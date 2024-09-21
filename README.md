@@ -5,5 +5,4 @@ Immitation of the popular video game Angry birds, made using Java &amp; libGDX f
 Class relations being used have being demonstrated in a UML Diagram:
 
 A sample Use Case Diagram:
-
-   angry_birds/ucd.pdf
+   `angry_birds/ucd.pdf`
