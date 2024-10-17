@@ -3,6 +3,7 @@ package com.angrybirds.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -31,6 +32,7 @@ public class settings implements Screen
     private TextButton b1,b2,b3;
     private Table table1,table2,table3;
     private Stage stage;
+    private Label label;
 
     public settings(Main game)
     {
@@ -54,23 +56,29 @@ public class settings implements Screen
     @Override
     public void show()
     {
-        b1=new TextButton("Mountains", skin);
+        label=new Label("Change Scenery",skin);
+        label.setFontScale(5);
+        label.setColor(0,0,0,1);
+
+        float marginTop=100;
+        float x =(stage.getWidth()-label.getWidth()-150)/3;
+        float y =VIRTUAL_HEIGHT-label.getHeight()-marginTop;
+
+
+        label.setPosition(x, y);
+        stage.addActor(label);
+
+        b1 = new TextButton("Mountains", skin);
+        b2 = new TextButton("Beach", skin);
+        b3 = new TextButton("Halloween", skin);
+
         table1.setFillParent(true);
         table1.center();
-        table1.add(b1).width(200).height(80).pad(10).padLeft(20);
+        table1.add(b1).width(200).height(80).pad(20).padLeft(20);
+        table1.add(b2).width(200).height(80).pad(20).padLeft(20);
+        table1.add(b3).width(200).height(80).pad(20).padLeft(20);
+
         stage.addActor(table1);
-
-        b2=new TextButton("Beach", skin);
-        table2.setFillParent(true);
-        table2.center();
-        table2.add(b2).width(200).height(80).pad(10).padLeft(275);
-        stage.addActor(table2);
-
-        b3=new TextButton("Halloween", skin);
-        table3.setFillParent(true);
-        table3.center();
-        table3.add(b3).width(200).height(80).pad(10).padLeft(500);
-        stage.addActor(table3);
 
     }
 
