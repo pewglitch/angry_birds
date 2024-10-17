@@ -1,6 +1,7 @@
 package com.angrybirds.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.Gdx;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
+import com.badlogic.gdx.audio.Music;
 
 public class Playscreen implements Screen
 {
@@ -15,6 +17,7 @@ public class Playscreen implements Screen
     private Texture texture;
     private OrthographicCamera camera;
     private FitViewport viewport;
+    private Music backgroundMusic;
 
     private final float VIRTUAL_WIDTH = 1000;
     private final float VIRTUAL_HEIGHT = 600;
@@ -26,6 +29,10 @@ public class Playscreen implements Screen
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         texture = new Texture("firstload.jpg");
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.5f); // Adjust volume as needed
+        backgroundMusic.play();
     }
 
     @Override
@@ -44,6 +51,12 @@ public class Playscreen implements Screen
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         game.batch.end();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched())
+        {
+            game.setScreen(new menu(game));
+            backgroundMusic.stop();
+        }
     }
 
     @Override
