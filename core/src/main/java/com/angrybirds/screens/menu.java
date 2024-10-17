@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class menu implements Screen
@@ -37,6 +38,7 @@ public class menu implements Screen
     public void show()
     {
 
+
     }
 
     @Override
@@ -50,6 +52,13 @@ public class menu implements Screen
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         game.batch.end();
+
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched())
+        {
+            game.setScreen(new settings(game));
+            backgroundMusic.stop();
+        }
     }
 
     @Override
