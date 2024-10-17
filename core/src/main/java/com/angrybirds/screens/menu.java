@@ -27,7 +27,7 @@ public class menu implements Screen
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
-        texture = new Texture("ridhhin.png");
+        texture = new Texture("img.png");
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(0.5f); // Adjust volume as needed
