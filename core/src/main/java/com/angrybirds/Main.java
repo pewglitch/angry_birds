@@ -1,36 +1,50 @@
 package com.angrybirds;
 
+import com.angrybirds.screens.Playscreen;
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main implements ApplicationListener {
+public class Main extends Game
+{
+    public SpriteBatch batch;
     @Override
-    public void create() {
+    public void create()
+    {
         // Prepare your application here.
+        batch = new SpriteBatch();
+        setScreen(new Playscreen(this));
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int width, int height)
+    {
         // Resize your application here. The parameters represent the new window size.
     }
 
     @Override
-    public void render() {
+    public void render()
+    {
         // Draw your application here.
+        super.render();
     }
 
     @Override
-    public void pause() {
+    public void pause()
+    {
         // Invoked when your application is paused.
     }
 
     @Override
-    public void resume() {
+    public void resume()
+    {
         // Invoked when your application is resumed after pause.
     }
 
     @Override
-    public void dispose() {
+    public void dispose()
+    {
         // Destroy application's resources here.
     }
 }
