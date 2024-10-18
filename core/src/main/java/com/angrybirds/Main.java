@@ -13,7 +13,6 @@ public class Main extends Game
     @Override
     public void create()
     {
-        // Prepare your application here.
         batch = new SpriteBatch();
         setScreen(new Playscreen(this));
     }

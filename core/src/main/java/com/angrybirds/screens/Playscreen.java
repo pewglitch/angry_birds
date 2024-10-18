@@ -29,15 +29,16 @@ public class Playscreen implements Screen
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         texture = new Texture("firstload.jpg");
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("startcoc.mp3"));
-        backgroundMusic.setLooping(false);
-        backgroundMusic.setVolume(1f);
-        backgroundMusic.play();
+
     }
 
     @Override
     public void show()
     {
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("startcoc.mp3"));
+        backgroundMusic.setLooping(false);
+        backgroundMusic.setVolume(1f);
+        backgroundMusic.play();
     }
 
     @Override

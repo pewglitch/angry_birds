@@ -4,9 +4,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.Gdx;
@@ -32,6 +36,11 @@ public class gamescreen implements Screen
     Label scorelabel;
     Label levellabel;
 
+    private Skin skin;
+    private TextButton b1, b2, b3, b4, b5, b6;
+    private Table table1;
+    private Label label;
+
     public gamescreen(Main game, SpriteBatch sb)
     {
         this.game = game;
@@ -41,36 +50,48 @@ public class gamescreen implements Screen
 
         stage = new Stage(viewport, sb);
         texture = new Texture("halloween.jpg");
+        skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
-//        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
-//        backgroundMusic.setLooping(false);
-//        backgroundMusic.setVolume(0.5f);
-//        backgroundMusic.play();
-
-        Table table = new Table();
-        table.top();
-        table.setFillParent(true);
+        table1 = new Table();
+        table1.top();
+        table1.setFillParent(true);
 
         scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         levellabel = new Label(String.format("Level: %05d", level), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
 
+        table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
+        table1.add(levellabel).expandX().padTop(10).right().padRight(20);
 
-        table.add(scorelabel).expandX().padTop(10).left().padLeft(20);
-        table.add(levellabel).expandX().padTop(10).right().padRight(20);
-
-        stage.addActor(table);
+        stage.addActor(table1);
     }
 
     @Override
     public void show()
     {
         Gdx.input.setInputProcessor(stage);
+
+        b1 = new TextButton("Home", skin);
+        b1.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen(new menu(game));
+                backgroundMusic.stop();
+            }
+        });
+
+        table1.add(b1).width(100).height(50).pad(5).center();
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("gametheme.mp3"));
+        backgroundMusic.setLooping(false);
+        backgroundMusic.setVolume(0.5f);
+        backgroundMusic.play();
     }
 
     @Override
     public void render(float delta)
     {
-
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
