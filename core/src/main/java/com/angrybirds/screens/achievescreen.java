@@ -7,9 +7,13 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -25,7 +29,8 @@ public class achievescreen implements Screen
     private Label label,label1,label2,label3;
     private Skin skin;
     private Stage stage;
-
+    private TextButton b4,b5;
+    private Table table;
     public achievescreen(Main game)
     {
         this.game = game;
@@ -35,6 +40,7 @@ public class achievescreen implements Screen
         texture = new Texture("achievement.png");
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         stage=new Stage(new ScreenViewport());
+        table=new Table();
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(0.7f);
@@ -72,10 +78,38 @@ public class achievescreen implements Screen
         label2.setPosition(margin+1.25f*spl,y);
         label3.setPosition(margin+2.5f*spl,y);
 
+
+        b4 = new TextButton("Back",skin);
+        b5 = new TextButton("Exit",skin);
+
+        table.setFillParent(true);
+        table.center();
+        table.add(label).padBottom(50).colspan(5).center();
+        table.row();
+        table.add(b4).width(150).height(80).pad(5);
+        table.add(b5).width(150).height(80).pad(5);
+        b4.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen(new menu(game));
+            }
+        });
+        b5.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                Gdx.app.exit();
+            }
+        });
+
         stage.addActor(label);
         stage.addActor(label1);
         stage.addActor(label2);
         stage.addActor(label3);
+        stage.addActor(table);
 
 
     }
