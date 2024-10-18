@@ -75,11 +75,13 @@ public class taptap
         skin.dispose();
     }
 
-    public Stage getStage() {
+    public Stage getStage()
+    {
         return stage;
     }
 
-    public void resize(int width, int height) {
+    public void resize(int width, int height)
+    {
         stage.getViewport().update(width, height, true); // Update viewport
     }
 }
