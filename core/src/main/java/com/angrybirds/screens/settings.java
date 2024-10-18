@@ -51,11 +51,10 @@ public class settings implements Screen
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(0.5f); // Adjust volume as needed
         backgroundMusic.play();
+        button_show();
     }
 
-    @Override
-    public void show()
-    {
+    private void button_show(){
         label=new Label("Change Scenery",skin);
         label.setFontScale(5);
         label.setColor(0,0,0,1);
@@ -79,7 +78,11 @@ public class settings implements Screen
         table1.add(b3).width(200).height(80).pad(20).padLeft(20);
 
         stage.addActor(table1);
-
+    }
+    @Override
+    public void show()
+    {
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
