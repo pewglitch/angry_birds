@@ -12,8 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class menu implements Screen
-{
+public class menu implements Screen {
     private final Main game;
     private OrthographicCamera camera;
     private FitViewport viewport;
@@ -23,37 +22,36 @@ public class menu implements Screen
     private final float VIRTUAL_HEIGHT = 600;
     private taptap buttonManager;
 
-    public menu(Main game)
-    {
+    public menu(Main game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
-        texture = new Texture("birb.jpg");
+        texture = new Texture("menubg2.jpg");
 
+        // Load and play background music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
         backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.7f);
+        backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
 
         SpriteBatch sb = new SpriteBatch();
         buttonManager = new taptap();
 
+        // Create buttons with listeners
         buttonManager.createButton("Play", game, new gamescreen(game,sb));
-        buttonManager.createButton("Settings", game, new settings(game));
-        buttonManager.createButton("Achievements", game, new gamescreen(game,sb));
+        buttonManager.createButton("Settings", game, new settings(game)); // Assuming you have a settings screen
+        buttonManager.createButton("Achievements", game, new gamescreen(game,sb)); // Assuming you have an achievements screen
         buttonManager.createExitButton("Exit");
     }
 
     @Override
-    public void show()
-    {
-
+    public void show() {
+        // You can add additional logic for when the screen is shown
     }
 
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -67,8 +65,7 @@ public class menu implements Screen
     }
 
     @Override
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
         viewport.update(width, height, true);
         buttonManager.resize(width, height);
     }
@@ -84,8 +81,8 @@ public class menu implements Screen
     }
 
     @Override
-    public void hide()
-    {
+    public void hide() {
+        // Stop background music when hiding the menu
         backgroundMusic.stop();
     }
 

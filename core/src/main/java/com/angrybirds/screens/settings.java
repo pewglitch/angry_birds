@@ -2,13 +2,11 @@ package com.angrybirds.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.Gdx;
@@ -31,7 +29,7 @@ public class settings implements Screen
     private final float VIRTUAL_HEIGHT = 600;
 
     private Skin skin;
-    private TextButton b1,b2,b3,b4,b5,b6;
+    private TextButton b1,b2,b3;
     private Table table1,table2,table3;
     private Stage stage;
     private Label label;
@@ -49,52 +47,39 @@ public class settings implements Screen
         table3=new Table();
         stage=new Stage(new ScreenViewport());
 
-        button_show();
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.5f); // Adjust volume as needed
+        backgroundMusic.play();
     }
 
-    public void button_show()
+    @Override
+    public void show()
     {
-        label = new Label("Change Scenery", skin);
-        label.setFontScale(3);
-        label.setColor(0, 0, 0, 1);
+        label=new Label("Change Scenery",skin);
+        label.setFontScale(5);
+        label.setColor(0,0,0,1);
+
+        float marginTop=100;
+        float x =(stage.getWidth()-label.getWidth()-150)/3;
+        float y =VIRTUAL_HEIGHT-label.getHeight()-marginTop;
+
+
+        label.setPosition(x, y);
+        stage.addActor(label);
 
         b1 = new TextButton("Mountains", skin);
         b2 = new TextButton("Beach", skin);
         b3 = new TextButton("Halloween", skin);
-        b4 = new TextButton("Back",skin);
-        b5 = new TextButton("Exit",skin);
+
         table1.setFillParent(true);
         table1.center();
-        table1.add(label).padBottom(50).colspan(5).center();
-        table1.row();
-        table1.add(b1).width(150).height(80).pad(5);
-        table1.add(b2).width(150).height(80).pad(5);
-        table1.add(b3).width(150).height(80).pad(5);
-        table1.add(b4).width(150).height(80).pad(5);
-        table1.add(b5).width(150).height(80).pad(5);
-        b4.addListener(new ClickListener()
-        {
-           @Override
-           public void clicked(InputEvent event,float x,float y)
-           {
-               game.setScreen(new menu(game));
-           }
-        });
-        b5.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                Gdx.app.exit();
-            }
-        });
+        table1.add(b1).width(200).height(80).pad(20).padLeft(20);
+        table1.add(b2).width(200).height(80).pad(20).padLeft(20);
+        table1.add(b3).width(200).height(80).pad(20).padLeft(20);
 
         stage.addActor(table1);
-    }
-    @Override
-    public void show()
-    {
-        Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
@@ -117,10 +102,8 @@ public class settings implements Screen
     @Override
     public void resize(int width, int height)
     {
-        viewport.update(width, height, true);
-        stage.getViewport().update(width, height, true);
+        viewport.update(width, height);
     }
-
 
     @Override
     public void pause()
