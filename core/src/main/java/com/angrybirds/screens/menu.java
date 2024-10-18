@@ -41,8 +41,9 @@ public class menu implements Screen
 
         buttonManager.createButton("Play", game, new gamescreen(game,sb));
         buttonManager.createButton("Settings", game, new settings(game));
-        buttonManager.createButton("Achievements", game, new gamescreen(game,sb));
+        buttonManager.createButton("Achievements", game, new achievescreen(game));
         buttonManager.createExitButton("Exit");
+
     }
 
     @Override
