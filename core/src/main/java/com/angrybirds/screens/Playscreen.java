@@ -29,9 +29,9 @@ public class Playscreen implements Screen
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         texture = new Texture("firstload.jpg");
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.5f); // Adjust volume as needed
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("startcoc.mp3"));
+        backgroundMusic.setLooping(false);
+        backgroundMusic.setVolume(1f);
         backgroundMusic.play();
     }
 
@@ -86,7 +86,6 @@ public class Playscreen implements Screen
     @Override
     public void dispose()
     {
-        // Dispose of resources
         texture.dispose();
     }
 }
