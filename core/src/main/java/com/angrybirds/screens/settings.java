@@ -54,7 +54,7 @@ public class settings implements Screen
         button_show();
     }
 
-    private void button_show(){
+    public void button_show(){
         label=new Label("Change Scenery",skin);
         label.setFontScale(5);
         label.setColor(0,0,0,1);
