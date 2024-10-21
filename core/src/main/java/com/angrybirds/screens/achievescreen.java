@@ -63,21 +63,27 @@ public class achievescreen implements Screen
     {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = 12;
-        BitmapFont font12 = generator.generateFont(parameter); // font size 12 pixels
+        parameter.size = 50;
+        BitmapFont font12 = generator.generateFont(parameter);
         generator.dispose();
         Label.LabelStyle lst = new Label.LabelStyle();
         lst.font = font12;
         label = new Label("Achievements", lst);
-        label.setFontScale(5);
         label.setColor(0, 0,0, 1);
 
-        label1=new Label("Highest Score", lst);
-        label2=new Label("Coins earned", lst);
-        label3=new Label("Current level", lst);
-        label1.setFontScale(2);
-        label2.setFontScale(2);
-        label3.setFontScale(2);
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontParameter par = new FreeTypeFontParameter();
+        par.size = 25;
+        BitmapFont font13 = gen.generateFont(par);
+        gen.dispose();
+        Label.LabelStyle lst1 = new Label.LabelStyle();
+        lst1.font = font13;
+
+
+
+        label1=new Label("Highest Score", lst1);
+        label2=new Label("Coins earned", lst1);
+        label3=new Label("Current level", lst1);
         label1.setColor(0, 0,0, 1);
         label2.setColor(0, 0,0, 1);
         label3.setColor(0, 0,0, 1);
