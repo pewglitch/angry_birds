@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 
 public class achievescreen implements Screen
@@ -59,10 +61,13 @@ public class achievescreen implements Screen
 
     public void achieve()
     {
-
-
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size = 12;
+        BitmapFont font12 = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose();
         Label.LabelStyle lst = new Label.LabelStyle();
-        lst.font = skin.getFont("default-font");
+        lst.font = font12;
         label = new Label("Achievements", lst);
         label.setFontScale(5);
         label.setColor(0, 0,0, 1);
