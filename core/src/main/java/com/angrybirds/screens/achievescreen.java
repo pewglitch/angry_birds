@@ -7,6 +7,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,16 +16,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.graphics.Color;
+
 
 public class achievescreen implements Screen
 {
     private Main game;
     private OrthographicCamera camera;
     private FitViewport viewport;
-    private Texture texture;
+    private Texture texture,texture2;
     private Music backgroundMusic;
+    private TextureRegionDrawable buttonDrawable;
     private final float VIRTUAL_WIDTH = 1000;
     private final float VIRTUAL_HEIGHT = 600;
     private Label label,label1,label2,label3;
@@ -31,6 +37,9 @@ public class achievescreen implements Screen
     private Stage stage;
     private TextButton b4,b5;
     private Table table;
+    private BitmapFont font;
+
+
     public achievescreen(Main game)
     {
         this.game = game;
@@ -38,7 +47,10 @@ public class achievescreen implements Screen
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         texture = new Texture("achievement.png");
+        texture2=new Texture("button1.png");
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+        font = new BitmapFont();
+        skin.add("default-font", font);
         stage=new Stage(new ScreenViewport());
         table=new Table();
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
@@ -50,13 +62,17 @@ public class achievescreen implements Screen
 
     public void achieve()
     {
-        label = new Label("Achievements", skin);
+
+
+        Label.LabelStyle lst = new Label.LabelStyle();
+        lst.font = skin.getFont("default-font");
+        label = new Label("Achievements", lst);
         label.setFontScale(5);
         label.setColor(0, 0,0, 1);
 
-        label1=new Label("Highest Score",skin);
-        label2=new Label("Coins earned",skin);
-        label3=new Label("Current level",skin);
+        label1=new Label("Highest Score", lst);
+        label2=new Label("Coins earned", lst);
+        label3=new Label("Current level", lst);
         label1.setFontScale(2);
         label2.setFontScale(2);
         label3.setFontScale(2);
@@ -77,17 +93,31 @@ public class achievescreen implements Screen
         label1.setPosition(margin,y);
         label2.setPosition(margin+1.25f*spl,y);
         label3.setPosition(margin+2.5f*spl,y);
+        buttonDrawable = new TextureRegionDrawable(new TextureRegion(texture2));
 
+        BitmapFont sizefont = skin.getFont("default-font");
+        sizefont.getData().setScale(1.5f);
 
-        b4 = new TextButton("Back",skin);
-        b5 = new TextButton("Exit",skin);
-
+        TextButton.TextButtonStyle tbt = new TextButton.TextButtonStyle();
+        tbt.font = sizefont;
+        tbt.up = buttonDrawable;
+        tbt.down = buttonDrawable;
+        tbt.fontColor = new Color(0f, 0f, 139f / 255f, 1f);
+        b4 = new TextButton("Back", tbt);
+        b5 = new TextButton("Exit", tbt);
         table.setFillParent(true);
-        table.center();
-        table.add(label).padBottom(50).colspan(5).center();
+        table.top();
+
+        table.add(b4).width(100).height(40).pad(10).padRight(380);
+        table.add(b5).width(100).height(40).pad(10).padLeft(380);
         table.row();
-        table.add(b4).width(150).height(80).pad(5);
-        table.add(b5).width(150).height(80).pad(5);
+        table.add(label).padTop(40).colspan(2).center();
+        table.row();
+
+        table.add(label1).padTop(25);
+        table.add(label2).padTop(25);
+        table.add(label3).padTop(25);
+
         b4.addListener(new ClickListener()
         {
             @Override
@@ -125,6 +155,8 @@ public class achievescreen implements Screen
     {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);

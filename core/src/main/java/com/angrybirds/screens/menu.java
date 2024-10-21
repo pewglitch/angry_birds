@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+
 public class menu implements Screen
 {
     private final Main game;
@@ -57,6 +58,7 @@ public class menu implements Screen
     {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
