@@ -53,10 +53,7 @@ public class achievescreen implements Screen
         skin.add("default-font", font);
         stage=new Stage(new ScreenViewport());
         table=new Table();
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.7f);
-        backgroundMusic.play();
+
         achieve();
     }
 
@@ -147,6 +144,10 @@ public class achievescreen implements Screen
     @Override
     public void show()
     {
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.7f);
+        backgroundMusic.play();
         Gdx.input.setInputProcessor(stage);
     }
 

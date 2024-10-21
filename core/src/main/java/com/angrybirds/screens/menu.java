@@ -32,10 +32,7 @@ public class menu implements Screen
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         texture = new Texture("birb.jpg");
 
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.7f);
-        backgroundMusic.play();
+
 
         SpriteBatch sb = new SpriteBatch();
         buttonManager = new taptap();
@@ -50,7 +47,10 @@ public class menu implements Screen
     @Override
     public void show()
     {
-
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.7f);
+        backgroundMusic.play();
     }
 
     @Override
