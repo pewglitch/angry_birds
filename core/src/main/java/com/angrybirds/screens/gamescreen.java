@@ -1,9 +1,11 @@
 package com.angrybirds.screens;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,6 +20,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.physics.box2d.*;
+
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class gamescreen implements Screen
 {
@@ -41,9 +46,13 @@ public class gamescreen implements Screen
     private Table table1;
     private Label label;
 
+    private World world;
+    private Box2DDebugRenderer bdr;
+
     public gamescreen(Main game, SpriteBatch sb)
     {
         this.game = game;
+        this.world=world;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
@@ -63,6 +72,10 @@ public class gamescreen implements Screen
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
 
         stage.addActor(table1);
+        this.world = new World(new Vector2(0, 0), true);
+        bdr = new Box2DDebugRenderer();
+
+        // Create the obstacle with a texture and add it to the world
     }
 
     @Override
@@ -87,6 +100,7 @@ public class gamescreen implements Screen
         backgroundMusic.setLooping(false);
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
+
     }
 
     @Override
@@ -100,11 +114,9 @@ public class gamescreen implements Screen
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         game.batch.end();
-
-        stage.act(delta);
-        stage.draw();
+        bdr.render(world,camera.combined);
+        camera.update();
     }
-
     @Override
     public void resize(int width, int height)
     {
@@ -126,5 +138,7 @@ public class gamescreen implements Screen
         stage.dispose();
         texture.dispose();
         backgroundMusic.dispose();
+        bdr.dispose();
+        world.dispose();
     }
 }

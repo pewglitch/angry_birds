@@ -35,10 +35,7 @@ public class achievescreen implements Screen
         texture = new Texture("achievement.png");
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         stage=new Stage(new ScreenViewport());
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.7f);
-        backgroundMusic.play();
+
         achieve();
     }
 
@@ -84,6 +81,10 @@ public class achievescreen implements Screen
     public void show()
     {
         Gdx.input.setInputProcessor(stage);
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.7f);
+        backgroundMusic.play();
     }
 
     @Override
