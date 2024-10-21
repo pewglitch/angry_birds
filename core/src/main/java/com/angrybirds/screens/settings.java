@@ -82,9 +82,11 @@ public class settings implements Screen
         table1.add(b3).padTop(50).padLeft(5).padRight(70).width(120).height(50);
         table1.row();
 
-        b4.addListener(new ClickListener() {
+        b4.addListener(new ClickListener()
+        {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y)
+            {
                 game.setScreen(new menu(game));
             }
         });

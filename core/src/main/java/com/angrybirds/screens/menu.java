@@ -2,6 +2,7 @@ package com.angrybirds.screens;
 
 import com.angrybirds.Main;
 import com.angrybirds.buttons.taptap;
+import com.angrybirds.screens.levels.levels;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -37,9 +38,9 @@ public class menu implements Screen
         SpriteBatch sb = new SpriteBatch();
         buttonManager = new taptap();
 
-        buttonManager.createButton("Play", game, new gamescreen(game,sb));
-        buttonManager.createButton("Settings", game, new settings(game));
-        buttonManager.createButton("Achievements", game, new achievescreen(game));
+        buttonManager.createButton("Play", game, new levels(game,sb));  // Redirect to `levels`
+        buttonManager.createButton("Settings", game, new settings(game));  // Redirect to `settings`
+        buttonManager.createButton("Achievements", game, new achievescreen(game));  // Redirect to `achievescreen`
         buttonManager.createExitButton("Exit");
 
     }
