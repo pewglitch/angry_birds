@@ -107,7 +107,7 @@ public class achievescreen implements Screen
         sizefont.getData().setScale(1.5f);
 
         TextButton.TextButtonStyle tbt = new TextButton.TextButtonStyle();
-        tbt.font = sizefont;
+        tbt.font = font13;
         tbt.up = buttonDrawable;
         tbt.down = buttonDrawable;
         tbt.fontColor = new Color(0f, 0f, 139f / 255f, 1f);

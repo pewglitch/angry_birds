@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -21,6 +22,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class settings implements Screen
 {
@@ -39,6 +42,7 @@ public class settings implements Screen
     private Table table1,table2,table3;
     private Stage stage;
     private Label label;
+    private BitmapFont font;
 
     public settings(Main game)
     {
@@ -57,8 +61,14 @@ public class settings implements Screen
     }
 
     public void button_show() {
-        label = new Label("Change Scenery", skin);
-        label.setFontScale(5);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 40;
+        BitmapFont font12 = generator.generateFont(parameter);
+        generator.dispose();
+        Label.LabelStyle lst = new Label.LabelStyle();
+        lst.font = font12;
+        label = new Label("Change Scenery",lst);
         label.setColor(0, 0, 0, 1);
 
         b1 = new TextButton("Mountains", skin);
