@@ -1,15 +1,26 @@
 package com.angrybirds.birds;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class red{
-    private Texture texture2;
+public class red {
+    private float x,y;
+    private Texture texture1;
 
-    public red(){
-        texture2=new Texture("red1.png");
+    public red(float x,float y){
+        texture1=new Texture("red1.png");
+        this.x=x;
+        this.y=y;
     }
 
-    public Texture reddy(){
-        return texture2;
+
+    public void render(SpriteBatch batch, float width, float height)
+    {
+        batch.draw(texture1, x, y, width, height);
+    }
+
+    public void dispose()
+    {
+        texture1.dispose();
     }
 }

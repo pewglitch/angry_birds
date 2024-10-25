@@ -22,8 +22,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.angrybirds.birds.yellow;
+import com.angrybirds.birds.black;
+import com.angrybirds.birds.red;
+import com.angrybirds.birds.white;
 
 public class gamescreen implements Screen
 {
@@ -49,6 +51,17 @@ public class gamescreen implements Screen
     private pigs p1,p2,p3,p4,p5;
     private planks box1,box2;
     private catapult cata;
+    private Texture red1;
+    private Texture black1,white1;
+
+    private red red_bird;
+    private yellow yellow_bird;
+    private black black_bird;
+    private white white_bird;
+
+
+
+
     public gamescreen(Main game, SpriteBatch sb1)
     {
         this.game = game;
@@ -57,8 +70,14 @@ public class gamescreen implements Screen
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
 
+        red_bird=new red(160,120);
+        yellow_bird=new yellow(100,20);
+        black_bird=new black(150,25);
+        white_bird=new white(30,20);
+
         stage = new Stage(viewport, sb);
         texture = new Texture("gamebg.jpg");
+
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
         table1 = new Table();
@@ -121,6 +140,13 @@ public class gamescreen implements Screen
         p3.render(game.batch, 50, 50);
         p4.render(game.batch, 50, 50);
         p5.render(game.batch, 50, 50);
+
+        red_bird.render(game.batch, 50, 50);
+        white_bird.render(game.batch, 50, 50);
+        yellow_bird.render(game.batch, 50, 50);
+        black_bird.render(game.batch, 50, 50);
+
+
         box1.render(game.batch, 260, 60);
         cata.render(game.batch, 180, 180);
 
