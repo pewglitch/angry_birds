@@ -1,5 +1,8 @@
 package com.angrybirds.screens;
 
+import com.angrybirds.obstacles.catapult;
+import com.angrybirds.obstacles.pigs;
+import com.angrybirds.obstacles.planks;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -43,7 +46,9 @@ public class gamescreen implements Screen
     private TextButton b1, b2, b3, b4, b5, b6;
     private Table table1;
     private Label label;
-
+    private pigs p1,p2,p3,p4,p5;
+    private planks box1,box2;
+    private catapult cata;
     public gamescreen(Main game, SpriteBatch sb1)
     {
         this.game = game;
@@ -65,6 +70,14 @@ public class gamescreen implements Screen
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
+        p1 = new pigs(610 + 40, 340);
+        p2 = new pigs(680 + 40, 340);
+        p3 = new pigs(580 + 40, 270);
+        p4 = new pigs(650 + 40, 270);
+        p5 = new pigs(720 + 40, 270);
+        box1 = new planks(550 + 40, 210);
+
+        cata = new catapult(200 , 20);
 
         stage.addActor(table1);
     }
@@ -103,12 +116,20 @@ public class gamescreen implements Screen
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        p1.render(game.batch,70,70);
+        p2.render(game.batch,70,70);
+        p3.render(game.batch,70,70);
+        p4.render(game.batch,70,70);
+        p5.render(game.batch,70,70);
+        box1.render(game.batch,280,80);
+        cata.render(game.batch,200,200);
         game.batch.end();
 
         stage.act(delta);
         stage.draw();
 
-        float restrictedY = 200;
+
+        float restrictedY = 800;
         float restrictedHeight = 400;
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched())
         {
@@ -117,7 +138,7 @@ public class gamescreen implements Screen
 
             touchY = Gdx.graphics.getHeight() - touchY;
 
-            if (touchX >= 0 && touchX <= 500 && touchY >= restrictedY && touchY <= (restrictedY + restrictedHeight))
+            if (touchX >= 0 && touchX <= 500 && touchY >= 0 && touchY <= 400)
             {
                 game.setScreen(new winscreen(game, sb));
                 backgroundMusic.stop();
@@ -131,7 +152,7 @@ public class gamescreen implements Screen
 
             touchY = Gdx.graphics.getHeight() - touchY;
 
-            if (touchX >= 500 && touchX <= 1000 && touchY >= restrictedY && touchY <= (restrictedY + restrictedHeight))
+            if (touchX >= 500 && touchX <= 1000 && touchY >= 0 && touchY <= 400)
             {
                 game.setScreen(new losescreen(game, sb));
                 backgroundMusic.stop();
