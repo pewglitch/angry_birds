@@ -1,5 +1,6 @@
 package com.angrybirds.screens;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -37,15 +38,16 @@ public class gamescreen implements Screen
 
     Label scorelabel;
     Label levellabel;
-
+    SpriteBatch sb;
     private Skin skin;
     private TextButton b1, b2, b3, b4, b5, b6;
     private Table table1;
     private Label label;
 
-    public gamescreen(Main game, SpriteBatch sb)
+    public gamescreen(Main game, SpriteBatch sb1)
     {
         this.game = game;
+        this.sb=sb1;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
@@ -105,6 +107,38 @@ public class gamescreen implements Screen
 
         stage.act(delta);
         stage.draw();
+
+        float restrictedY = 200;
+        float restrictedHeight = 400;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched())
+        {
+            float touchX = Gdx.input.getX();
+            float touchY = Gdx.input.getY();
+
+            touchY = Gdx.graphics.getHeight() - touchY;
+
+            if (touchX >= 0 && touchX <= 500 && touchY >= restrictedY && touchY <= (restrictedY + restrictedHeight))
+            {
+                game.setScreen(new winscreen(game, sb));
+                backgroundMusic.stop();
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched())
+        {
+            float touchX = Gdx.input.getX();
+            float touchY = Gdx.input.getY();
+
+            touchY = Gdx.graphics.getHeight() - touchY;
+
+            if (touchX >= 500 && touchX <= 1000 && touchY >= restrictedY && touchY <= (restrictedY + restrictedHeight))
+            {
+                game.setScreen(new losescreen(game, sb));
+                backgroundMusic.stop();
+            }
+        }
+
+
     }
 
     @Override
