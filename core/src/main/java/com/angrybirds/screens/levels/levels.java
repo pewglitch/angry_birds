@@ -66,13 +66,23 @@ public class levels implements Screen {
     @Override
     public void show()
     {
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("mainbgm.mp3"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 100;
+        BitmapFont font12 = generator.generateFont(parameter);
+        generator.dispose();
+        Label.LabelStyle lst = new Label.LabelStyle();
+        lst.font = font12;
+        label = new Label("Choose Level", lst);
+        label.setColor(1, 0.608f, 0.314f, 1);
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("levelsbgm.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
-        label = new Label("Choose Level", skin);
-        label.setFontScale(5);
-        label.setColor(0, 0, 0, 1);
+//        label = new Label("Choose Level", skin);
+//        label.setFontScale(5);
+//        label.setColor(0, 0, 0, 1);
 
         b1 = new TextButton("Level 1", skin);
         b2 = new TextButton("Level 2", skin);
