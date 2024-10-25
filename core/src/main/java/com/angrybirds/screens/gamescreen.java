@@ -58,7 +58,7 @@ public class gamescreen implements Screen
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
 
         stage = new Stage(viewport, sb);
-        texture = new Texture("halloween.jpg");
+        texture = new Texture("gamebg.jpg");
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
         table1 = new Table();
@@ -70,14 +70,14 @@ public class gamescreen implements Screen
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
-        p1 = new pigs(610 + 40, 340);
-        p2 = new pigs(680 + 40, 340);
-        p3 = new pigs(580 + 40, 270);
-        p4 = new pigs(650 + 40, 270);
-        p5 = new pigs(720 + 40, 270);
-        box1 = new planks(550 + 40, 210);
+        p1 = new pigs(710, 320);
+        p2 = new pigs(760, 320);
+        p3 = new pigs(690, 270);
+        p4 = new pigs(740, 270);
+        p5 = new pigs(790, 270);
+        box1 = new planks(640, 225);
 
-        cata = new catapult(200 , 20);
+        cata = new catapult(130 , 20);
 
         stage.addActor(table1);
     }
@@ -116,13 +116,14 @@ public class gamescreen implements Screen
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        p1.render(game.batch,70,70);
-        p2.render(game.batch,70,70);
-        p3.render(game.batch,70,70);
-        p4.render(game.batch,70,70);
-        p5.render(game.batch,70,70);
-        box1.render(game.batch,280,80);
-        cata.render(game.batch,200,200);
+        p1.render(game.batch, 50, 50);
+        p2.render(game.batch, 50, 50);
+        p3.render(game.batch, 50, 50);
+        p4.render(game.batch, 50, 50);
+        p5.render(game.batch, 50, 50);
+        box1.render(game.batch, 260, 60);
+        cata.render(game.batch, 180, 180);
+
         game.batch.end();
 
         stage.act(delta);
