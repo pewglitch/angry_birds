@@ -1,11 +1,7 @@
 package com.angrybirds.screens.levels;
 
-import com.angrybirds.buttons.taptap;
-import com.angrybirds.screens.achievescreen;
 import com.angrybirds.screens.gamescreen;
 import com.angrybirds.screens.menu;
-import com.angrybirds.screens.settings;
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -37,6 +33,7 @@ public class levels implements Screen {
     private FitViewport viewport;
     private Music backgroundMusic;
     private TextureRegionDrawable buttonDrawable;
+    private BitmapFont font;
 
     private final float VIRTUAL_WIDTH = 1000;
     private final float VIRTUAL_HEIGHT = 600;
@@ -56,6 +53,8 @@ public class levels implements Screen {
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         texture= new Texture("levelsbg.png");
         skin=new Skin(Gdx.files.internal("ui/uiskin.json"));
+        font = new BitmapFont();
+        skin.add("default-font", font);
         table1=new Table();
         table2=new Table();
         this.sb=sbx;
@@ -70,15 +69,33 @@ public class levels implements Screen {
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
-        label = new Label("Choose Level", skin);
-        label.setFontScale(5);
-        label.setColor(0, 0, 0, 1);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size =60;
+        parameter.color=Color.YELLOW;
+        BitmapFont font12 = generator.generateFont(parameter);
+        generator.dispose();
+        Label.LabelStyle lst = new Label.LabelStyle();
+        lst.font = font12;
+        label = new Label("Choose Levels", lst);
 
-        b1 = new TextButton("Level 1", skin);
-        b2 = new TextButton("Level 2", skin);
-        b3 = new TextButton("Level 3", skin);
-        b4 = new TextButton("Back", skin);
-        b5 = new TextButton("Exit", skin);
+
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        par.size=25;
+        par.color=Color.YELLOW;
+        BitmapFont font13 = gen.generateFont(par);
+        gen.dispose();
+
+        TextButton.TextButtonStyle btn1 = new TextButton.TextButtonStyle();
+        btn1.font = font13;
+
+        b1 = new TextButton("Level 1", btn1);
+        b2 = new TextButton("Level 2", btn1);
+        b3 = new TextButton("Level 3", btn1);
+        b4 = new TextButton("Back", btn1);
+        b5 = new TextButton("Exit", btn1);
+
 
         table1.setFillParent(true);
         table1.top();

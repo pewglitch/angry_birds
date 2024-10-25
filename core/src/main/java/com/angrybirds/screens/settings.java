@@ -1,16 +1,12 @@
 package com.angrybirds.screens;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,8 +18,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class settings implements Screen
 {
@@ -63,19 +57,29 @@ public class settings implements Screen
     public void button_show() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 40;
-        BitmapFont font12 = generator.generateFont(parameter);
+        parameter.size=60;
+        BitmapFont font12=generator.generateFont(parameter);
         generator.dispose();
-        Label.LabelStyle lst = new Label.LabelStyle();
-        lst.font = font12;
+        Label.LabelStyle lst=new Label.LabelStyle();
+        lst.font=font12;
         label = new Label("Change Scenery",lst);
         label.setColor(0, 0, 0, 1);
 
-        b1 = new TextButton("Mountains", skin);
-        b2 = new TextButton("Beach", skin);
-        b3 = new TextButton("Halloween", skin);
-        b4 = new TextButton("Back", skin);
-        b5 = new TextButton("Exit", skin);
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        par.size=30;
+        BitmapFont font13 = gen.generateFont(par);
+        gen.dispose();
+
+        TextButton.TextButtonStyle btn = new TextButton.TextButtonStyle();
+        btn.font =font13;
+        btn.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
+
+        b1 = new TextButton("Mountains", btn);
+        b2 = new TextButton("Beach",btn);
+        b3 = new TextButton("Halloween",btn);
+        b4 = new TextButton("Back",btn);
+        b5 = new TextButton("Exit",btn);
 
         table1.setFillParent(true);
         table1.top();
@@ -87,10 +91,21 @@ public class settings implements Screen
         table1.add(label).colspan(3).center().padTop(80);
         table1.row();
 
-        table1.add(b1).padTop(50).padLeft(70).padRight(5).width(120).height(50);
-        table1.add(b2).padTop(50).padLeft(5).padRight(5).width(120).height(50);
-        table1.add(b3).padTop(50).padLeft(5).padRight(70).width(120).height(50);
+        table1.add(b1).padTop(50).padLeft(70).padRight(5).width(150).height(50);
+        table1.add(b2).padTop(50).padLeft(5).padRight(5).width(150).height(50);
+        table1.add(b3).padTop(50).padLeft(5).padRight(70).width(150).height(50);
         table1.row();
+
+        Texture imgTexture1=new Texture(Gdx.files.internal("ridhhin.png"));
+        Texture imgTexture2=new Texture(Gdx.files.internal("img.png"));
+        Texture imgTexture3=new Texture(Gdx.files.internal("halloween.jpg"));
+
+        Image i1=new Image(imgTexture1);
+        Image i2=new Image(imgTexture2);
+        Image i3=new Image(imgTexture3);
+        table1.add(i1).padTop(35).padLeft(70).padRight(5).width(150).height(120);
+        table1.add(i2).padTop(35).padLeft(5).padRight(5).width(150).height(120);
+        table1.add(i3).padTop(35).padLeft(5).padRight(70).width(150).height(120);
 
         b4.addListener(new ClickListener()
         {
