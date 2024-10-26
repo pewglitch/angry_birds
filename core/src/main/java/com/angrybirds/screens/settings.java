@@ -96,9 +96,9 @@ public class settings implements Screen
         table1.add(b3).padTop(50).padLeft(5).padRight(70).width(180).height(50);
         table1.row();
 
-        Texture imgTexture1=new Texture(Gdx.files.internal("ridhhin.png"));
+        Texture imgTexture1=new Texture(Gdx.files.internal("setting.png"));
         Texture imgTexture2=new Texture(Gdx.files.internal("img.png"));
-        Texture imgTexture3=new Texture(Gdx.files.internal("halloween.jpg"));
+        Texture imgTexture3=new Texture(Gdx.files.internal("gamebg.jpg"));
 
         Image i1=new Image(imgTexture1);
         Image i2=new Image(imgTexture2);
