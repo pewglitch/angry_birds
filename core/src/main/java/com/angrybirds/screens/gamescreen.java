@@ -8,6 +8,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.Gdx;
@@ -53,7 +56,7 @@ public class gamescreen implements Screen
     private catapult cata;
     private Texture red1;
     private Texture black1,white1;
-
+    private TextureRegionDrawable buttonDrawable;
     private red red_bird;
     private yellow yellow_bird;
     private black black_bird;
@@ -104,9 +107,29 @@ public class gamescreen implements Screen
     @Override
     public void show()
     {
-        Gdx.input.setInputProcessor(stage);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size=20;
+        BitmapFont font12=generator.generateFont(parameter);
+        generator.dispose();
 
-        b1 = new TextButton("Home", skin);
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        par.size=20;
+        BitmapFont font13 = gen.generateFont(par);
+        gen.dispose();
+
+        TextButton.TextButtonStyle btn = new TextButton.TextButtonStyle();
+        btn.font =font13;
+        btn.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
+
+        b1= new TextButton("Home", btn);
+
+        table1.setFillParent(true);
+        table1.top();
+        table1.add(b1).padTop(10).padLeft(90).padRight(5).width(120).height(50);
+        buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("buttons.png")));
+        b1.getStyle().up = buttonDrawable;
         b1.addListener(new ClickListener()
         {
             @Override
@@ -116,13 +139,12 @@ public class gamescreen implements Screen
                 backgroundMusic.stop();
             }
         });
-
-        table1.add(b1).width(100).height(50).pad(5).center();
-
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("gametheme.mp3"));
         backgroundMusic.setLooping(false);
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
+        stage.addActor(table1);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
