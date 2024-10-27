@@ -61,7 +61,7 @@ public class achievescreen implements Screen
 
     public void achieve()
     {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
         parameter.size = 50;
         BitmapFont font12 = generator.generateFont(parameter);
@@ -71,14 +71,13 @@ public class achievescreen implements Screen
         label = new Label("Achievements", lst);
         label.setColor(0, 0,0, 1);
 
-        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
         FreeTypeFontParameter par = new FreeTypeFontParameter();
         par.size = 25;
         BitmapFont font13 = gen.generateFont(par);
         gen.dispose();
         Label.LabelStyle lst1 = new Label.LabelStyle();
         lst1.font = font13;
-
 
 
         label1=new Label("Highest Score", lst1);

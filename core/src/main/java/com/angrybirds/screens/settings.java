@@ -44,7 +44,7 @@ public class settings implements Screen
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
-        texture= new Texture("background.png");
+        texture= new Texture("setting3.png");
         skin=new Skin(Gdx.files.internal("ui/uiskin.json"));
         table1=new Table();
         table2=new Table();
@@ -55,7 +55,7 @@ public class settings implements Screen
     }
 
     public void button_show() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size=60;
         BitmapFont font12=generator.generateFont(parameter);
@@ -65,7 +65,7 @@ public class settings implements Screen
         label = new Label("Change Scenery",lst);
         label.setColor(0, 0, 0, 1);
 
-        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/opensans.ttf"));
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
         par.size=30;
         BitmapFont font13 = gen.generateFont(par);
@@ -75,11 +75,11 @@ public class settings implements Screen
         btn.font =font13;
         btn.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
 
-        b1 = new TextButton("Mountains", btn);
-        b2 = new TextButton("Beach",btn);
-        b3 = new TextButton("Halloween",btn);
-        b4 = new TextButton("Back",btn);
-        b5 = new TextButton("Exit",btn);
+        b1= new TextButton("Mountains", btn);
+        b2= new TextButton("Beach",btn);
+        b3= new TextButton("Halloween",btn);
+        b4= new TextButton("Back",btn);
+        b5= new TextButton("Exit",btn);
 
         table1.setFillParent(true);
         table1.top();
@@ -91,14 +91,14 @@ public class settings implements Screen
         table1.add(label).colspan(3).center().padTop(80);
         table1.row();
 
-        table1.add(b1).padTop(50).padLeft(70).padRight(5).width(150).height(50);
-        table1.add(b2).padTop(50).padLeft(5).padRight(5).width(150).height(50);
-        table1.add(b3).padTop(50).padLeft(5).padRight(70).width(150).height(50);
+        table1.add(b1).padTop(50).padLeft(70).padRight(5).width(180).height(50);
+        table1.add(b2).padTop(50).padLeft(5).padRight(5).width(180).height(50);
+        table1.add(b3).padTop(50).padLeft(5).padRight(70).width(180).height(50);
         table1.row();
 
-        Texture imgTexture1=new Texture(Gdx.files.internal("ridhhin.png"));
+        Texture imgTexture1=new Texture(Gdx.files.internal("setting.png"));
         Texture imgTexture2=new Texture(Gdx.files.internal("img.png"));
-        Texture imgTexture3=new Texture(Gdx.files.internal("halloween.jpg"));
+        Texture imgTexture3=new Texture(Gdx.files.internal("gamebg.jpg"));
 
         Image i1=new Image(imgTexture1);
         Image i2=new Image(imgTexture2);
