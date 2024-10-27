@@ -1,0 +1,206 @@
+@startuml
+
+package com.angrybirds {
+    class Main {
+        - SpriteBatch batch
+        + create(): void
+        + render(): void
+        + resize(int, int): void
+        + dispose(): void
+        + setScreen(screen: Screen): void
+    }
+
+    class taptap {
+        + createButton(String, Game, Screen): void
+        + createExitButton(String): void
+        + resize(int, int): void
+        + dispose(): void
+    }
+
+    Main "1" --> "1" Playscreen
+    Main "1" --> "1" menu
+    Main "1" --> "1" levels
+    Main --> gamescreen
+    Main --> winscreen
+    Main --> losescreen
+}
+package com.angrybirds.obstacles{
+class catapult {
+    - Texture pigTexture
+    - float x
+    - float y
+
+    + catapult(float x, float y)
+    + render(SpriteBatch batch, float width, float height)
+    + dispose()
+}
+
+class pigs {
+    - Texture pigTexture
+    - float x
+    - float y
+
+    + pigs(float x, float y)
+    + render(SpriteBatch batch, float width, float height)
+    + dispose()
+}
+
+    class planks {
+        - Texture pigTexture
+        - float x
+        - float y
+
+        + planks(float x, float y)
+        + render(SpriteBatch batch, float width, float height)
+        + dispose()
+    }
+
+    class stones {
+        - Texture pigTexture
+        - float x
+        - float y
+
+        + stones(float x, float y)
+        + render(SpriteBatch batch, float width, float height)
+        + dispose()
+    }
+}
+
+package com.angrybirds.screens {
+    class settings {
+        - Main game
+        - Texture texture
+        - OrthographicCamera camera
+        - FitViewport viewport
+
+        - BitmapFont font
+        - button_show() : void
+        + settings(game : Main)
+        + show() : void
+        + render(delta : float) : void
+        + resize(width : int, height : int) : void
+    }
+
+    class Playscreen implements Screen {
+        - Main game
+        - Texture texture
+        - OrthographicCamera camera
+        - FitViewport viewport
+        - Music backgroundMusic
+        + Playscreen(Main): void
+        + show(): void
+        + render(float): void
+        + resize(int, int): void
+        + dispose(): void
+    }
+
+    class menu implements Screen {
+        - Main game
+        - OrthographicCamera camera
+        - FitViewport viewport
+        - Texture texture
+
+        + menu(Main): void
+        + show(): void
+        + render(float): void
+        + resize(int, int): void
+        + dispose(): void
+    }
+
+    class levels implements Screen {
+        - Main game
+        - Texture texture
+        - OrthographicCamera camera
+        - FitViewport viewport
+        - Music backgroundMusic
+        - Skin skin
+
+        + levels(Main, SpriteBatch): void
+        + show(): void
+        + render(float): void
+        + resize(int, int): void
+        + dispose(): void
+    }
+}
+
+class gamescreen implements Screen {
+    - Main game
+    - Texture texture
+    - OrthographicCamera camera
+    - FitViewport viewport
+
+
+    + gamescreen(Main game, SpriteBatch sb1): void
+    + show(): void
+    + render(float delta): void
+    + resize(int width, int height): void
+
+}
+class achievescreen {
+    - Main game
+    - OrthographicCamera camera
+    - FitViewport viewport
+
+
+    + achievescreen(Main game)
+}
+class winscreen implements Screen {
+    - Main game
+    - Texture texture
+    - OrthographicCamera camera
+    - FitViewport viewport
+
+
+    + winscreen(game: Main, sb: SpriteBatch)
+    + show(): void
+    + render(delta: float): void
+    + resize(width: int, height: int): void
+
+}
+
+class losescreen implements Screen {
+    - Main game
+    - Texture texture
+    - OrthographicCamera camera
+    - FitViewport viewport
+    - Music backgroundMusic
+
+
+    + losescreen(game: Main, sb: SpriteBatch)
+    + show(): void
+    + render(delta: float): void
+    + resize(width: int, height: int): void
+
+}
+
+package com.badlogic.gdx {
+    interface Screen {
+        + show(): void
+        + render(float delta): void
+        + resize(int width, int height): void
+        + pause(): void
+        + resume(): void
+        + hide(): void
+        + dispose(): void
+    }
+
+    abstract class Game {
+        + setScreen(Screen): void
+    }
+
+    Game <|-- Main
+    Screen <|-- Playscreen
+    Screen <|-- menu
+    Screen <|-- levels
+    Screen <|-- gamescreen
+
+    achievescreen <|-- menu
+    settings <|-- menu
+    playscreen <|-- menu
+    com.angrybirds.obstacles <|-- gamescreen
+    gamescreen <|-- winscreen
+    gamescreen <|-- losescreen
+    playscreen <|-- gamescreen
+}
+
+@enduml

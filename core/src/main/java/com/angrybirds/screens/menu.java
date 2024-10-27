@@ -82,6 +82,7 @@ public class menu implements Screen
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
         par.size = 20;
+
         BitmapFont font13 = gen.generateFont(par);
         gen.dispose();
 
