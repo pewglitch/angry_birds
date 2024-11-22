@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.GL20;
@@ -62,6 +63,17 @@ public class gamescreen implements Screen {
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
+
+    private Array<TextureRegion> remainingBirdsTextures;
+    private float[] remainingBirdsPositions;
+    private static final int TOTAL_BIRDS = 5;
+    private static final float BIRD_DISPLAY_Y = 50; // Y position for displaying birds
+    private static final float BIRD_DISPLAY_SPACING = 40; // Space between displayed birds
+    private static final float BIRD_DISPLAY_SIZE = 40; // Size of the displayed birds
+    private static final float INITIAL_X_POSITION = 50; // Starting X position for bird display
+
+
+    private catapult cata;
     public gamescreen(Main game, SpriteBatch sb1)
     {
         this.game = game;
@@ -83,7 +95,7 @@ public class gamescreen implements Screen {
 
         Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new red(world, birdRegion, 100/PIXELS_TO_METERS, 300/PIXELS_TO_METERS,stage);
+        bird = new red(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -96,6 +108,17 @@ public class gamescreen implements Screen {
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
+        cata = new catapult(130,20);
+
+
+        remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
+        remainingBirdsPositions = new float[TOTAL_BIRDS];
+
+        for (int i = 0; i < TOTAL_BIRDS; i++) {
+            remainingBirdsTextures.add(birdRegion);
+            remainingBirdsPositions[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
+        }
+
 
         stage.addActor(table1);
 
@@ -187,6 +210,7 @@ public class gamescreen implements Screen {
         camera.update();
         box2DCamera.update();
         game.batch.begin();
+        game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         birds.render(game.batch);
         game.batch.end();
 
@@ -202,9 +226,14 @@ public class gamescreen implements Screen {
             birds.reset();
         }
     }
+    private void updateRemainingBirdsDisplay() {
+        int remainingBirds = TOTAL_BIRDS - count;
+        for (int i = 0; i < remainingBirds; i++) {
+            remainingBirdsPositions[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
+        }
+    }
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -222,25 +251,44 @@ public class gamescreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+
+        // Draw remaining birds
+        int remainingBirds = TOTAL_BIRDS - count;
+        for (int i = 0; i < remainingBirds; i++) {
+            game.batch.draw(remainingBirdsTextures.get(i),
+                remainingBirdsPositions[i],
+                BIRD_DISPLAY_Y,
+                BIRD_DISPLAY_SIZE,
+                BIRD_DISPLAY_SIZE);
+        }
+
+        Texture nice=new Texture("cata.png");
+        game.batch.draw(nice, cata.getX(), cata.getY(), 180, 180);
+
         bird.render(game.batch);
         game.batch.end();
 
         stage.act(delta);
         stage.draw();
+
         if (debugPhysics) {
             debugRenderer.render(world, box2DCamera.combined);
         }
-        Vector2 birdPosition = bird.getPosition();
+
+        Vector2 birdPosition=bird.getPosition();
         if (bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
             birdPosition.x * PIXELS_TO_METERS < 0 ||
             birdPosition.y * PIXELS_TO_METERS < 0 ||
-            bird.isStopped()))
-        {
+            bird.isStopped())) {
             count++;
-            if(count<=5)
-            {
+            updateRemainingBirdsDisplay();
+            if(count < TOTAL_BIRDS) {
                 bird.reset();
             }
+        }
+
+        if (count >= TOTAL_BIRDS) {
+            Gdx.input.setInputProcessor(stage); // Only allow UI interactions
         }
     }
 
