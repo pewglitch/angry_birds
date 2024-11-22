@@ -62,6 +62,8 @@ public class gamescreen implements Screen {
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
+
+    private catapult cata;
     public gamescreen(Main game, SpriteBatch sb1)
     {
         this.game = game;
@@ -83,7 +85,10 @@ public class gamescreen implements Screen {
 
         Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new red(world, birdRegion, 100/PIXELS_TO_METERS, 300/PIXELS_TO_METERS,stage);
+
+
+        //birdddddddddd
+        bird = new red(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -96,7 +101,7 @@ public class gamescreen implements Screen {
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
-
+        cata = new catapult(130,20);
         stage.addActor(table1);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -187,8 +192,11 @@ public class gamescreen implements Screen {
         camera.update();
         box2DCamera.update();
         game.batch.begin();
-        birds.render(game.batch);
+        game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        bird.render(game.batch);
+        //cata.render(game.batch, 180, 180); // Use game.batch instead of sb
         game.batch.end();
+
 
         // Debug physics rendering
         if (debugPhysics) {
@@ -211,23 +219,27 @@ public class gamescreen implements Screen {
         // Update physics world
         world.step(WORLD_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-        // Update bird
         bird.update();
 
-        // Update cameras
         camera.update();
         box2DCamera.update();
 
-        // Draw background
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+
+        // Draw background
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+
         bird.render(game.batch);
+        Texture nice=new Texture("cata.png");
+        game.batch.draw(nice, cata.getX(), cata.getY(), 180, 180);
+
         game.batch.end();
 
         stage.act(delta);
         stage.draw();
-        if (debugPhysics) {
+        if (debugPhysics)
+        {
             debugRenderer.render(world, box2DCamera.combined);
         }
         Vector2 birdPosition = bird.getPosition();

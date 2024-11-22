@@ -14,12 +14,6 @@ public class catapult
         this.x = x;
         this.y = y;
     }
-
-    public void render(SpriteBatch batch, float width, float height)
-    {
-        batch.draw(pigTexture, x, y, width, height);
-    }
-
     public void dispose()
     {
         pigTexture.dispose();
@@ -33,4 +27,6 @@ public class catapult
     {
         return y;
     }
+
+
 }
