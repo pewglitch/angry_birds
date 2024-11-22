@@ -106,6 +106,7 @@ public class menu implements Screen
 
         table1.row();
 
+        constants rx = new constants();
         b1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -120,7 +121,8 @@ public class menu implements Screen
                 game.setScreen(new settings(game));
             }
         });
-        b3.addListener(new ClickListener() {
+        b3.addListener(new ClickListener()
+        {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new achievescreen(game));

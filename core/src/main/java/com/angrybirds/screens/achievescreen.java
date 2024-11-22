@@ -41,6 +41,11 @@ public class achievescreen implements Screen
     private Table table;
     private BitmapFont font;
 
+    public Integer l1=0;
+    public Integer l2=0;
+    public Integer l3=0;
+
+    private Integer sx=0;
 
     public achievescreen(Main game)
     {
@@ -55,7 +60,11 @@ public class achievescreen implements Screen
         skin.add("default-font", font);
         stage=new Stage(new ScreenViewport());
         table=new Table();
-
+        constants rx=new constants();
+        l1=rx.getR1();
+        l2=rx.getR2();
+        l3=rx.getR3();
+        sx=rx.getR4();
         achieve();
     }
 
@@ -69,7 +78,7 @@ public class achievescreen implements Screen
         Label.LabelStyle lst = new Label.LabelStyle();
         lst.font = font12;
         label = new Label("Achievements", lst);
-        label.setColor(0, 0,0, 1);
+        label.setColor(0, 0, 0, 1);
 
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
         FreeTypeFontParameter par = new FreeTypeFontParameter();
@@ -79,29 +88,51 @@ public class achievescreen implements Screen
         Label.LabelStyle lst1 = new Label.LabelStyle();
         lst1.font = font13;
 
+        label1 = new Label("Highest Score", lst1);
+        label2 = new Label("Coins earned", lst1);
+        label3 = new Label("Current level", lst1);
 
-        label1=new Label("Highest Score", lst1);
-        label2=new Label("Coins earned", lst1);
-        label3=new Label("Current level", lst1);
-        label1.setColor(0, 0,0, 1);
-        label2.setColor(0, 0,0, 1);
-        label3.setColor(0, 0,0, 1);
+        // Set all labels to black color
+        label1.setColor(0, 0, 0, 1);
+        label2.setColor(0, 0, 0, 1);
+        label3.setColor(0, 0, 0, 1);
 
+        // Create level labels with colors
+        Label labellevel1 = new Label("Level 1: " + l1, lst1);
+        Label labellevel2 = new Label("Level 2: " + l2, lst1);
+        Label labellevel3 = new Label("Level 3: " + l3, lst1);
+        Label labellevel4 = new Label("Secret mission: " + sx, lst1);
 
-        float y=VIRTUAL_HEIGHT-label.getHeight()*label.getFontScaleY()-190;
-        float margin=60f;
-        float aw=VIRTUAL_WIDTH-2*margin;
-        float spl=aw/3;
+        labellevel1.setColor(0, 0, 0, 1);
+        labellevel2.setColor(0, 0, 0, 1);
+        labellevel3.setColor(0, 0, 0, 1);
+        labellevel4.setColor(0, 0, 0, 1);
 
-        float hc=(VIRTUAL_WIDTH-label.getWidth()*label.getFontScaleX())/2;
-        float tm=VIRTUAL_HEIGHT-label.getHeight()*label.getFontScaleY()-50;
+        // Position labels
+        float y = VIRTUAL_HEIGHT - label.getHeight() * label.getFontScaleY() - 190;
+        float margin = 60f;
+        float aw = VIRTUAL_WIDTH - 2 * margin;
+        float spl = aw / 3;
 
-        label.setPosition(hc,tm);
-        label1.setPosition(margin,y);
-        label2.setPosition(margin+1.25f*spl,y);
-        label3.setPosition(margin+2.5f*spl,y);
+        float hc = (VIRTUAL_WIDTH - label.getWidth() * label.getFontScaleX()) / 2;
+        float tm = VIRTUAL_HEIGHT - label.getHeight() * label.getFontScaleY() - 50;
+
+        label.setPosition(hc, tm);
+        label1.setPosition(margin, y);
+        label2.setPosition(margin + 1.25f * spl, y);
+        label3.setPosition(margin + 2.5f * spl, y);
+
+        // Position level labels below
+        float levelLabelY = y - 50; // Start below `label1`
+        float labelSpacing = 40f;   // Spacing between level labels
+
+        labellevel1.setPosition(margin, levelLabelY);
+        labellevel2.setPosition(margin, levelLabelY - labelSpacing);
+        labellevel3.setPosition(margin, levelLabelY - 2 * labelSpacing);
+        labellevel4.setPosition(margin, levelLabelY - 3 * labelSpacing);
+
+        // Add button and table
         buttonDrawable = new TextureRegionDrawable(new TextureRegion(texture2));
-
         BitmapFont sizefont = skin.getFont("default-font");
         sizefont.getData().setScale(1.5f);
 
@@ -112,44 +143,45 @@ public class achievescreen implements Screen
         tbt.fontColor = new Color(0f, 0f, 139f / 255f, 1f);
         b4 = new TextButton("Back", tbt);
         b5 = new TextButton("Exit", tbt);
+
         table.setFillParent(true);
         table.top();
-
         table.add(b4).width(100).height(40).pad(10).padRight(380);
         table.add(b5).width(100).height(40).pad(10).padLeft(380);
         table.row();
         table.add(label).padTop(40).colspan(2).center();
         table.row();
-
         table.add(label1).padTop(25);
         table.add(label2).padTop(25);
         table.add(label3).padTop(25);
 
-        b4.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                game.setScreen(new menu(game));
-            }
-        });
-        b5.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                Gdx.app.exit();
-            }
-        });
-
+        // Add actors to stage
         stage.addActor(label);
         stage.addActor(label1);
         stage.addActor(label2);
         stage.addActor(label3);
+        stage.addActor(labellevel1);
+        stage.addActor(labellevel2);
+        stage.addActor(labellevel3);
+        stage.addActor(labellevel4);
         stage.addActor(table);
 
+        // Set button listeners
+        b4.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new menu(game));
+            }
+        });
 
+        b5.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
     }
+
 
     @Override
     public void show()

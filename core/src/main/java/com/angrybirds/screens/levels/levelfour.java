@@ -35,7 +35,7 @@ import com.angrybirds.birds.red;
 
 import static java.lang.Thread.sleep;
 
-public class leveltwo implements Screen
+public class levelfour implements Screen
 {
     private final Main game;
     private final SpriteBatch sb;
@@ -81,7 +81,7 @@ public class leveltwo implements Screen
     private float runtime;
 
     private catapult cata;
-    public leveltwo(Main game, SpriteBatch sb1)
+    public levelfour(Main game, SpriteBatch sb1)
     {
         this.game = game;
         this.sb = sb1;

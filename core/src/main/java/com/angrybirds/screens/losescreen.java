@@ -40,7 +40,7 @@ public class losescreen implements Screen
     private Label label;
     private Integer score;
 
-    public losescreen(Main game,SpriteBatch sb,Integer scorex)
+    public losescreen(Main game,SpriteBatch sb,Integer scorex,Integer level)
     {
         this.game = game;
         camera = new OrthographicCamera();

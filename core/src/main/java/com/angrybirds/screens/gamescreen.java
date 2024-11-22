@@ -51,7 +51,7 @@ public class gamescreen implements Screen {
     private Music backgroundMusic;
     private int score = 0;
     private int level = 1;
-
+    private Integer coins=0;
     private World world;
     private red bird;
     private final float WORLD_STEP = 1/60f;
@@ -336,13 +336,13 @@ public class gamescreen implements Screen {
             checkplankStatus(plank5);
             checkplankStatus(plank6);
 
-            if(score>=200)
+            if(score>=400)
             {
-                game.setScreen(new winscreen(game,sb,score));
+                game.setScreen(new winscreen(game,sb,score,1,sb));
             }
             else
             {
-                game.setScreen(new losescreen(game,sb,score));
+                game.setScreen(new losescreen(game,sb,score,1));
             }
 
         }

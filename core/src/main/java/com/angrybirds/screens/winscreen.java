@@ -1,5 +1,8 @@
 package com.angrybirds.screens;
 
+import com.angrybirds.screens.levels.levelfour;
+import com.angrybirds.screens.levels.levelthree;
+import com.angrybirds.screens.levels.leveltwo;
 import com.badlogic.gdx.Screen;
 import com.angrybirds.Main;
 import com.angrybirds.buttons.taptap;
@@ -26,6 +29,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import static java.lang.Math.max;
+
 public class winscreen implements Screen
 {
     private Main game;
@@ -40,14 +45,28 @@ public class winscreen implements Screen
     private TextureRegionDrawable buttonDrawable;
 
     private Skin skin;
-    private TextButton b4, b5, b6;
+    private TextButton b1,b2,b3,b4;
     private Table table1;
     private Label label;
     private Integer score;
-    public winscreen(Main game,SpriteBatch sb,Integer socrex)
+    private Integer l;
+    private SpriteBatch sb;
+    public winscreen(Main game,SpriteBatch sb,Integer socrex,Integer level,SpriteBatch sx)
     {
+        this.sb=sx;
+        this.l=level;
         this.score=socrex;
         this.game = game;
+        constants rx=new constants();
+        if (level == 1) {
+            rx.setR1(Math.max(rx.getR1(), socrex));
+        } else if (level == 2) {
+            rx.setR2(Math.max(rx.getR2(), socrex));
+        } else if (level == 3) {
+            rx.setR3(Math.max(rx.getR3(), socrex));
+        } else if (level == 4) {
+            rx.setR4(Math.max(rx.getR4(), socrex));
+        }
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
@@ -64,60 +83,97 @@ public class winscreen implements Screen
     {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 100;
+        parameter.size = 20;
         BitmapFont font12 = generator.generateFont(parameter);
         generator.dispose();
+
         Label.LabelStyle lst = new Label.LabelStyle();
         lst.font = font12;
-        label = new Label("Yay Victory!!", lst);
-        label.setColor(0, 0f, 0, 1);  // Setting the color to coral
-        Label scoreLabel = new Label("Score: " + score.toString(), lst);
-        scoreLabel.setColor(Color.WHITE);
 
-        b4 = new TextButton("Back", skin);
-        b5 = new TextButton("Exit", skin);
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        par.size = 20;
+
+        BitmapFont font13 = gen.generateFont(par);
+        gen.dispose();
+
+        TextButton.TextButtonStyle btn = new TextButton.TextButtonStyle();
+        btn.font = font13;
+        btn.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
+
+        b1 = new TextButton("Home", btn);
+        b2 = new TextButton("Exit", btn);
+        b3 = new TextButton("Next Level", btn);
+        b4 = new TextButton("Replay Level", btn);
 
         table1.setFillParent(true);
         table1.top();
+        table1.padTop(50);
 
-        table1.add(b4).left().padTop(20).padLeft(30).width(100).height(40);
-        table1.add().expandX();
-        table1.add(b5).right().padTop(20).padRight(30).width(100).height(40);
-        table1.row();
-        table1.add(label).colspan(3).center().padTop(20).padBottom(100);
-        table1.row();
-        table1.add(scoreLabel).colspan(3).center().padTop(20);
+        table1.add(b1).padLeft(30).padRight(10).padTop(20).width(220).height(90);
+        table1.add(b2).padLeft(10).padRight(10).padTop(20).width(220).height(90);
+        table1.add(b3).padLeft(10).padRight(10).padTop(20).width(220).height(90);
+        table1.add(b4).padLeft(10).padRight(30).padTop(20).width(220).height(90);
 
-        //table1.row();
+        table1.row();
+
+        constants rx = new constants();
+        b1.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new menu(game));
+                //backgroundMusic.stop();
+            }
+        });
+
+        b2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+                //backgroundMusic.stop();
+            }
+        });
+        b3.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (l == 1) {
+                    game.setScreen(new leveltwo(game,sb));
+                } else if (l == 2) {
+                    game.setScreen(new levelthree(game,sb));
+                } else if (l == 3) {
+                    game.setScreen(new levelfour(game,sb));
+                } else if (l == 4) {
+
+                }
+                //backgroundMusic.stop();
+            }
+        });
+
 
         b4.addListener(new ClickListener()
         {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                game.setScreen(new menu(game));
-                backgroundMusic.stop();
-            }
-        });
-
-        b5.addListener(new ClickListener()
-        {
-            @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-                backgroundMusic.stop();
+                if (l == 1) {
+                    game.setScreen(new gamescreen(game,sb));
+                } else if (l == 2) {
+                    game.setScreen(new leveltwo(game,sb));
+                } else if (l == 3) {
+                    game.setScreen(new levelthree(game,sb));
+                } else if (l == 4) {
+                    game.setScreen(new levelfour(game,sb));
+                }
+                //backgroundMusic.stop();
             }
         });
 
-        buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("button1.png")));
-        b4.getStyle().up= buttonDrawable;
-        b5.getStyle().up= buttonDrawable;
-        stage.addActor(table1);
+        buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("buttons.png")));
+        b1.getStyle().up = buttonDrawable;
+        b2.getStyle().up = buttonDrawable;
+        b3.getStyle().up = buttonDrawable;
+        b4.getStyle().up = buttonDrawable;
 
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("win.mp3"));
-        backgroundMusic.setLooping(false);
-        backgroundMusic.setVolume(0.5f);
-        backgroundMusic.play();
+        stage.addActor(table1);
         Gdx.input.setInputProcessor(stage);
     }
 
