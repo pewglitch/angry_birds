@@ -1,9 +1,12 @@
 package com.angrybirds.screens;
 
 import com.angrybirds.obstacles.catapult;
+import com.angrybirds.obstacles.pigs;
+import com.angrybirds.obstacles.planks;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -32,11 +35,13 @@ import static java.lang.Thread.sleep;
 public class gamescreen implements Screen {
     private final Main game;
     private final SpriteBatch sb;
+    private Sprite sprite_plank;
     private OrthographicCamera camera;
     private OrthographicCamera box2DCamera; // Separate camera for Box2D
     private FitViewport viewport;
     private Stage stage;
     private Texture texture;
+    private Texture plank_texture;
     private Skin skin;
     private Table table1;
     private Label scorelabel;
@@ -60,6 +65,7 @@ public class gamescreen implements Screen {
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
     private pigs p1,p2,p3,p4,p5;
+    private planks plank1,plank2,plank3,plank4,plank5,plank6;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -132,10 +138,19 @@ public class gamescreen implements Screen {
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
         cata = new catapult(130,20);
-        p1= new pigs(600,200,world);
+        p1= new pigs(600,180,world);
         p2= new pigs(700,250,world);
-        p3= new pigs(800,300,world);
-        p4= new pigs(900,350,world);
+        p3= new pigs(850,200,world);
+        p4= new pigs(890,200,world);
+        p5= new pigs(870,240,world);
+
+        //plank
+        plank1=new planks(530,170,7,4,90,world);
+        plank2=new planks(630,245,10,4,90,world);
+        plank3=new planks(960,100,7,4,0,world);
+        plank4=new planks(960,230,7,4,0,world);
+        plank5=new planks(745,165,5.2f,4,90,world);
+        plank6=new planks(860,165,5.2f,4,90,world);
 
         remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
@@ -263,6 +278,13 @@ public class gamescreen implements Screen {
         p2.render(game.batch);
         p3.render(game.batch);
         p4.render(game.batch);
+        p5.render(game.batch);
+        plank1.render(game.batch);
+        plank2.render(game.batch);
+        plank3.render(game.batch);
+        plank4.render(game.batch);
+        plank5.render(game.batch);
+        plank6.render(game.batch);
         // Draw remaining birds
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++) {
@@ -307,6 +329,12 @@ public class gamescreen implements Screen {
             checkPigStatus(p2);
             checkPigStatus(p3);
             checkPigStatus(p4);
+            checkplankStatus(plank1);
+            checkplankStatus(plank2);
+            checkplankStatus(plank3);
+            checkplankStatus(plank4);
+            checkplankStatus(plank5);
+            checkplankStatus(plank6);
 
             if(score>=200)
             {
@@ -323,6 +351,14 @@ public class gamescreen implements Screen {
     private void checkPigStatus(pigs pig)
     {
         if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+        {
+            score += 100;
+            scorelabel.setText(String.format("Score: %05d", score));
+        }
+    }
+    private void checkplankStatus(planks plank)
+    {
+        if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
         {
             score += 100;
             scorelabel.setText(String.format("Score: %05d", score));
