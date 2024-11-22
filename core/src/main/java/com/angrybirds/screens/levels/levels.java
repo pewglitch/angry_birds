@@ -30,7 +30,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class levels implements Screen {
+public class levels implements Screen
+{
     private Main game;
     private Texture texture;
     private OrthographicCamera camera;

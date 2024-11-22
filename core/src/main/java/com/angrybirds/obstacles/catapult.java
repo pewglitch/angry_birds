@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class catapult
 {
     private Texture pigTexture;
-    private float x, y;
+    private  static float x, y;
 
     public catapult(float x, float y)
     {
@@ -23,5 +23,14 @@ public class catapult
     public void dispose()
     {
         pigTexture.dispose();
+    }
+
+    public static float getX()
+    {
+        return x;
+    }
+    public static float getY()
+    {
+        return y;
     }
 }

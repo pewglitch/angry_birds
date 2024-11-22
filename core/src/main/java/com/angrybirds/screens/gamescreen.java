@@ -3,13 +3,16 @@ package com.angrybirds.screens;
 import com.angrybirds.obstacles.catapult;
 import com.angrybirds.obstacles.pigs;
 import com.angrybirds.obstacles.planks;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
@@ -30,56 +32,58 @@ import com.angrybirds.birds.black;
 import com.angrybirds.birds.red;
 import com.angrybirds.birds.white;
 
-public class gamescreen implements Screen
-{
-    private Main game;
-    private Texture texture;
+public class gamescreen implements Screen {
+    private final Main game;
+    private final SpriteBatch sb;
     private OrthographicCamera camera;
+    private OrthographicCamera box2DCamera; // Separate camera for Box2D
     private FitViewport viewport;
-    private Music backgroundMusic;
-
-    private final float VIRTUAL_WIDTH = 1000;
-    private final float VIRTUAL_HEIGHT = 600;
-    public Stage stage;
-    private Integer score = 0;
-    private Integer level = 1;
-
-    Label scorelabel;
-    Label levellabel;
-    SpriteBatch sb;
+    private Stage stage;
+    private Texture texture;
     private Skin skin;
-    private TextButton b1, b2, b3, b4, b5, b6;
     private Table table1;
-    private Label label;
-    private pigs p1,p2,p3,p4,p5;
-    private planks box1,box2;
-    private catapult cata;
-    private Texture red1;
-    private Texture black1,white1;
+    private Label scorelabel;
+    private Label levellabel;
+    private TextButton b1;
     private TextureRegionDrawable buttonDrawable;
-    private red red_bird;
-    private yellow yellow_bird;
-    private black black_bird;
-    private white white_bird;
+    private Music backgroundMusic;
+    private int score = 0;
+    private int level = 1;
 
-
-
-
+    private World world;
+    private red bird;
+    private final float WORLD_STEP = 1/60f;
+    private final int VELOCITY_ITERATIONS = 6;
+    private final int POSITION_ITERATIONS = 2;
+    private Vector3 touchPoint;
+    private boolean debugPhysics = true; // Set to true for debugging
+    private Box2DDebugRenderer debugRenderer;
+    private final float PIXELS_TO_METERS = 100f;
+    private Integer VIRTUAL_WIDTH = 1000;
+    private Integer VIRTUAL_HEIGHT = 600;
+    private Integer count=0;
     public gamescreen(Main game, SpriteBatch sb1)
     {
         this.game = game;
-        this.sb=sb1;
+        this.sb = sb1;
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
 
-        red_bird=new red(160,120);
-        yellow_bird=new yellow(100,20);
-        black_bird=new black(150,25);
-        white_bird=new white(30,20);
+        box2DCamera = new OrthographicCamera();
+        box2DCamera.setToOrtho(false, VIRTUAL_WIDTH / PIXELS_TO_METERS, VIRTUAL_HEIGHT / PIXELS_TO_METERS);
 
+        world = new World(new Vector2(0, 0), true);
+        debugRenderer = new Box2DDebugRenderer();
+
+        touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
         texture = new Texture("gamebg.jpg");
+
+        Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
+        TextureRegion birdRegion = new TextureRegion(birdTexture);
+        bird = new red(world, birdRegion, 100/PIXELS_TO_METERS, 300/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -92,18 +96,46 @@ public class gamescreen implements Screen
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
-        p1 = new pigs(710, 320);
-        p2 = new pigs(760, 320);
-        p3 = new pigs(690, 270);
-        p4 = new pigs(740, 270);
-        p5 = new pigs(790, 270);
-        box1 = new planks(640, 225);
-
-        cata = new catapult(130 , 20);
 
         stage.addActor(table1);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new InputAdapter()
+        {
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button)
+            {
+                Vector3 worldCoords = new Vector3(screenX, screenY, 0);
+                camera.unproject(worldCoords);
+                bird.touchDown(worldCoords.x / PIXELS_TO_METERS, worldCoords.y / PIXELS_TO_METERS);
+                return true;
+            }
+
+            @Override
+            public boolean touchDragged(int screenX, int screenY, int pointer)
+            {
+                Vector3 worldCoords = new Vector3(screenX, screenY, 0);
+                camera.unproject(worldCoords);
+                bird.touchDragged(worldCoords.x / PIXELS_TO_METERS, worldCoords.y / PIXELS_TO_METERS);
+                return true;
+            }
+
+            @Override
+            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                Vector3 worldCoords = new Vector3(screenX, screenY, 0);
+                camera.unproject(worldCoords);
+                bird.touchUp(worldCoords.x / PIXELS_TO_METERS, worldCoords.y / PIXELS_TO_METERS);
+                return true;
+            }
+        });
+        show(multiplexer);
     }
 
+    public void show(InputMultiplexer ix)
+    {
+        Gdx.input.setInputProcessor(ix);
+    }
     @Override
     public void show()
     {
@@ -144,72 +176,74 @@ public class gamescreen implements Screen
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
         stage.addActor(table1);
-        Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(stage);
     }
 
+
+
+    public void render(red birds)
+    {
+        birds.update();
+        camera.update();
+        box2DCamera.update();
+        game.batch.begin();
+        birds.render(game.batch);
+        game.batch.end();
+
+        // Debug physics rendering
+        if (debugPhysics) {
+            debugRenderer.render(world, box2DCamera.combined);
+        }
+        Vector2 birdPosition = birds.getPosition();
+        if (birds.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
+            birdPosition.x * PIXELS_TO_METERS < 0 ||
+            birdPosition.y * PIXELS_TO_METERS < 0 ||
+            birds.isStopped())) {
+            birds.reset();
+        }
+    }
     @Override
     public void render(float delta)
     {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
 
+        // Update physics world
+        world.step(WORLD_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+
+        // Update bird
+        bird.update();
+
+        // Update cameras
+        camera.update();
+        box2DCamera.update();
+
+        // Draw background
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        p1.render(game.batch, 50, 50);
-        p2.render(game.batch, 50, 50);
-        p3.render(game.batch, 50, 50);
-        p4.render(game.batch, 50, 50);
-        p5.render(game.batch, 50, 50);
-
-        red_bird.render(game.batch, 50, 50);
-        white_bird.render(game.batch, 50, 50);
-        yellow_bird.render(game.batch, 50, 50);
-        black_bird.render(game.batch, 50, 50);
-
-
-        box1.render(game.batch, 260, 60);
-        cata.render(game.batch, 180, 180);
-
+        bird.render(game.batch);
         game.batch.end();
 
         stage.act(delta);
         stage.draw();
-
-
-        float restrictedY = 800;
-        float restrictedHeight = 400;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched())
+        if (debugPhysics) {
+            debugRenderer.render(world, box2DCamera.combined);
+        }
+        Vector2 birdPosition = bird.getPosition();
+        if (bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
+            birdPosition.x * PIXELS_TO_METERS < 0 ||
+            birdPosition.y * PIXELS_TO_METERS < 0 ||
+            bird.isStopped()))
         {
-            float touchX = Gdx.input.getX();
-            float touchY = Gdx.input.getY();
-
-            touchY = Gdx.graphics.getHeight() - touchY;
-
-            if (touchX >= 0 && touchX <= 500 && touchY >= 0 && touchY <= 400)
+            count++;
+            if(count<=5)
             {
-                game.setScreen(new winscreen(game, sb));
-                backgroundMusic.stop();
+                bird.reset();
             }
         }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.justTouched())
-        {
-            float touchX = Gdx.input.getX();
-            float touchY = Gdx.input.getY();
-
-            touchY = Gdx.graphics.getHeight() - touchY;
-
-            if (touchX >= 500 && touchX <= 1000 && touchY >= 0 && touchY <= 400)
-            {
-                game.setScreen(new losescreen(game, sb));
-                backgroundMusic.stop();
-            }
-        }
-
-
     }
+
 
     @Override
     public void resize(int width, int height)
