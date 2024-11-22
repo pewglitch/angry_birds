@@ -9,8 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -27,6 +26,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
 import com.angrybirds.birds.red;
+
+import static java.lang.Thread.sleep;
 
 public class gamescreen implements Screen {
     private final Main game;
@@ -58,7 +59,7 @@ public class gamescreen implements Screen {
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
-
+    private pigs p1,p2,p3,p4,p5;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -67,6 +68,7 @@ public class gamescreen implements Screen {
     private static final float BIRD_DISPLAY_SIZE = 40; // Size of the displayed birds
     private static final float INITIAL_X_POSITION = 50; // Starting X position for bird display
 
+    private float runtime;
 
     private catapult cata;
     public gamescreen(Main game, SpriteBatch sb1)
@@ -82,6 +84,32 @@ public class gamescreen implements Screen {
         box2DCamera.setToOrtho(false, VIRTUAL_WIDTH / PIXELS_TO_METERS, VIRTUAL_HEIGHT / PIXELS_TO_METERS);
 
         world = new World(new Vector2(0, 0), true);
+        world.setContactListener(new ContactListener()
+        {
+            @Override
+            public void beginContact(Contact contact)
+            {
+                Object a = contact.getFixtureA().getBody().getUserData();
+                Object b = contact.getFixtureB().getBody().getUserData();
+
+                System.out.println("Contact detected: " + a + " and " + b);
+
+                if (isBird(contact))
+                {
+                    //bird.onCollision();
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
+
         debugRenderer = new Box2DDebugRenderer();
 
         touchPoint = new Vector3();
@@ -104,12 +132,16 @@ public class gamescreen implements Screen {
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
         cata = new catapult(130,20);
-
+        p1= new pigs(600,200,world);
+        p2= new pigs(700,250,world);
+        p3= new pigs(800,300,world);
+        p4= new pigs(900,350,world);
 
         remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
 
-        for (int i = 0; i < TOTAL_BIRDS; i++) {
+        for (int i = 0; i < TOTAL_BIRDS; i++)
+        {
             remainingBirdsTextures.add(birdRegion);
             rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
@@ -149,7 +181,12 @@ public class gamescreen implements Screen {
         });
         show(multiplexer);
     }
-
+    private boolean isBird(Contact contact)
+    {
+        Object a = contact.getFixtureA().getBody().getUserData();
+        Object b = contact.getFixtureB().getBody().getUserData();
+        return a == bird || b == bird;
+    }
     public void show(InputMultiplexer ix)
     {
         Gdx.input.setInputProcessor(ix);
@@ -197,30 +234,6 @@ public class gamescreen implements Screen {
         //Gdx.input.setInputProcessor(stage);
     }
 
-
-
-    public void render(red birds)
-    {
-        birds.update();
-        camera.update();
-        box2DCamera.update();
-        game.batch.begin();
-        game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        birds.render(game.batch);
-        game.batch.end();
-
-        // Debug physics rendering
-        if (debugPhysics) {
-            debugRenderer.render(world, box2DCamera.combined);
-        }
-        Vector2 birdPosition = birds.getPosition();
-        if (birds.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
-            birdPosition.x * PIXELS_TO_METERS < 0 ||
-            birdPosition.y * PIXELS_TO_METERS < 0 ||
-            birds.isStopped())) {
-            birds.reset();
-        }
-    }
     private void updateRemainingBirdsDisplay() {
         int remainingBirds=TOTAL_BIRDS-count;
         for (int i = 0; i < remainingBirds; i++) {
@@ -246,7 +259,10 @@ public class gamescreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-
+        p1.render(game.batch);
+        p2.render(game.batch);
+        p3.render(game.batch);
+        p4.render(game.batch);
         // Draw remaining birds
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++) {
@@ -283,18 +299,45 @@ public class gamescreen implements Screen {
         }
 
         if (count >= TOTAL_BIRDS) {
-            Gdx.input.setInputProcessor(stage); // Only allow UI interactions
+            Gdx.input.setInputProcessor(stage);
+        }
+        if(count==TOTAL_BIRDS)
+        {
+            checkPigStatus(p1);
+            checkPigStatus(p2);
+            checkPigStatus(p3);
+            checkPigStatus(p4);
+
+            if(score>=200)
+            {
+                game.setScreen(new winscreen(game,sb,score));
+            }
+            else
+            {
+                game.setScreen(new losescreen(game,sb,score));
+            }
+
         }
     }
 
-
+    private void checkPigStatus(pigs pig)
+    {
+        if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+        {
+            score += 100;
+            scorelabel.setText(String.format("Score: %05d", score));
+        }
+    }
     @Override
     public void resize(int width, int height)
     {
         viewport.update(width, height);
         stage.getViewport().update(width, height, true);
     }
-
+    public void update(float deltatime)
+    {
+        runtime+=deltatime;
+    }
     @Override
     public void pause() {}
 

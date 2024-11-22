@@ -38,11 +38,13 @@ public class losescreen implements Screen
     private TextButton b4, b5, b6;
     private Table table1;
     private Label label;
+    private Integer score;
 
-    public losescreen(Main game,SpriteBatch sb)
+    public losescreen(Main game,SpriteBatch sb,Integer scorex)
     {
         this.game = game;
         camera = new OrthographicCamera();
+        this.score=scorex;
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
 
@@ -66,6 +68,8 @@ public class losescreen implements Screen
         label = new Label("Level Not Cleared!", lst);
         label.setColor(0, 0f, 0, 1);  // Setting the color to coral
 
+        Label scoreLabel = new Label("Score: " + score.toString(), lst);
+        scoreLabel.setColor(0, 0f, 0, 1);  // Setting the color to black
 
         b4 = new TextButton("Back", skin);
         b5 = new TextButton("Exit", skin);
@@ -79,7 +83,7 @@ public class losescreen implements Screen
         table1.row();
         table1.add(label).colspan(3).center().padTop(80);
         table1.row();
-
+        table1.add(scoreLabel).colspan(3).center().padTop(20);
         //table1.row();
 
         b4.addListener(new ClickListener()

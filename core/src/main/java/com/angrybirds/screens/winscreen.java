@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,9 +43,10 @@ public class winscreen implements Screen
     private TextButton b4, b5, b6;
     private Table table1;
     private Label label;
-
-    public winscreen(Main game,SpriteBatch sb)
+    private Integer score;
+    public winscreen(Main game,SpriteBatch sb,Integer socrex)
     {
+        this.score=socrex;
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -69,7 +71,8 @@ public class winscreen implements Screen
         lst.font = font12;
         label = new Label("Yay Victory!!", lst);
         label.setColor(0, 0f, 0, 1);  // Setting the color to coral
-
+        Label scoreLabel = new Label("Score: " + score.toString(), lst);
+        scoreLabel.setColor(Color.WHITE);
 
         b4 = new TextButton("Back", skin);
         b5 = new TextButton("Exit", skin);
@@ -83,6 +86,7 @@ public class winscreen implements Screen
         table1.row();
         table1.add(label).colspan(3).center().padTop(20).padBottom(100);
         table1.row();
+        table1.add(scoreLabel).colspan(3).center().padTop(20);
 
         //table1.row();
 
@@ -111,7 +115,7 @@ public class winscreen implements Screen
         stage.addActor(table1);
 
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("win.mp3"));
-        backgroundMusic.setLooping(true);
+        backgroundMusic.setLooping(false);
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
         Gdx.input.setInputProcessor(stage);
