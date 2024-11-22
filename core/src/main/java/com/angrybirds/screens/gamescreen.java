@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.GL20;
@@ -50,7 +49,6 @@ public class gamescreen implements Screen {
     private Music backgroundMusic;
     private int score = 0;
     private int level = 1;
-    private Array<TextureRegion> remainingBirdsTextures;
 
     private World world;
     private red bird;
@@ -64,12 +62,6 @@ public class gamescreen implements Screen {
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
-    private float[] remainingBirdsPositions;
-    private static final int TOTAL_BIRDS = 5;
-    private static final float BIRD_DISPLAY_Y = 30; // Y position for displaying birds
-    private static final float BIRD_DISPLAY_SPACING = 40; // Space between displayed birds
-    private static final float BIRD_DISPLAY_SIZE = 40; // Size of the displayed birds
-    private static final float INITIAL_X_POSITION = 30; // Starting X position for bird display
     public gamescreen(Main game, SpriteBatch sb1)
     {
         this.game = game;
@@ -106,15 +98,6 @@ public class gamescreen implements Screen {
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
 
         stage.addActor(table1);
-
-        remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
-        remainingBirdsPositions = new float[TOTAL_BIRDS];
-
-        for (int i = 0; i < TOTAL_BIRDS; i++) {
-            remainingBirdsTextures.add(birdRegion);
-            remainingBirdsPositions[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
-        }
-
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
@@ -219,15 +202,9 @@ public class gamescreen implements Screen {
             birds.reset();
         }
     }
-    public void updateRemainingBirdsDisplay() {
-        int remainingBirds = TOTAL_BIRDS - count;
-        // Shift remaining birds to the left
-        for (int i = 0; i < remainingBirds; i++) {
-            remainingBirdsPositions[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
-        }
-    }
     @Override
-    public void render(float delta) {
+    public void render(float delta)
+    {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -245,46 +222,27 @@ public class gamescreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-
-        // Draw remaining birds
-        int remainingBirds = TOTAL_BIRDS - count;
-        for (int i = 0; i < remainingBirds; i++) {
-            game.batch.draw(remainingBirdsTextures.get(i),
-                remainingBirdsPositions[i],
-                BIRD_DISPLAY_Y,
-                BIRD_DISPLAY_SIZE,
-                BIRD_DISPLAY_SIZE);
-        }
-
-        // Draw active bird
         bird.render(game.batch);
         game.batch.end();
 
         stage.act(delta);
         stage.draw();
-
         if (debugPhysics) {
             debugRenderer.render(world, box2DCamera.combined);
         }
-
         Vector2 birdPosition = bird.getPosition();
         if (bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
             birdPosition.x * PIXELS_TO_METERS < 0 ||
             birdPosition.y * PIXELS_TO_METERS < 0 ||
-            bird.isStopped())) {
+            bird.isStopped()))
+        {
             count++;
-            updateRemainingBirdsDisplay();
-            if(count < TOTAL_BIRDS) {
+            if(count<=5)
+            {
                 bird.reset();
             }
         }
-
-        // Disable bird projection if all birds are used
-        if (count >= TOTAL_BIRDS) {
-            Gdx.input.setInputProcessor(stage); // Only allow UI interactions
-        }
     }
-
 
 
     @Override
