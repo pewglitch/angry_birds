@@ -13,7 +13,7 @@ public class red extends InputMultiplexer
 {
     private static final float PIXELS_TO_METERS = 100f;
     private static final float BIRD_SIZE = 50f; // Size in pixels
-
+    private boolean markedForDestruction= false;
     private Body body;
     private TextureRegion texture;
     private World world;
@@ -22,12 +22,12 @@ public class red extends InputMultiplexer
     private Vector2 dragStart = new Vector2();
     private Vector2 launchPosition = new Vector2();
 
-    // Constants for physics
-    private static final float MAX_DRAG_DISTANCE = 3.0f; // in meters
+    private static final float MAX_DRAG_DISTANCE = 3.0f;
     private static final float LAUNCH_FORCE_MULTIPLIER = 7.0f;
     private Stage stage;
     public red(World world, TextureRegion texture, float x, float y,Stage stag) {
         this.world = world;
+
         this.texture = texture;
         this.launchPosition.set(x, y);
         this.stage=stag;
@@ -48,35 +48,30 @@ public class red extends InputMultiplexer
         fixtureDef.restitution = 0.6f;
 
         body.createFixture(fixtureDef);
+
+        body.setUserData(this);
         circle.dispose();
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch)
+    {
         Vector2 position = body.getPosition();
         float angle = body.getAngle() * MathUtils.radiansToDegrees;
 
-        // Convert Box2D coordinates (meters) to screen coordinates (pixels)
         float screenX = position.x * PIXELS_TO_METERS - BIRD_SIZE/2f;
         float screenY = position.y * PIXELS_TO_METERS - BIRD_SIZE/2f;
 
         batch.draw(texture,
-            screenX, screenY,  // Position
-            BIRD_SIZE/2f, BIRD_SIZE/2f,  // Origin
-            BIRD_SIZE, BIRD_SIZE,  // Size
+            screenX, screenY,
+            BIRD_SIZE/2f, BIRD_SIZE/2f,
+            BIRD_SIZE, BIRD_SIZE,
             1, 1,  // Scale
             angle
         );
     }
 
-    public void update()
+    public boolean touchDown(float worldX, float worldY)
     {
-        if (isLaunched && isStopped())
-        {
-            // Implement any stopped bird logic here
-        }
-    }
-
-    public boolean touchDown(float worldX, float worldY) {
         if (!isLaunched && Vector2.dst(worldX, worldY,
             body.getPosition().x, body.getPosition().y) < BIRD_SIZE / PIXELS_TO_METERS) {
             isDragging = true;
@@ -87,7 +82,8 @@ public class red extends InputMultiplexer
         return false;
     }
 
-    public void touchDragged(float worldX, float worldY) {
+    public void touchDragged(float worldX, float worldY)
+    {
         if (isDragging) {
             Vector2 dragCurrent = new Vector2(worldX, worldY);
             Vector2 dragVector = new Vector2(launchPosition).sub(dragCurrent);
@@ -125,7 +121,8 @@ public class red extends InputMultiplexer
         }
     }
 
-    public void reset() {
+    public void reset()
+    {
         isLaunched = false;
         isDragging = false;
         body.setType(BodyDef.BodyType.DynamicBody);
@@ -146,7 +143,20 @@ public class red extends InputMultiplexer
         return body.getPosition();
     }
 
-    public boolean isStopped() {
+    public boolean isStopped()
+    {
         return isLaunched && body.getLinearVelocity().len() < 0.1f;
+    }
+    public void onCollision()
+    {
+        if (body != null)
+        {
+            body.setLinearVelocity(new Vector2(0f, -50f)); // Impart some movement
+            markedForDestruction = true;
+        }
+    }
+
+    public void update()
+    {
     }
 }

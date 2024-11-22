@@ -1,118 +1,102 @@
 package com.angrybirds.obstacles;
 
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
-public class pigs implements InputProcessor
+public class pigs
 {
-    private float x, y;
-    private Texture texture1;
-    private Integer ppm = 64;
+    private static final float PIXELS_TO_METERS = 100f;
+    private static final float PIG_SIZE = 50f; // Size in pixels
+
     private Body body;
-    private boolean isDragging = false;
-    private Vector2 dragStart = new Vector2();
-    private Vector2 dragEnd = new Vector2();
+    private TextureRegion texture;
+    private World world;
+    private int health;
 
-    public pigs(float x, float y, World world, Box2DDebugRenderer rdr)
+    public pigs(float x, float y, World world)
     {
-        texture1 = new Texture("piggy.png");
+        this.world = world;
+        this.health = 100;
+        Texture pigTexture = new Texture("piggy.png");
+        this.texture = new TextureRegion(pigTexture);
 
-        BodyDef birdef = new BodyDef();
-        birdef.type = BodyDef.BodyType.StaticBody;
-        birdef.position.set(x / ppm, y / ppm);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x / PIXELS_TO_METERS, y / PIXELS_TO_METERS);
 
-        body = world.createBody(birdef);
+        body = world.createBody(bodyDef);
 
-        CircleShape shape = new CircleShape();
-        shape.setRadius(64 / ppm);
+        CircleShape circle = new CircleShape();
+        circle.setRadius(PIG_SIZE / (2f * PIXELS_TO_METERS));
 
-        FixtureDef fixdef = new FixtureDef();
-        fixdef.density = 2.5f;
-        fixdef.friction = 0.35f;
-        fixdef.restitution = 0.75f;
-        fixdef.shape = shape;
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circle;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.6f;
 
-        body.createFixture(fixdef);
-        shape.dispose();
-
-        BodyDef ground = new BodyDef();
-        ground.type = BodyDef.BodyType.StaticBody;
-        ground.position.set(0f, 0f);
-
-        ChainShape grshape = new ChainShape();
-        grshape.createChain(new Vector2[]{new Vector2(-500 / ppm, 0), new Vector2(500 / ppm, 0)});  // Adjust size and scale
-
-        fixdef.shape = grshape;
-        fixdef.friction = 0.5f;
-        fixdef.restitution = 0.5f;
-
-       // world.createBody(ground).createFixture(fixdef);
+        body.createFixture(fixtureDef);
+        body.setUserData(this);
+        circle.dispose();
     }
 
-    public void render(SpriteBatch batch, float width, float height)
+    public void render(SpriteBatch batch)
     {
-        x = body.getPosition().x * ppm;
-        y = body.getPosition().y * ppm;
+        Vector2 position = body.getPosition();
+        float angle = body.getAngle() * (180f / (float)Math.PI);
 
-        batch.draw(texture1, x - width / 2, y - height / 2, width, height);
+        float screenX = position.x * PIXELS_TO_METERS - PIG_SIZE / 2f;
+        float screenY = position.y * PIXELS_TO_METERS - PIG_SIZE / 2f;
+
+        batch.draw(texture,
+            screenX, screenY,
+            PIG_SIZE / 2f, PIG_SIZE / 2f,
+            PIG_SIZE, PIG_SIZE,
+            1, 1,  // Scale
+            angle
+        );
     }
 
-    @Override
-    public boolean keyDown(int keycode) { return false; }
-
-    @Override
-    public boolean keyUp(int keycode) { return false; }
-
-    @Override
-    public boolean keyTyped(char character) { return false; }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        isDragging = true;
-        dragStart.set(screenX / ppm, screenY / ppm);  // Start dragging
-        return true;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (isDragging)
-        {
-            isDragging = false;
-            dragEnd.set(screenX / ppm, screenY / ppm);  // Dragging ended
-
-            Vector2 launchForce = dragStart.sub(dragEnd).scl(25);  // Scale the force for a stronger throw
-            body.applyLinearImpulse(launchForce, body.getWorldCenter(), true);
+    // Method to take damage
+    public void takeDamage(int damage)
+    {
+        health -= damage;
+        if (health <= 0) {
+            destroy();
         }
-        return true;
     }
 
-    @Override
-    public boolean touchCancelled(int i, int i1, int i2, int i3) { return false; }
+    public boolean isOutOfWindow(float virtualWidth, float virtualHeight) {
+        Vector2 pigPosition = body.getPosition();
+        float pigScreenX = pigPosition.x * PIXELS_TO_METERS;
+        float pigScreenY = pigPosition.y * PIXELS_TO_METERS;
 
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (isDragging)
-        {
-            body.setTransform(screenX / ppm, screenY / ppm, 0);
-        }
-        return true;
+        return (pigScreenX > virtualWidth ||
+            pigScreenX < 0 ||
+            pigScreenY > virtualHeight ||
+            pigScreenY < 0);
+    }
+    public void destroy()
+    {
+        world.destroyBody(body);
+        body = null;
     }
 
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) { return false; }
 
-    @Override
-    public boolean scrolled(float v, float v1) { return false; }
+    public boolean isAlive() {
+        return health > 0 && body != null;
+    }
+
 
     public Body getBody() {
         return body;
     }
 
-    public void dispose() {
-        texture1.dispose();
+
+    public Vector2 getPosition() {
+        return body.getPosition();
     }
 }
-
