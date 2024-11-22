@@ -59,13 +59,15 @@ public class gamescreen implements Screen {
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
 
-    private Array<TextureRegion> rbt;
+    private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
     private static final float BIRD_DISPLAY_Y = 50; // Y position for displaying birds
     private static final float BIRD_DISPLAY_SPACING = 40; // Space between displayed birds
     private static final float BIRD_DISPLAY_SIZE = 40; // Size of the displayed birds
-    private static final float xi= 50; // Starting X position for bird display
+    private static final float INITIAL_X_POSITION = 50; // Starting X position for bird display
+
+
     private catapult cata;
     public gamescreen(Main game, SpriteBatch sb1)
     {
@@ -104,12 +106,12 @@ public class gamescreen implements Screen {
         cata = new catapult(130,20);
 
 
-        rbt= new Array<>(TOTAL_BIRDS);
+        remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
 
         for (int i = 0; i < TOTAL_BIRDS; i++) {
-            rbt.add(birdRegion);
-            rb[i]=xi+(i * BIRD_DISPLAY_SPACING);
+            remainingBirdsTextures.add(birdRegion);
+            rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
 
 
@@ -222,7 +224,7 @@ public class gamescreen implements Screen {
     private void updateRemainingBirdsDisplay() {
         int remainingBirds=TOTAL_BIRDS-count;
         for (int i = 0; i < remainingBirds; i++) {
-            rb[i] = xi + (i * BIRD_DISPLAY_SPACING);
+            rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
     }
     @Override
@@ -245,10 +247,10 @@ public class gamescreen implements Screen {
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
-
+        // Draw remaining birds
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++) {
-            game.batch.draw(rbt.get(i),
+            game.batch.draw(remainingBirdsTextures.get(i),
                 rb[i],
                 BIRD_DISPLAY_Y,
                 BIRD_DISPLAY_SIZE,
