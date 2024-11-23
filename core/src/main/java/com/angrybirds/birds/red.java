@@ -159,4 +159,8 @@ public class red extends InputMultiplexer
     public void update()
     {
     }
+
+    public Body getBody() {
+        return body;
+    }
 }

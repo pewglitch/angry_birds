@@ -1,3 +1,4 @@
+
 package com.angrybirds.screens;
 
 import com.angrybirds.obstacles.catapult;
@@ -65,7 +66,7 @@ public class gamescreen implements Screen {
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
     private pigs p1,p2,p3,p4,p5;
-    private planks plank1,plank2,plank3,plank4,plank5,plank6;
+    private planks plank1,plank2,plank3,plank4,plank5,plank6,plank7;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -151,6 +152,7 @@ public class gamescreen implements Screen {
         plank4=new planks(960,230,7,4,0,world);
         plank5=new planks(745,165,5.2f,4,90,world);
         plank6=new planks(860,165,5.2f,4,90,world);
+
 
         remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
@@ -390,3 +392,4 @@ public class gamescreen implements Screen {
         backgroundMusic.dispose();
     }
 }
+

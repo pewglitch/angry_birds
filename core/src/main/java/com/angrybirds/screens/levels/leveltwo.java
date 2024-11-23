@@ -126,7 +126,9 @@ public class leveltwo implements Screen
         texture = new Texture("level2bg.png");
 
         Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
+        Texture b2 = new Texture(Gdx.files.internal("yellow1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
+        TextureRegion b3 = new TextureRegion(b2);
         bird = new red(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
@@ -343,8 +345,6 @@ public class leveltwo implements Screen
             checkmetalstatus(metal2);
             checkmetalstatus(metal3);
             checkmetalstatus(metal4);
-            checkmetalstatus(metal5);
-            checkmetalstatus(metal6);
 
             checktrianglestatus(t1);
 

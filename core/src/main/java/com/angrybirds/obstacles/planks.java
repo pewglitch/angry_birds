@@ -36,9 +36,10 @@ public class planks
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x / PIXELS_TO_METERS, y / PIXELS_TO_METERS);
+        bodyDef.position.set(x / PIXELS_TO_METERS, y/PIXELS_TO_METERS);
 
         body = world.createBody(bodyDef);
+
 
         CircleShape circle = new CircleShape();
         circle.setRadius(PLANK_SIZE / (2f * PIXELS_TO_METERS));
@@ -53,6 +54,8 @@ public class planks
         body.setUserData(this);
         circle.dispose();
 
+
+
     }
 
     public void render(SpriteBatch batch)
@@ -62,11 +65,13 @@ public class planks
         float screenX = position.x * PIXELS_TO_METERS - PLANK_SIZE / 2f;
         float screenY = position.y * PIXELS_TO_METERS - PLANK_SIZE / 2f;
 
+
         batch.draw(texture,
             screenX, screenY,
             PLANK_SIZE / 2f, PLANK_SIZE / 2f,
             PLANK_SIZE, PLANK_SIZE, h,w,angle  // Scale
         );
+
     }
 
     // Method to take damage
