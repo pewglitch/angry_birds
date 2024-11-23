@@ -1,8 +1,6 @@
 package com.angrybirds.screens.levels;
 
-import com.angrybirds.obstacles.catapult;
-import com.angrybirds.obstacles.pigs;
-import com.angrybirds.obstacles.planks;
+import com.angrybirds.obstacles.*;
 import com.angrybirds.screens.losescreen;
 import com.angrybirds.screens.menu;
 import com.angrybirds.screens.winscreen;
@@ -69,7 +67,8 @@ public class leveltwo implements Screen
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
     private pigs p1,p2,p3,p4,p5;
-    private planks plank1,plank2,plank3,plank4,plank5,plank6;
+    private metals metal1,metal2,metal3,metal4,metal5, metal6;
+    private squaret t1;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -142,19 +141,24 @@ public class leveltwo implements Screen
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
         cata = new catapult(130,20);
-        p1= new pigs(600,180,world);
-        p2= new pigs(700,250,world);
-        p3= new pigs(850,200,world);
-        p4= new pigs(890,200,world);
-        p5= new pigs(870,240,world);
+        p1= new pigs(590,140,world);
+        p2= new pigs(720,250,world);
+        p3= new pigs(875,270,world);
+        p4= new pigs(915,270,world);
 
-        //plank
-        plank1=new planks(530,170,7,4,90,world);
-        plank2=new planks(630,245,10,4,90,world);
-        plank3=new planks(960,100,7,4,0,world);
-        plank4=new planks(960,230,7,4,0,world);
-        plank5=new planks(745,165,5.2f,4,90,world);
-        plank6=new planks(860,165,5.2f,4,90,world);
+        //in the triangle pig
+        p5= new pigs(720,50,world);
+
+        //metal planks
+        metal1=new metals(520,120,4,4,90,world);
+        metal2=new metals(680,160,6,2,60,world);
+        metal3=new metals(700,140,6,2,120,world);
+        metal4=new metals(800,250,9,6,90,world);
+
+        //square plank
+        t1= new squaret(770,270,3,5,360,world);
+
+
 
         remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
@@ -283,12 +287,14 @@ public class leveltwo implements Screen
         p3.render(game.batch);
         p4.render(game.batch);
         p5.render(game.batch);
-        plank1.render(game.batch);
-        plank2.render(game.batch);
-        plank3.render(game.batch);
-        plank4.render(game.batch);
-        plank5.render(game.batch);
-        plank6.render(game.batch);
+
+        metal1.render(game.batch);
+        metal2.render(game.batch);
+        metal3.render(game.batch);
+        metal4.render(game.batch);
+
+        t1.render(game.batch);
+
         // Draw remaining birds
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++) {
@@ -333,12 +339,14 @@ public class leveltwo implements Screen
             checkPigStatus(p2);
             checkPigStatus(p3);
             checkPigStatus(p4);
-            checkplankStatus(plank1);
-            checkplankStatus(plank2);
-            checkplankStatus(plank3);
-            checkplankStatus(plank4);
-            checkplankStatus(plank5);
-            checkplankStatus(plank6);
+            checkmetalstatus(metal1);
+            checkmetalstatus(metal2);
+            checkmetalstatus(metal3);
+            checkmetalstatus(metal4);
+            checkmetalstatus(metal5);
+            checkmetalstatus(metal6);
+
+            checktrianglestatus(t1);
 
             if(score>=400)
             {
@@ -360,9 +368,17 @@ public class leveltwo implements Screen
             scorelabel.setText(String.format("Score: %05d", score));
         }
     }
-    private void checkplankStatus(planks plank)
+    private void checkmetalstatus(metals metal)
     {
-        if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+        if (metal.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+        {
+            score += 100;
+            scorelabel.setText(String.format("Score: %05d", score));
+        }
+    }
+    private void checktrianglestatus(squaret tr)
+    {
+        if (tr.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
         {
             score += 100;
             scorelabel.setText(String.format("Score: %05d", score));

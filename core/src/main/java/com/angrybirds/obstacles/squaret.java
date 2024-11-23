@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class planks
+public class squaret
 {
     private static final float PIXELS_TO_METERS = 100f;
     private static final float PLANK_SIZE = 50f; // Size in pixels
@@ -18,14 +18,14 @@ public class planks
 
     private float h,w,angle;
 
-    public planks(float x, float y,float h,float w,float angle, World world)
+    public squaret(float x, float y,float h,float w,float angle, World world)
     {
         this.world = world;
         this.health = 100;
         this.h=h;
         this.w=w;
         this.angle=angle;
-        Texture planktexture = new Texture("plank.png");
+        Texture planktexture = new Texture("metal2.png");
         this.texture = new TextureRegion(planktexture);
 
         this.texture.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -45,9 +45,9 @@ public class planks
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f;
+        fixtureDef.density = 20.0f;
+        fixtureDef.friction = 40f;
+        fixtureDef.restitution = 1.6f;
 
         body.createFixture(fixtureDef);
         body.setUserData(this);

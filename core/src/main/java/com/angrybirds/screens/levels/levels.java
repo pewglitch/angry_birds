@@ -121,7 +121,7 @@ public class levels implements Screen
             public void clicked(InputEvent event,float x,float y)
             {
                 backgroundMusic.stop();
-                game.setScreen(new gamescreen(game,sb));
+                game.setScreen(new leveltwo(game,sb));
 
             }
         });
