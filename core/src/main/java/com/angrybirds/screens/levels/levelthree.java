@@ -148,13 +148,6 @@ public class levelthree implements Screen
         p4= new pigs(890,200,world);
         p5= new pigs(870,240,world);
 
-        //plank
-        plank1=new planks(530,170,7,4,90,world);
-        plank2=new planks(630,245,10,4,90,world);
-        plank3=new planks(960,100,7,4,0,world);
-        plank4=new planks(960,230,7,4,0,world);
-        plank5=new planks(745,165,5.2f,4,90,world);
-        plank6=new planks(860,165,5.2f,4,90,world);
 
         remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
@@ -283,12 +276,7 @@ public class levelthree implements Screen
         p3.render(game.batch);
         p4.render(game.batch);
         p5.render(game.batch);
-        plank1.render(game.batch);
-        plank2.render(game.batch);
-        plank3.render(game.batch);
-        plank4.render(game.batch);
-        plank5.render(game.batch);
-        plank6.render(game.batch);
+
         // Draw remaining birds
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++) {
@@ -333,12 +321,7 @@ public class levelthree implements Screen
             checkPigStatus(p2);
             checkPigStatus(p3);
             checkPigStatus(p4);
-            checkplankStatus(plank1);
-            checkplankStatus(plank2);
-            checkplankStatus(plank3);
-            checkplankStatus(plank4);
-            checkplankStatus(plank5);
-            checkplankStatus(plank6);
+
 
             if(score>=400)
             {

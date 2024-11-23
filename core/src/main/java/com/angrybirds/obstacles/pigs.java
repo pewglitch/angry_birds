@@ -15,7 +15,7 @@ public class pigs
     private TextureRegion texture;
     private World world;
     private int health;
-
+    public boolean dead=false;
     public pigs(float x, float y, World world)
     {
         this.world = world;
@@ -42,7 +42,10 @@ public class pigs
         body.setUserData(this);
         circle.dispose();
     }
-
+    public Integer gethealth()
+    {
+        return health;
+    }
     public void render(SpriteBatch batch)
     {
         Vector2 position = body.getPosition();
@@ -69,7 +72,8 @@ public class pigs
         }
     }
 
-    public boolean isOutOfWindow(float virtualWidth, float virtualHeight) {
+    public boolean isOutOfWindow(float virtualWidth, float virtualHeight)
+    {
         Vector2 pigPosition = body.getPosition();
         float pigScreenX = pigPosition.x * PIXELS_TO_METERS;
         float pigScreenY = pigPosition.y * PIXELS_TO_METERS;
@@ -82,14 +86,27 @@ public class pigs
     public void destroy()
     {
         world.destroyBody(body);
-        body = null;
     }
-
-
+    public void oncolide(Integer damage)
+    {
+        health-=damage;
+        if(health<=20)
+        {
+            dead=true;
+        }
+    }
+    public boolean getdead()
+    {
+        return dead;
+    }
     public boolean isAlive() {
         return health > 0 && body != null;
     }
 
+    public TextureRegion getregion()
+    {
+        return texture;
+    }
 
     public Body getBody() {
         return body;

@@ -28,7 +28,8 @@ public class yellow extends InputMultiplexer {
     private static final float BIRD_MASS = 0.8f;
     private Stage stage;
 
-    public yellow(World world, TextureRegion texture, float x, float y, Stage stag) {
+    public yellow(World world, TextureRegion texture, float x, float y, Stage stag)
+    {
         this.world = world;
         this.texture = texture;
         this.launchPosition.set(x, y);
@@ -57,8 +58,8 @@ public class yellow extends InputMultiplexer {
         circle.dispose();
     }
 
-    // Render method remains the same
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch)
+    {
         Vector2 position = body.getPosition();
         float angle = body.getAngle() * MathUtils.radiansToDegrees;
 

@@ -31,9 +31,12 @@ import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
 import com.angrybirds.birds.red;
 
+import java.util.Objects;
+
 import static java.lang.Thread.sleep;
 
-public class gamescreen implements Screen {
+public class gamescreen implements Screen
+{
     private final Main game;
     private final SpriteBatch sb;
     private Sprite sprite_plank;
@@ -74,9 +77,9 @@ public class gamescreen implements Screen {
     private static final float BIRD_DISPLAY_SPACING = 40; // Space between displayed birds
     private static final float BIRD_DISPLAY_SIZE = 40; // Size of the displayed birds
     private static final float INITIAL_X_POSITION = 50; // Starting X position for bird display
-
+    private Body body;
     private float runtime;
-
+    private boolean over=false;
     private catapult cata;
     public gamescreen(Main game, SpriteBatch sb1)
     {
@@ -91,32 +94,26 @@ public class gamescreen implements Screen {
         box2DCamera.setToOrtho(false, VIRTUAL_WIDTH / PIXELS_TO_METERS, VIRTUAL_HEIGHT / PIXELS_TO_METERS);
 
         world = new World(new Vector2(0, 0), true);
-        world.setContactListener(new ContactListener()
-        {
-            @Override
-            public void beginContact(Contact contact)
-            {
-                Object a = contact.getFixtureA().getBody().getUserData();
-                Object b = contact.getFixtureB().getBody().getUserData();
 
-                System.out.println("Contact detected: " + a + " and " + b);
 
-                if (isBird(contact))
-                {
-                    //bird.onCollision();
-                }
-            }
+        //ground imple over
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(0,0);
 
-            @Override
-            public void endContact(Contact contact) {}
+        body = world.createBody(bodyDef);
 
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
+        ChainShape groundshape=new ChainShape();
+        groundshape.createChain(new Vector2[]{new Vector2(-5000,0),new Vector2(5000,0)});
 
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {}
-        });
 
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape=groundshape;
+        fixtureDef.friction=1000f;
+        fixtureDef.restitution=0.1f;
+        world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        body.setUserData(groundshape);
         debugRenderer = new Box2DDebugRenderer();
 
         touchPoint = new Vector3();
@@ -145,15 +142,74 @@ public class gamescreen implements Screen {
         p4= new pigs(890,200,world);
         p5= new pigs(870,240,world);
 
-        //plank
-        plank1=new planks(530,170,7,4,90,world);
-        plank2=new planks(630,245,10,4,90,world);
-        plank3=new planks(960,100,7,4,0,world);
-        plank4=new planks(960,230,7,4,0,world);
-        plank5=new planks(745,165,5.2f,4,90,world);
-        plank6=new planks(860,165,5.2f,4,90,world);
+        plank1=new planks(600,70,20,70,0,1.3f,3,world);
+        plank2=new planks(850,150,30,70,0,1.3f,3,world);
+        plank3=new planks(950,150,30,70,0,1.3f,3,world);
+        plank4=new planks(500,100,30,70,0,1.3f,3,world);
+        plank5=new planks(400,100,30,70,0,1.3f,3,world);
+        plank6=new planks(300,100,30,70,0,1.3f,3,world);
 
+        world.setContactListener(new ContactListener()
+        {
+            @Override
+            public void beginContact(Contact contact)
+            {
+                Object a = contact.getFixtureA().getBody().getUserData();
+                Object b = contact.getFixtureB().getBody().getUserData();
 
+                System.out.println("Contact detected: " + a + " and " + b);
+
+                if ((a == bird && b == p1) || (a == p1 && b == bird)) {
+                    p1.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == p2) || (a == p2 && b == bird)) {
+                    p2.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == p3) || (a == p3 && b == bird)) {
+                    p3.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == p4) || (a == p4 && b == bird)) {
+                    p4.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == p5) || (a == p5 && b == bird)) {
+                    p5.oncolide(100);
+                    over=true;
+                }
+
+                if ((a == bird && b == plank1) || (a == plank1 && b == bird)) {
+                    plank1.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == plank2) || (a == plank2 && b == bird)) {
+                    plank2.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == plank3) || (a == plank3 && b == bird)) {
+                    plank3.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == plank4) || (a == plank4 && b == bird)) {
+                    plank4.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == plank5) || (a == plank5 && b == bird)) {
+                    plank5.oncolide(100);
+                    over=true;
+                } else if ((a == bird && b == plank6) || (a == plank6 && b == bird)) {
+                    plank6.oncolide(100);
+                    over=true;
+                }
+
+                if ((a == bird && b == groundshape) || (a == groundshape && b == bird)) {
+                    over=true;
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
         remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
 
@@ -198,12 +254,7 @@ public class gamescreen implements Screen {
         });
         show(multiplexer);
     }
-    private boolean isBird(Contact contact)
-    {
-        Object a = contact.getFixtureA().getBody().getUserData();
-        Object b = contact.getFixtureB().getBody().getUserData();
-        return a == bird || b == bird;
-    }
+
     public void show(InputMultiplexer ix)
     {
         Gdx.input.setInputProcessor(ix);
@@ -248,31 +299,31 @@ public class gamescreen implements Screen {
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
         stage.addActor(table1);
-        //Gdx.input.setInputProcessor(stage);
+
     }
 
-    private void updateRemainingBirdsDisplay() {
+    private void updateRemainingBirdsDisplay()
+    {
         int remainingBirds=TOTAL_BIRDS-count;
         for (int i = 0; i < remainingBirds; i++) {
             rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
     }
     @Override
-    public void render(float delta) {
+    public void render(float delta)
+    {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Update physics world
+        //above
         world.step(WORLD_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-        // Update bird
         bird.update();
 
-        // Update cameras
         camera.update();
         box2DCamera.update();
 
-        // Draw background
+        //bgbc
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -281,15 +332,17 @@ public class gamescreen implements Screen {
         p3.render(game.batch);
         p4.render(game.batch);
         p5.render(game.batch);
+
         plank1.render(game.batch);
         plank2.render(game.batch);
         plank3.render(game.batch);
         plank4.render(game.batch);
         plank5.render(game.batch);
         plank6.render(game.batch);
-        // Draw remaining birds
+
         int remainingBirds = TOTAL_BIRDS - count;
-        for (int i = 0; i < remainingBirds; i++) {
+        for (int i = 0; i < remainingBirds; i++)
+        {
             game.batch.draw(remainingBirdsTextures.get(i),
                 rb[i],
                 BIRD_DISPLAY_Y,
@@ -306,39 +359,44 @@ public class gamescreen implements Screen {
         stage.act(delta);
         stage.draw();
 
-        if (debugPhysics) {
+
             debugRenderer.render(world, box2DCamera.combined);
-        }
+
 
         Vector2 birdPosition=bird.getPosition();
-        if (bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
-            birdPosition.x * PIXELS_TO_METERS < 0 ||
-            birdPosition.y * PIXELS_TO_METERS < 0 ||
-            bird.isStopped())) {
+        if ((bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
+        birdPosition.x * PIXELS_TO_METERS < 0 ||
+        birdPosition.y * PIXELS_TO_METERS < 0 ||
+        bird.isStopped())) || over)
+        {
             count++;
-            updateRemainingBirdsDisplay();
-            if(count < TOTAL_BIRDS) {
+            over=false;
+
+            if(count < TOTAL_BIRDS)
+            {
                 bird.reset();
+                updateRemainingBirdsDisplay();
+                checkPigStatus(p1);
+                checkPigStatus(p2);
+                checkPigStatus(p3);
+                checkPigStatus(p4);
+
+                checkplankStatus(plank1);
+                checkplankStatus(plank2);
+                checkplankStatus(plank3);
+                checkplankStatus(plank4);
+                checkplankStatus(plank5);
+                checkplankStatus(plank6);
             }
         }
 
-        if (count >= TOTAL_BIRDS) {
+        if (count >TOTAL_BIRDS)
+        {
             Gdx.input.setInputProcessor(stage);
         }
         if(count==TOTAL_BIRDS)
         {
-            checkPigStatus(p1);
-            checkPigStatus(p2);
-            checkPigStatus(p3);
-            checkPigStatus(p4);
-            checkplankStatus(plank1);
-            checkplankStatus(plank2);
-            checkplankStatus(plank3);
-            checkplankStatus(plank4);
-            checkplankStatus(plank5);
-            checkplankStatus(plank6);
-
-            if(score>=400)
+            if(score>=500)
             {
                 game.setScreen(new winscreen(game,sb,score,1,sb));
             }
@@ -352,17 +410,23 @@ public class gamescreen implements Screen {
 
     private void checkPigStatus(pigs pig)
     {
-        if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+        if(pig!=null)
+        if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig.getdead())
         {
             score += 100;
+            pig.destroy();
+            pig.getregion().setRegion(0,0,0,0);
             scorelabel.setText(String.format("Score: %05d", score));
         }
     }
     private void checkplankStatus(planks plank)
     {
-        if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+        if(plank!=null)
+        if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
         {
             score += 100;
+            plank.destroy();
+            plank.getregion().setRegion(0,0,0,0);
             scorelabel.setText(String.format("Score: %05d", score));
         }
     }
