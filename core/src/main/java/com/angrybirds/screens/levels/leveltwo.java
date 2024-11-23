@@ -123,7 +123,7 @@ public class leveltwo implements Screen
 
         touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
-        texture = new Texture("gamebg.jpg");
+        texture = new Texture("level2bg.png");
 
         Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
@@ -136,7 +136,7 @@ public class leveltwo implements Screen
         table1.setFillParent(true);
 
         scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        levellabel = new Label(String.format("Level: %05d", level), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        levellabel = new Label(String.format("Level: %05d", 2), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
