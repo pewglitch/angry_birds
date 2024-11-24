@@ -19,7 +19,7 @@ public class pigs
     public pigs(float x, float y, World world)
     {
         this.world = world;
-        this.health = 100;
+        this.health = 150;
         Texture pigTexture = new Texture("piggy.png");
         this.texture = new TextureRegion(pigTexture);
 
@@ -40,6 +40,7 @@ public class pigs
 
         body.createFixture(fixtureDef);
         body.setUserData(this);
+        body.setGravityScale(0.5f);
         circle.dispose();
     }
     public Integer gethealth()

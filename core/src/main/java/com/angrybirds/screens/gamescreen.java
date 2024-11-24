@@ -31,9 +31,6 @@ import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
 import com.angrybirds.birds.red;
 
-import java.util.Objects;
-
-import static java.lang.Thread.sleep;
 
 public class gamescreen implements Screen
 {
@@ -73,14 +70,20 @@ public class gamescreen implements Screen
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
-    private static final float BIRD_DISPLAY_Y = 50; // Y position for displaying birds
-    private static final float BIRD_DISPLAY_SPACING = 40; // Space between displayed birds
-    private static final float BIRD_DISPLAY_SIZE = 40; // Size of the displayed birds
-    private static final float INITIAL_X_POSITION = 50; // Starting X position for bird display
+    private static final float BIRD_DISPLAY_Y = 50;
+    private static final float BIRD_DISPLAY_SPACING = 40;
+    private static final float BIRD_DISPLAY_SIZE = 40;
+    private static final float INITIAL_X_POSITION = 50;
     private Body body;
     private float runtime;
     private boolean over=false;
     private catapult cata;
+    private float delay = 2.0f;
+    private float timer = 0.0f;private float delayTimer = 0;
+    private boolean isWaitingForDelay = false;
+    private static final float DELAY_SECONDS = 2f;
+    private boolean shouldProcessNextBird = false;
+
     public gamescreen(Main game, SpriteBatch sb1)
     {
         this.game = game;
@@ -95,8 +98,6 @@ public class gamescreen implements Screen
 
         world = new World(new Vector2(0, 0), true);
 
-
-        //ground imple over
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(0,0);
@@ -105,7 +106,6 @@ public class gamescreen implements Screen
 
         ChainShape groundshape=new ChainShape();
         groundshape.createChain(new Vector2[]{new Vector2(-5000,0),new Vector2(5000,0)});
-
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape=groundshape;
@@ -142,12 +142,18 @@ public class gamescreen implements Screen
         p4= new pigs(890,200,world);
         p5= new pigs(870,240,world);
 
-        plank1=new planks(600,70,20,70,0,1.3f,3,world);
-        plank2=new planks(850,150,30,70,0,1.3f,3,world);
-        plank3=new planks(950,150,30,70,0,1.3f,3,world);
-        plank4=new planks(500,100,30,70,0,1.3f,3,world);
-        plank5=new planks(400,100,30,70,0,1.3f,3,world);
-        plank6=new planks(300,100,30,70,0,1.3f,3,world);
+        plank1=new planks(600,85,40,130,0,1.3f,2.1f,world);
+
+        //second pig plank
+        plank4=new planks(700,115,40,187,0,1.3f,2.2f,world);
+
+        //vertical plank last pigs
+        plank2=new planks(830,85,30,85,0,1.3f,2.3f,world);
+        plank3=new planks(910,85,30,85,0,1.3f,2.3f,world);
+
+        //horizontal planks
+        plank5=new planks(870,160,37,110,90,1.3f,1.9f,world);
+        plank6=new planks(870,37,37,110,90,1.3f,1.9f,world);
 
         world.setContactListener(new ContactListener()
         {
@@ -161,42 +167,44 @@ public class gamescreen implements Screen
 
                 if ((a == bird && b == p1) || (a == p1 && b == bird)) {
                     p1.oncolide(100);
+                    score+=100;
                     over=true;
                 } else if ((a == bird && b == p2) || (a == p2 && b == bird)) {
-                    p2.oncolide(100);
+                    p2.oncolide(100);score+=100;
                     over=true;
                 } else if ((a == bird && b == p3) || (a == p3 && b == bird)) {
-                    p3.oncolide(100);
+                    p3.oncolide(100);score+=100;
                     over=true;
                 } else if ((a == bird && b == p4) || (a == p4 && b == bird)) {
-                    p4.oncolide(100);
+                    p4.oncolide(100);score+=100;
                     over=true;
                 } else if ((a == bird && b == p5) || (a == p5 && b == bird)) {
-                    p5.oncolide(100);
+                    p5.oncolide(100);score+=100;
                     over=true;
                 }
 
                 if ((a == bird && b == plank1) || (a == plank1 && b == bird)) {
-                    plank1.oncolide(100);
+                    plank1.oncolide(100);score+=100;
                     over=true;
                 } else if ((a == bird && b == plank2) || (a == plank2 && b == bird)) {
-                    plank2.oncolide(100);
+                    plank2.oncolide(100);score+=100;
                     over=true;
                 } else if ((a == bird && b == plank3) || (a == plank3 && b == bird)) {
-                    plank3.oncolide(100);
+                    plank3.oncolide(100);score+=100;
                     over=true;
                 } else if ((a == bird && b == plank4) || (a == plank4 && b == bird)) {
-                    plank4.oncolide(100);
+                    plank4.oncolide(100);score+=100;
                     over=true;
                 } else if ((a == bird && b == plank5) || (a == plank5 && b == bird)) {
-                    plank5.oncolide(100);
+                    plank5.oncolide(100);score+=100;
                     over=true;
                 } else if ((a == bird && b == plank6) || (a == plank6 && b == bird)) {
-                    plank6.oncolide(100);
+                    plank6.oncolide(100);score+=100;
                     over=true;
                 }
 
-                if ((a == bird && b == groundshape) || (a == groundshape && b == bird)) {
+                if ((a == bird && b == groundshape) || (a == groundshape && b == bird))
+                {
                     over=true;
                 }
             }
@@ -310,12 +318,10 @@ public class gamescreen implements Screen
         }
     }
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //above
         world.step(WORLD_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
         bird.update();
@@ -323,7 +329,6 @@ public class gamescreen implements Screen
         camera.update();
         box2DCamera.update();
 
-        //bgbc
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -341,8 +346,7 @@ public class gamescreen implements Screen
         plank6.render(game.batch);
 
         int remainingBirds = TOTAL_BIRDS - count;
-        for (int i = 0; i < remainingBirds; i++)
-        {
+        for (int i = 0; i < remainingBirds; i++) {
             game.batch.draw(remainingBirdsTextures.get(i),
                 rb[i],
                 BIRD_DISPLAY_Y,
@@ -350,7 +354,7 @@ public class gamescreen implements Screen
                 BIRD_DISPLAY_SIZE);
         }
 
-        Texture nice=new Texture("cata.png");
+        Texture nice = new Texture("cata.png");
         game.batch.draw(nice, cata.getX(), cata.getY(), 180, 180);
 
         bird.render(game.batch);
@@ -359,22 +363,103 @@ public class gamescreen implements Screen
         stage.act(delta);
         stage.draw();
 
+        debugRenderer.render(world, box2DCamera.combined);
 
-            debugRenderer.render(world, box2DCamera.combined);
-
-
-        Vector2 birdPosition=bird.getPosition();
+        Vector2 birdPosition = bird.getPosition();
         if ((bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
-        birdPosition.x * PIXELS_TO_METERS < 0 ||
-        birdPosition.y * PIXELS_TO_METERS < 0 ||
-        bird.isStopped())) || over)
-        {
-            count++;
-            over=false;
+            birdPosition.x * PIXELS_TO_METERS < 0 ||
+            birdPosition.y * PIXELS_TO_METERS < 0 ||
+            bird.isStopped())) || over) {
 
-            if(count < TOTAL_BIRDS)
+            if (!isWaitingForDelay) {
+                isWaitingForDelay = true;
+                delayTimer = 0;
+                shouldProcessNextBird = true;
+            }
+        }
+
+
+        if (isWaitingForDelay)
+        {
+            delayTimer += delta;
+
+            if (delayTimer >= DELAY_SECONDS && shouldProcessNextBird) {
+                shouldProcessNextBird = false;
+                count++;
+                over = false;
+
+                if (count < TOTAL_BIRDS) {
+                    updateRemainingBirdsDisplay();
+                    checkPigStatus(p1);
+                    checkPigStatus(p2);
+                    checkPigStatus(p3);
+                    checkPigStatus(p4);
+
+                    checkplankStatus(plank1);
+                    checkplankStatus(plank2);
+                    checkplankStatus(plank3);
+                    checkplankStatus(plank4);
+                    checkplankStatus(plank5);
+                    checkplankStatus(plank6);
+                    bird.reset();
+                }
+
+                isWaitingForDelay = false;
+            }
+        }
+
+        if (count > TOTAL_BIRDS) {
+            Gdx.input.setInputProcessor(stage);
+        }
+        if (count == TOTAL_BIRDS) {
+            if (score >= 500) {
+                game.setScreen(new winscreen(game, sb, score, 1, sb));
+            } else {
+                game.setScreen(new losescreen(game, sb, score, 1));
+            }
+        }
+    }
+    private void checkPigStatus(pigs pig)
+    {
+        if(pig!=null)
+        {
+            if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig.getdead()) {
+                score += 100;
+                pig.destroy();
+                pig.getregion().setRegion(0, 0, 0, 0);
+                scorelabel.setText(String.format("Score: %05d", score));
+            }
+        }
+    }
+    private void checkplankStatus(planks plank)
+    {
+        if(plank!=null)
+        {
+            if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
             {
-                bird.reset();
+                score += 100;
+                plank.destroy();
+                plank.getregion().setRegion(0, 0, 0, 0);
+                scorelabel.setText(String.format("Score: %05d", score));
+            }
+        }
+    }
+    @Override
+    public void resize(int width, int height)
+    {
+        viewport.update(width, height);
+        stage.getViewport().update(width, height, true);
+    }
+
+
+    public void update(float deltaTime)
+    {
+        timer += deltaTime;
+        if (timer >= delay)
+        {
+            timer = 0.0f;
+
+            if (count < TOTAL_BIRDS) {
                 updateRemainingBirdsDisplay();
                 checkPigStatus(p1);
                 checkPigStatus(p2);
@@ -387,59 +472,11 @@ public class gamescreen implements Screen
                 checkplankStatus(plank4);
                 checkplankStatus(plank5);
                 checkplankStatus(plank6);
+                bird.reset();
             }
-        }
-
-        if (count >TOTAL_BIRDS)
-        {
-            Gdx.input.setInputProcessor(stage);
-        }
-        if(count==TOTAL_BIRDS)
-        {
-            if(score>=500)
-            {
-                game.setScreen(new winscreen(game,sb,score,1,sb));
-            }
-            else
-            {
-                game.setScreen(new losescreen(game,sb,score,1));
-            }
-
         }
     }
 
-    private void checkPigStatus(pigs pig)
-    {
-        if(pig!=null)
-        if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig.getdead())
-        {
-            score += 100;
-            pig.destroy();
-            pig.getregion().setRegion(0,0,0,0);
-            scorelabel.setText(String.format("Score: %05d", score));
-        }
-    }
-    private void checkplankStatus(planks plank)
-    {
-        if(plank!=null)
-        if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
-        {
-            score += 100;
-            plank.destroy();
-            plank.getregion().setRegion(0,0,0,0);
-            scorelabel.setText(String.format("Score: %05d", score));
-        }
-    }
-    @Override
-    public void resize(int width, int height)
-    {
-        viewport.update(width, height);
-        stage.getViewport().update(width, height, true);
-    }
-    public void update(float deltatime)
-    {
-        runtime+=deltatime;
-    }
     @Override
     public void pause() {}
 
