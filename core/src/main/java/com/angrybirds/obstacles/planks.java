@@ -24,7 +24,7 @@ public class planks
         this.world = wor;
         this.h = length;
         this.w = width;
-        this.health = 100;
+        this.health = 130;
 
         Texture plankTexture = new Texture("plank.png");
         this.texture = new TextureRegion(plankTexture);
@@ -41,8 +41,8 @@ public class planks
         poly.setAsBox(w / 2f / PIXELS_TO_METERS, h / 2f / PIXELS_TO_METERS);
 
         FixtureDef fixDef = new FixtureDef();
-        fixDef.density = 1000f;
-        fixDef.friction = 1000f;
+        fixDef.density = 5f;
+        fixDef.friction = 10f;
         fixDef.restitution = 0.1f;
         fixDef.shape = poly;
 
@@ -99,7 +99,7 @@ public class planks
     public void oncolide(Integer damage)
     {
         health-=damage;
-        if(health<=30)
+        if(health<30)
         {
             dead=true;
         }

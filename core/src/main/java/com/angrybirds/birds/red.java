@@ -29,6 +29,7 @@ public class red extends InputMultiplexer
     private static final float BIRD_MASS = 0.8f;
     private Stage stage;
 
+
     public red(World world, TextureRegion texture, float x, float y, Stage stag)
     {
         this.world = world;
@@ -91,7 +92,8 @@ public class red extends InputMultiplexer
 
     public void touchDragged(float worldX, float worldY)
     {
-        if (isDragging) {
+        if (isDragging)
+        {
             Vector2 dragCurrent = new Vector2(worldX, worldY);
             Vector2 dragVector = new Vector2(launchPosition).sub(dragCurrent);
 
@@ -160,13 +162,17 @@ public class red extends InputMultiplexer
         }
     }
 
-    public void reset() {
+    public void reset()
+    {
         isLaunched= false;
         isDragging = false;
         body.setType(BodyDef.BodyType.DynamicBody);
         body.setTransform(launchPosition, 0);
         body.setLinearVelocity(0, 0);
         body.setAngularVelocity(0);
+
+        body.setType(BodyDef.BodyType.StaticBody);
+        body.setGravityScale(1);
     }
 
     public boolean isLaunched() {
@@ -195,7 +201,8 @@ public class red extends InputMultiplexer
         }
     }
 
-    public Body getBody() {
+    public Body getBody()
+    {
         return body;
     }
 }

@@ -96,7 +96,7 @@ public class winscreen implements Screen
 
         BitmapFont font13 = gen.generateFont(par);
         gen.dispose();
-
+        lst.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
         TextButton.TextButtonStyle btn = new TextButton.TextButtonStyle();
         btn.font = font13;
         btn.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
@@ -105,17 +105,18 @@ public class winscreen implements Screen
         b2 = new TextButton("Exit", btn);
         b3 = new TextButton("Next Level", btn);
         b4 = new TextButton("Replay Level", btn);
-
+        Label scoreLabel = new Label("Score: " + score, lst);
         table1.setFillParent(true);
         table1.top();
         table1.padTop(50);
-
+        scoreLabel.setFontScale(2.0f);
         table1.add(b1).padLeft(30).padRight(10).padTop(20).width(220).height(90);
         table1.add(b2).padLeft(10).padRight(10).padTop(20).width(220).height(90);
         table1.add(b3).padLeft(10).padRight(10).padTop(20).width(220).height(90);
         table1.add(b4).padLeft(10).padRight(30).padTop(20).width(220).height(90);
 
         table1.row();
+        table1.add(scoreLabel).colspan(10).padTop(30).center();
 
         constants rx = new constants();
         b1.addListener(new ClickListener() {
