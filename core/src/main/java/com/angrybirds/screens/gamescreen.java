@@ -142,12 +142,19 @@ public class gamescreen implements Screen
         p4= new pigs(890,200,world);
         p5= new pigs(870,240,world);
 
-        plank1=new planks(600,70,20,70,0,1.3f,3,world);
-        plank2=new planks(850,150,30,70,0,1.3f,3,world);
-        plank3=new planks(950,150,30,70,0,1.3f,3,world);
-        plank4=new planks(500,100,30,70,0,1.3f,3,world);
-        plank5=new planks(400,100,30,70,0,1.3f,3,world);
-        plank6=new planks(300,100,30,70,0,1.3f,3,world);
+        //first pig plank
+        plank1=new planks(600,85,40,130,0,1.3f,2.1f,world);
+
+        //second pig plank
+        plank4=new planks(700,115,40,187,0,1.3f,2.2f,world);
+
+        //vertical plank last pigs
+        plank2=new planks(830,85,30,85,0,1.3f,2.3f,world);
+        plank3=new planks(910,85,30,85,0,1.3f,2.3f,world);
+
+        //horizontal planks
+        plank5=new planks(870,160,37,110,90,1.3f,1.9f,world);
+        plank6=new planks(870,37,37,110,90,1.3f,1.9f,world);
 
         world.setContactListener(new ContactListener()
         {
