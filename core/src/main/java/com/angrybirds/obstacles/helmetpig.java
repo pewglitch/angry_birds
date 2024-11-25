@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 public class helmetpig
 {
     private static final float PIXELS_TO_METERS = 100f;
-    private static final float PIG_SIZE = 50f; // Size in pixels
+    private static final float PIG_SIZE = 55f; // Size in pixels
 
     private Body body;
     private TextureRegion texture;
@@ -30,7 +30,7 @@ public class helmetpig
         body = world.createBody(bodyDef);
 
         CircleShape circle = new CircleShape();
-        circle.setRadius(PIG_SIZE / (2f * PIXELS_TO_METERS));
+        circle.setRadius(PIG_SIZE / (2.4f * PIXELS_TO_METERS));
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;

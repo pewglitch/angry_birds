@@ -31,7 +31,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
-import com.angrybirds.birds.red;
 
 
 public class levelthree implements Screen
@@ -69,7 +68,8 @@ public class levelthree implements Screen
     private Integer count=0;
     private pigs p1,p2,p3,p4,p5;
     private helmetpig m1,m2,m3,m4,m5;
-    private metals metal1,metal2,metal3,metal4,metal5,metal6,metal7;
+    private metals metal1,metal2,metal3,metal4,metal5,plank5,plank6;
+    private planks plan1, plan2, plan3, plan4,plan5,plan6,plan7,plan8,plan9,plan10;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -139,23 +139,44 @@ public class levelthree implements Screen
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
         cata = new catapult(130,20);
-        m1= new helmetpig(600,100,world);
-        m2= new helmetpig(730,253,world);
-        m3= new helmetpig(870,185,world);
-        m4= new helmetpig(910,185,world);
+        m1= new helmetpig(650,240,world);
+        m2= new helmetpig(700,240,world);
 
-        metal1=new metals(600,40,60,50,0,1.1f,1.6f,world);
+        //between pig
+        m3= new helmetpig(690,50,world);
 
-        //second pig plank
-        metal2=new metals(700,80,40,140,150,1.1f,1.3f,world);
-        metal7=new metals(740,77,40,140,25,1.1f,1.3f,world);
+        //last pig
+        m4= new helmetpig(920,325,world);
 
-        //vertical plank last two pigs
-        metal3=new metals(890,80,80,150,0,1.1f,1.2f,world);
+        m5= new helmetpig(880,155,world);
 
-        //horizontal planks
-        metal5=new metals(730,205,35,110,90,1.3f,1.2f,world);
-        metal6=new metals(730,192,35,110,90,1.3f,1.2f,world);
+        //between
+        plan1 =new planks(690,40,60,52,0,1.3f,1.9f,world);
+
+        //vertical
+        plan2 =new planks(630,80,40,180,0,1.1f,2f,world);
+        plan3 =new planks(750,77,40,180,0,1.1f,2f,world);
+
+        plan5=new planks(700,250,35,110,0,1.3f,2.5f,world);
+
+
+        plan6=new planks(700,205,35,200,90,1.3f,1.9f,world);
+
+        //flag
+        plan7=new planks(900,210,40,150,0,1.1f,2.3f,world);
+        plan8=new planks(930,305,30,120,90,1.1f,2f,world);
+
+        //flag base
+        plan4 =new planks(900,120,60,120,90,1.2f,2f,world);
+
+
+        //last two standing planks
+        plan9=new planks(900,40,25,80,0,1.1f,2f,world);
+        plan10=new planks(940,40,25,80,0,1.1f,2f,world);
+
+
+
+
 
         world.setContactListener(new ContactListener()
         {
@@ -181,28 +202,47 @@ public class levelthree implements Screen
                     m4.oncolide(100);score+=100;
                     over=true;
                 }
-                if ((a == bird && b ==metal1) || (a == metal1 && b == bird)) {
-                    metal1.oncolide(100);score+=100;
-                    over=true;
-                } else if ((a == bird && b == metal2) || (a == metal2 && b == bird)) {
-                    metal2.oncolide(100);score+=100;
-                    over=true;
-                } else if ((a == bird && b == metal3) || (a ==metal3 && b == bird)) {
-                    metal3.oncolide(100);score+=100;
-                    over=true;
-                } else if ((a == bird && b ==metal5) || (a ==metal5 && b == bird)) {
-                    metal5.oncolide(100);score+=100;
+                else if ((a == bird && b == m5) || (a == m5 && b == bird)) {
+                    m5.oncolide(100);score+=100;
                     over=true;
                 }
-                else if ((a == bird && b == metal6) || (a == metal6 && b == bird)) {
-                    metal6.oncolide(100);score+=100;
+                if ((a == bird && b == plan1) || (a == plan1 && b == bird)) {
+                    plan1.oncolide(100);score+=100;
+                    over=true;
+                } else if ((a == bird && b == plan2) || (a == plan2 && b == bird)) {
+                    plan2.oncolide(100);score+=100;
+                    over=true;
+                } else if ((a == bird && b == plan3) || (a == plan3 && b == bird)) {
+                    plan3.oncolide(100);score+=100;
+                    over=true;
+                } else if ((a == bird && b == plan4) || (a == plan4 && b == bird)) {
+                    plan4.oncolide(100);score+=100;
                     over=true;
                 }
-                else if ((a == bird && b == metal7) || (a == metal7 && b == bird)) {
-                    metal7.oncolide(100);score+=100;
+                else if ((a == bird && b == plan5) || (a == plan5 && b == bird)) {
+                    plan5.oncolide(100);score+=100;
                     over=true;
                 }
-
+                else if ((a == bird && b == plan6) || (a == plan6 && b == bird)) {
+                    plan6.oncolide(100);score+=100;
+                    over=true;
+                }
+                else if ((a == bird && b == plan7) || (a == plan7 && b == bird)) {
+                    plan7.oncolide(100);score+=100;
+                    over=true;
+                }
+                else if ((a == bird && b == plan8) || (a == plan8 && b == bird)) {
+                    plan8.oncolide(100);score+=100;
+                    over=true;
+                }
+                else if ((a == bird && b == plan9) || (a == plan9 && b == bird)) {
+                    plan9.oncolide(100);score+=100;
+                    over=true;
+                }
+                else if ((a == bird && b == plan10) || (a == plan10 && b == bird)) {
+                    plan10.oncolide(100);score+=100;
+                    over=true;
+                }
 
                 if ((a == bird && b == groundshape) || (a == groundshape && b == bird))
                 {
@@ -339,13 +379,18 @@ public class levelthree implements Screen
         m2.render(game.batch);
         m3.render(game.batch);
         m4.render(game.batch);
+        m5.render(game.batch);
 
-        metal1.render(game.batch);
-        metal2.render(game.batch);
-        metal3.render(game.batch);
-        metal5.render(game.batch);
-        metal6.render(game.batch);
-        metal7.render(game.batch);
+        plan1.render(game.batch);
+        plan2.render(game.batch);
+        plan3.render(game.batch);
+        plan4.render(game.batch);
+        plan5.render(game.batch);
+        plan6.render(game.batch);
+        plan7.render(game.batch);
+        plan8.render(game.batch);
+        plan9.render(game.batch);
+        plan10.render(game.batch);
 
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++)
@@ -386,13 +431,18 @@ public class levelthree implements Screen
                 checkmetalpigStatus(m2);
                 checkmetalpigStatus(m3);
                 checkmetalpigStatus(m4);
+                checkmetalpigStatus(m5);
 
-                checkmetal(metal1);
-                checkmetal(metal2);
-                checkmetal(metal3);
-                checkmetal(metal5);
-                checkmetal(metal6);
-                checkmetal(metal7);
+                checkplank(plan1);
+                checkplank(plan2);
+                checkplank(plan3);
+                checkplank(plan4);
+                checkplank(plan5);
+                checkplank(plan6);
+                checkplank(plan7);
+                checkplank(plan8);
+                checkplank(plan9);
+                checkplank(plan10);
 
                 bird.reset();
             }
@@ -427,15 +477,15 @@ public class levelthree implements Screen
             }
         }
     }
-    private void checkmetal(metals metal)
+    private void checkplank(planks plank)
     {
-        if(metal!=null)
+        if(plank!=null)
         {
-            if (metal.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || metal.getdead())
+            if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
             {
                 score += 100;
-                metal.destroy();
-                metal.getregion().setRegion(0, 0, 0, 0);
+                plank.destroy();
+                plank.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
         }
@@ -461,13 +511,18 @@ public class levelthree implements Screen
                 checkmetalpigStatus(m2);
                 checkmetalpigStatus(m3);
                 checkmetalpigStatus(m4);
+                checkmetalpigStatus(m5);
 
-                checkmetal(metal1);
-                checkmetal(metal2);
-                checkmetal(metal3);
-                checkmetal(metal4);
-                checkmetal(metal5);
-                checkmetal(metal6);
+                checkplank(plan1);
+                checkplank(plan2);
+                checkplank(plan3);
+                checkplank(plan4);
+                checkplank(plan5);
+                checkplank(plan6);
+                checkplank(plan7);
+                checkplank(plan8);
+                checkplank(plan9);
+                checkplank(plan10);
 
 
                 bird.reset();
