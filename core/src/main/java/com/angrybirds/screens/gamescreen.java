@@ -80,9 +80,6 @@ public class gamescreen implements Screen
     private catapult cata;
     private float delay = 2.0f;
     private float timer = 0.0f;private float delayTimer = 0;
-    private boolean isWaitingForDelay = false;
-    private static final float DELAY_SECONDS = 2f;
-    private boolean shouldProcessNextBird = false;
 
     public gamescreen(Main game, SpriteBatch sb1)
     {

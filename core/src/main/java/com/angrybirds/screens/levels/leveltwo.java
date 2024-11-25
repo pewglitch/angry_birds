@@ -1,10 +1,14 @@
 
-package com.angrybirds.screens;
+package com.angrybirds.screens.levels;
 
+import com.angrybirds.birds.yellow;
 import com.angrybirds.obstacles.catapult;
 import com.angrybirds.obstacles.metals;
 import com.angrybirds.obstacles.pigs;
 import com.angrybirds.obstacles.planks;
+import com.angrybirds.screens.losescreen;
+import com.angrybirds.screens.menu;
+import com.angrybirds.screens.winscreen;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -55,7 +59,7 @@ public class leveltwo implements Screen
     private int level = 1;
     private Integer coins=0;
     private World world;
-    private red bird;
+    private yellow bird;
     private final float WORLD_STEP = 1/60f;
     private final int VELOCITY_ITERATIONS = 6;
     private final int POSITION_ITERATIONS = 2;
@@ -84,6 +88,8 @@ public class leveltwo implements Screen
     private boolean isWaitingForDelay = false;
     private static final float DELAY_SECONDS = 2f;
     private boolean shouldProcessNextBird = false;
+
+    private yellow bird2;
 
     public leveltwo(Main game, SpriteBatch sb1)
     {
@@ -121,9 +127,10 @@ public class leveltwo implements Screen
         stage = new Stage(viewport, sb);
         texture = new Texture("level2bg3.png");
 
-        Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
-        TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new red(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
+        Texture bird22= new Texture("yellow_new.png");
+        TextureRegion bird22r=new TextureRegion(bird22);
+
+        bird = new yellow(world, bird22r, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -222,7 +229,7 @@ public class leveltwo implements Screen
 
         for (int i = 0; i < TOTAL_BIRDS; i++)
         {
-            remainingBirdsTextures.add(birdRegion);
+            remainingBirdsTextures.add(bird22r);
             rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
 

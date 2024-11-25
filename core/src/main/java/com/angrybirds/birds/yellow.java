@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class yellow extends InputMultiplexer {
+public class yellow extends InputMultiplexer
+{
     private static final float PIXELS_TO_METERS = 100f;
     private static final float BIRD_SIZE = 50f;
     private boolean markedForDestruction = false;
@@ -21,10 +22,10 @@ public class yellow extends InputMultiplexer {
     private Vector2 launchPosition = new Vector2();
 
     private static final float MAX_DRAG_DISTANCE = 1.5f;
-    private static final float LAUNCH_FORCE_MULTIPLIER = 6.0f;
-    private static final float g = 0.3f; //gravity
-    private static final float ad = 1.0f; //air density
-    private static final float dc = 0.3f; //drag coefficient
+    private static final float LAUNCH_FORCE_MULTIPLIER = 20.0f;
+    private static final float g = 0.5f;
+    private static final float ad = 1.0f;
+    private static final float dc = 0.3f;
     private static final float BIRD_MASS = 0.8f;
     private Stage stage;
 
@@ -39,7 +40,7 @@ public class yellow extends InputMultiplexer {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         bodyDef.bullet = true;
-        bodyDef.fixedRotation = false; // Allow rotation for more realistic motion
+        bodyDef.fixedRotation = false;
 
         body = world.createBody(bodyDef);
 
@@ -50,10 +51,10 @@ public class yellow extends InputMultiplexer {
         fixtureDef.shape = circle;
         fixtureDef.density = BIRD_MASS;
         fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.3f; // Lower restitution for less bounce
+        fixtureDef.restitution = 0.3f;
 
         body.createFixture(fixtureDef);
-        body.setGravityScale(g); // Increased gravity scale
+        body.setGravityScale(g);
         body.setUserData(this);
         circle.dispose();
     }
@@ -70,14 +71,16 @@ public class yellow extends InputMultiplexer {
             screenX, screenY,
             BIRD_SIZE/2f, BIRD_SIZE/2f,
             BIRD_SIZE, BIRD_SIZE,
-            1, 1,
+            1.3f, 1.4f,
             angle
         );
     }
 
-    public boolean touchDown(float worldX, float worldY) {
+    public boolean touchDown(float worldX, float worldY)
+    {
         if (!isLaunched && Vector2.dst(worldX, worldY,
-            body.getPosition().x, body.getPosition().y) < BIRD_SIZE / PIXELS_TO_METERS) {
+            body.getPosition().x, body.getPosition().y) < BIRD_SIZE / PIXELS_TO_METERS)
+        {
             isDragging = true;
             dragStart.set(worldX, worldY);
             body.setType(BodyDef.BodyType.KinematicBody);
@@ -86,8 +89,10 @@ public class yellow extends InputMultiplexer {
         return false;
     }
 
-    public void touchDragged(float worldX, float worldY) {
-        if (isDragging) {
+    public void touchDragged(float worldX, float worldY)
+    {
+        if (isDragging)
+        {
             Vector2 dragCurrent = new Vector2(worldX, worldY);
             Vector2 dragVector = new Vector2(launchPosition).sub(dragCurrent);
 
@@ -104,7 +109,8 @@ public class yellow extends InputMultiplexer {
         }
     }
 
-    public void touchUp(float worldX, float worldY) {
+    public void touchUp(float worldX, float worldY)
+    {
         if (isDragging) {
             isDragging = false;
             isLaunched= true;
@@ -112,7 +118,6 @@ public class yellow extends InputMultiplexer {
             Vector2 dragCurrent = new Vector2(worldX, worldY);
             Vector2 launchVector = new Vector2(launchPosition).sub(dragCurrent);
 
-            // Calculate launch angle
             float angle = MathUtils.atan2(launchVector.y, launchVector.x);
 
             if (launchVector.len() > MAX_DRAG_DISTANCE) {
@@ -124,42 +129,49 @@ public class yellow extends InputMultiplexer {
 
             float velocity = launchVector.len() * LAUNCH_FORCE_MULTIPLIER;
 
-            float x_v = velocity * MathUtils.cos(angle);
-            float y_v= velocity * MathUtils.sin(angle) * 1.2f; // Boost vertical velocity
+            float x_v = velocity * MathUtils.cos(angle) * 1.2f;
+            float y_v= velocity * MathUtils.sin(angle) * 1.2f;
 
             body.setLinearVelocity(x_v,y_v);
 
             body.applyLinearImpulse(
-                new Vector2(0,velocity * 0.1f),
+                new Vector2(0,0),
                 body.getWorldCenter(),
                 true
             );
         }
     }
 
-    public void update() {
-        if (isLaunched && !isDragging) {
+    public void update()
+    {
+        if (isLaunched && !isDragging)
+        {
             Vector2 velocity = body.getLinearVelocity();
             float speed = velocity.len();
 
-            if (speed>0.1f) {
+            if (speed>0.1f)
+            {
                 float area=MathUtils.PI *(BIRD_SIZE / (2f * PIXELS_TO_METERS)) * (BIRD_SIZE / (2f * PIXELS_TO_METERS));
                 float dm =0.5f*ad*speed*speed*dc*area;
 
                 Vector2 df=new Vector2(velocity).nor().scl(-dm);
                 body.applyForceToCenter(df, true);
-                body.applyForceToCenter(new Vector2(0, -g * 0.5f), true);
+                body.applyForceToCenter(new Vector2(0, -g * 0.9f), true);
             }
         }
     }
 
-    public void reset() {
+    public void reset()
+    {
         isLaunched= false;
         isDragging = false;
         body.setType(BodyDef.BodyType.DynamicBody);
         body.setTransform(launchPosition, 0);
         body.setLinearVelocity(0, 0);
         body.setAngularVelocity(0);
+
+        body.setType(BodyDef.BodyType.StaticBody);
+        body.setGravityScale(1);
     }
 
     public boolean isLaunched() {
@@ -179,14 +191,17 @@ public class yellow extends InputMultiplexer {
         return isLaunched && body.getLinearVelocity().len() < 0.1f;
     }
 
-    public void onCollision() {
-        if (body != null) {
+    public void onCollision()
+    {
+        if (body != null)
+        {
             body.setLinearVelocity(new Vector2(0f, -50f));
             markedForDestruction = true;
         }
     }
 
-    public Body getBody() {
+    public Body getBody()
+    {
         return body;
     }
 }

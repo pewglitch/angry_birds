@@ -1,7 +1,11 @@
 
-package com.angrybirds.screens;
+package com.angrybirds.screens.levels;
 
+import com.angrybirds.birds.white;
 import com.angrybirds.obstacles.*;
+import com.angrybirds.screens.losescreen;
+import com.angrybirds.screens.menu;
+import com.angrybirds.screens.winscreen;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -52,7 +56,7 @@ public class levelthree implements Screen
     private int level = 1;
     private Integer coins=0;
     private World world;
-    private red bird;
+    private white bird;
     private final float WORLD_STEP = 1/60f;
     private final int VELOCITY_ITERATIONS = 6;
     private final int POSITION_ITERATIONS = 2;
@@ -117,11 +121,11 @@ public class levelthree implements Screen
 
         touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
-        texture = new Texture("level2bg3.png");
+        texture = new Texture("level3.jpg");
 
-        Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
+        Texture birdTexture = new Texture(Gdx.files.internal("white1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new red(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
+        bird = new white(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 

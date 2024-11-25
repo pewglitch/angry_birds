@@ -2,7 +2,7 @@ package com.angrybirds.screens.levels;
 
 import com.angrybirds.buttons.taptap;
 import com.angrybirds.screens.*;
-import com.angrybirds.screens.levelthree;
+import com.angrybirds.screens.levels.levelthree;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -27,6 +27,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.angrybirds.screens.levels.leveltwo;
 
 public class levels implements Screen
 {
@@ -119,7 +120,7 @@ public class levels implements Screen
             public void clicked(InputEvent event,float x,float y)
             {
                 backgroundMusic.stop();
-                game.setScreen(new com.angrybirds.screens.leveltwo(game,sb));
+                game.setScreen(new leveltwo(game,sb));
 
             }
         });
