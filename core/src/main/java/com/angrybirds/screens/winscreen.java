@@ -1,8 +1,6 @@
 package com.angrybirds.screens;
 
 import com.angrybirds.screens.levels.levelfour;
-import com.angrybirds.screens.levels.levelthree;
-import com.angrybirds.screens.levels.leveltwo;
 import com.badlogic.gdx.Screen;
 import com.angrybirds.Main;
 import com.angrybirds.buttons.taptap;
@@ -138,9 +136,9 @@ public class winscreen implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (l == 1) {
-                    game.setScreen(new leveltwo(game,sb));
+                    game.setScreen(new com.angrybirds.screens.leveltwo(game,sb));
                 } else if (l == 2) {
-                    game.setScreen(new levelthree(game,sb));
+                    game.setScreen(new com.angrybirds.screens.levelthree(game,sb));
                 } else if (l == 3) {
                     game.setScreen(new levelfour(game,sb));
                 } else if (l == 4) {
@@ -158,9 +156,9 @@ public class winscreen implements Screen
                 if (l == 1) {
                     game.setScreen(new gamescreen(game,sb));
                 } else if (l == 2) {
-                    game.setScreen(new leveltwo(game,sb));
+                    game.setScreen(new com.angrybirds.screens.leveltwo(game,sb));
                 } else if (l == 3) {
-                    game.setScreen(new levelthree(game,sb));
+                    game.setScreen(new com.angrybirds.screens.levelthree(game,sb));
                 } else if (l == 4) {
                     game.setScreen(new levelfour(game,sb));
                 }

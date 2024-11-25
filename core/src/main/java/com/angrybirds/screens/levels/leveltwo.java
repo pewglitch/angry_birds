@@ -1,9 +1,10 @@
-package com.angrybirds.screens.levels;
 
-import com.angrybirds.obstacles.*;
-import com.angrybirds.screens.losescreen;
-import com.angrybirds.screens.menu;
-import com.angrybirds.screens.winscreen;
+package com.angrybirds.screens;
+
+import com.angrybirds.obstacles.catapult;
+import com.angrybirds.obstacles.metals;
+import com.angrybirds.obstacles.pigs;
+import com.angrybirds.obstacles.planks;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -31,7 +32,6 @@ import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
 import com.angrybirds.birds.red;
 
-import static java.lang.Thread.sleep;
 
 public class leveltwo implements Screen
 {
@@ -67,19 +67,24 @@ public class leveltwo implements Screen
     private Integer VIRTUAL_HEIGHT = 600;
     private Integer count=0;
     private pigs p1,p2,p3,p4,p5;
-    private metals metal1,metal2,metal3,metal4,metal5, metal6;
-    private squaret t1;
+    private metals metal1,metal2,metal3,metal4,metal5,metal6,metal7;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
-    private static final float BIRD_DISPLAY_Y = 50; // Y position for displaying birds
-    private static final float BIRD_DISPLAY_SPACING = 40; // Space between displayed birds
-    private static final float BIRD_DISPLAY_SIZE = 40; // Size of the displayed birds
-    private static final float INITIAL_X_POSITION = 50; // Starting X position for bird display
-
+    private static final float BIRD_DISPLAY_Y = 50;
+    private static final float BIRD_DISPLAY_SPACING = 40;
+    private static final float BIRD_DISPLAY_SIZE = 40;
+    private static final float INITIAL_X_POSITION = 50;
+    private Body body;
     private float runtime;
-
+    private boolean over=false;
     private catapult cata;
+    private float delay = 2.0f;
+    private float timer = 0.0f;private float delayTimer = 0;
+    private boolean isWaitingForDelay = false;
+    private static final float DELAY_SECONDS = 2f;
+    private boolean shouldProcessNextBird = false;
+
     public leveltwo(Main game, SpriteBatch sb1)
     {
         this.game = game;
@@ -93,42 +98,31 @@ public class leveltwo implements Screen
         box2DCamera.setToOrtho(false, VIRTUAL_WIDTH / PIXELS_TO_METERS, VIRTUAL_HEIGHT / PIXELS_TO_METERS);
 
         world = new World(new Vector2(0, 0), true);
-        world.setContactListener(new ContactListener()
-        {
-            @Override
-            public void beginContact(Contact contact)
-            {
-                Object a = contact.getFixtureA().getBody().getUserData();
-                Object b = contact.getFixtureB().getBody().getUserData();
 
-                System.out.println("Contact detected: " + a + " and " + b);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(0,0);
 
-                if (isBird(contact))
-                {
-                    //bird.onCollision();
-                }
-            }
+        body = world.createBody(bodyDef);
 
-            @Override
-            public void endContact(Contact contact) {}
+        ChainShape groundshape=new ChainShape();
+        groundshape.createChain(new Vector2[]{new Vector2(-5000,0),new Vector2(5000,0)});
 
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {}
-        });
-
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape=groundshape;
+        fixtureDef.friction=1000f;
+        fixtureDef.restitution=0.1f;
+        world.createBody(bodyDef);
+        body.createFixture(fixtureDef);
+        body.setUserData(groundshape);
         debugRenderer = new Box2DDebugRenderer();
 
         touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
-        texture = new Texture("level2bg.png");
+        texture = new Texture("level2bg3.png");
 
         Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
-        Texture b2 = new Texture(Gdx.files.internal("yellow1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        TextureRegion b3 = new TextureRegion(b2);
         bird = new red(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
@@ -143,25 +137,86 @@ public class leveltwo implements Screen
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
         cata = new catapult(130,20);
-        p1= new pigs(590,140,world);
-        p2= new pigs(720,250,world);
-        p3= new pigs(875,270,world);
-        p4= new pigs(915,270,world);
+        p1= new pigs(600,100,world);
+        p2= new pigs(730,253,world);
+        p3= new pigs(870,185,world);
+        p4= new pigs(910,185,world);
 
-        //in the triangle pig
-        p5= new pigs(720,50,world);
+        metal1=new metals(600,40,60,50,0,1.1f,1.6f,world);
 
-        //metal planks
-        metal1=new metals(520,120,4,4,90,world);
-        metal2=new metals(680,160,6,2,60,world);
-        metal3=new metals(700,140,6,2,120,world);
-        metal4=new metals(800,250,9,6,90,world);
+        //second pig plank
+        metal2=new metals(700,80,40,140,150,1.1f,1.3f,world);
+        metal7=new metals(740,77,40,140,25,1.1f,1.3f,world);
 
-        //square plank
-        t1= new squaret(770,270,3,5,360,world);
+        //vertical plank last two pigs
+        metal3=new metals(890,80,80,150,0,1.1f,1.2f,world);
+
+        //horizontal planks
+        metal5=new metals(730,205,35,110,90,1.3f,1.2f,world);
+        metal6=new metals(730,192,35,110,90,1.3f,1.2f,world);
+
+        world.setContactListener(new ContactListener()
+        {
+            @Override
+            public void beginContact(Contact contact)
+            {
+                Object a = contact.getFixtureA().getBody().getUserData();
+                Object b = contact.getFixtureB().getBody().getUserData();
+
+                System.out.println("Contact detected: " + a + " and " + b);
+
+                if ((a == bird && b == p1) || (a == p1 && b == bird)) {
+                    p1.oncolide(100);
+                    score+=100;
+                    over=true;
+                } else if ((a == bird && b == p2) || (a == p2 && b == bird)) {
+                    p2.oncolide(100);score+=100;
+                    over=true;
+                } else if ((a == bird && b == p3) || (a == p3 && b == bird)) {
+                    p3.oncolide(100);score+=100;
+                    over=true;
+                } else if ((a == bird && b == p4) || (a == p4 && b == bird)) {
+                    p4.oncolide(100);score+=100;
+                    over=true;
+                }
+                if ((a == bird && b ==metal1) || (a == metal1 && b == bird)) {
+                    metal1.oncolide(100);score+=100;
+                    over=true;
+                } else if ((a == bird && b == metal2) || (a == metal2 && b == bird)) {
+                    metal2.oncolide(100);score+=100;
+                    over=true;
+                } else if ((a == bird && b == metal3) || (a ==metal3 && b == bird)) {
+                    metal3.oncolide(100);score+=100;
+                    over=true;
+                } else if ((a == bird && b ==metal5) || (a ==metal5 && b == bird)) {
+                    metal5.oncolide(100);score+=100;
+                    over=true;
+                }
+                else if ((a == bird && b == metal6) || (a == metal6 && b == bird)) {
+                    metal6.oncolide(100);score+=100;
+                    over=true;
+                }
+                else if ((a == bird && b == metal7) || (a == metal7 && b == bird)) {
+                    metal7.oncolide(100);score+=100;
+                    over=true;
+                }
 
 
+                if ((a == bird && b == groundshape) || (a == groundshape && b == bird))
+                {
+                    over=true;
+                }
+            }
 
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
         remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
 
@@ -206,12 +261,7 @@ public class leveltwo implements Screen
         });
         show(multiplexer);
     }
-    private boolean isBird(Contact contact)
-    {
-        Object a = contact.getFixtureA().getBody().getUserData();
-        Object b = contact.getFixtureB().getBody().getUserData();
-        return a == bird || b == bird;
-    }
+
     public void show(InputMultiplexer ix)
     {
         Gdx.input.setInputProcessor(ix);
@@ -256,31 +306,30 @@ public class leveltwo implements Screen
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
         stage.addActor(table1);
-        //Gdx.input.setInputProcessor(stage);
+
     }
 
-    private void updateRemainingBirdsDisplay() {
+    private void updateRemainingBirdsDisplay()
+    {
         int remainingBirds=TOTAL_BIRDS-count;
         for (int i = 0; i < remainingBirds; i++) {
             rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
     }
-    @Override
-    public void render(float delta) {
+    public void render(float delta)
+    {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Update physics world
+        //above
         world.step(WORLD_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
-        // Update bird
         bird.update();
 
-        // Update cameras
         camera.update();
         box2DCamera.update();
 
-        // Draw background
+        //bgbc
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -288,18 +337,17 @@ public class leveltwo implements Screen
         p2.render(game.batch);
         p3.render(game.batch);
         p4.render(game.batch);
-        p5.render(game.batch);
 
         metal1.render(game.batch);
         metal2.render(game.batch);
         metal3.render(game.batch);
-        metal4.render(game.batch);
+        metal5.render(game.batch);
+        metal6.render(game.batch);
+        metal7.render(game.batch);
 
-        t1.render(game.batch);
-
-        // Draw remaining birds
         int remainingBirds = TOTAL_BIRDS - count;
-        for (int i = 0; i < remainingBirds; i++) {
+        for (int i = 0; i < remainingBirds; i++)
+        {
             game.batch.draw(remainingBirdsTextures.get(i),
                 rb[i],
                 BIRD_DISPLAY_Y,
@@ -316,39 +364,45 @@ public class leveltwo implements Screen
         stage.act(delta);
         stage.draw();
 
-        if (debugPhysics) {
-            debugRenderer.render(world, box2DCamera.combined);
-        }
+
+        debugRenderer.render(world, box2DCamera.combined);
+
 
         Vector2 birdPosition=bird.getPosition();
-        if (bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
+        if ((bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
             birdPosition.x * PIXELS_TO_METERS < 0 ||
             birdPosition.y * PIXELS_TO_METERS < 0 ||
-            bird.isStopped())) {
+            bird.isStopped())) || over)
+        {
             count++;
-            updateRemainingBirdsDisplay();
-            if(count < TOTAL_BIRDS) {
+            over=false;
+
+            if(count < TOTAL_BIRDS)
+            {
+                updateRemainingBirdsDisplay();
+                checkPigStatus(p1);
+                checkPigStatus(p2);
+                checkPigStatus(p3);
+                checkPigStatus(p4);
+
+                checkmetal(metal1);
+                checkmetal(metal2);
+                checkmetal(metal3);
+                checkmetal(metal5);
+                checkmetal(metal6);
+                checkmetal(metal7);
+
                 bird.reset();
             }
         }
 
-        if (count >= TOTAL_BIRDS) {
+        if (count >TOTAL_BIRDS)
+        {
             Gdx.input.setInputProcessor(stage);
         }
         if(count==TOTAL_BIRDS)
         {
-            checkPigStatus(p1);
-            checkPigStatus(p2);
-            checkPigStatus(p3);
-            checkPigStatus(p4);
-            checkmetalstatus(metal1);
-            checkmetalstatus(metal2);
-            checkmetalstatus(metal3);
-            checkmetalstatus(metal4);
-
-            checktrianglestatus(t1);
-
-            if(score>=400)
+            if(score>=500)
             {
                 game.setScreen(new winscreen(game,sb,score,1,sb));
             }
@@ -359,29 +413,29 @@ public class leveltwo implements Screen
 
         }
     }
-
     private void checkPigStatus(pigs pig)
     {
-        if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+        if(pig!=null)
         {
-            score += 100;
-            scorelabel.setText(String.format("Score: %05d", score));
+            if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig.getdead()) {
+                score += 100;
+                pig.destroy();
+                pig.getregion().setRegion(0, 0, 0, 0);
+                scorelabel.setText(String.format("Score: %05d", score));
+            }
         }
     }
-    private void checkmetalstatus(metals metal)
+    private void checkmetal(metals metal)
     {
-        if (metal.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
+        if(metal!=null)
         {
-            score += 100;
-            scorelabel.setText(String.format("Score: %05d", score));
-        }
-    }
-    private void checktrianglestatus(squaret tr)
-    {
-        if (tr.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
-        {
-            score += 100;
-            scorelabel.setText(String.format("Score: %05d", score));
+            if (metal.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || metal.getdead())
+            {
+                score += 100;
+                metal.destroy();
+                metal.getregion().setRegion(0, 0, 0, 0);
+                scorelabel.setText(String.format("Score: %05d", score));
+            }
         }
     }
     @Override
@@ -390,10 +444,35 @@ public class leveltwo implements Screen
         viewport.update(width, height);
         stage.getViewport().update(width, height, true);
     }
-    public void update(float deltatime)
+
+
+    public void update(float deltaTime)
     {
-        runtime+=deltatime;
+        timer += deltaTime;
+        if (timer >= delay)
+        {
+            timer = 0.0f;
+
+            if (count < TOTAL_BIRDS) {
+                updateRemainingBirdsDisplay();
+                checkPigStatus(p1);
+                checkPigStatus(p2);
+                checkPigStatus(p3);
+                checkPigStatus(p4);
+
+                checkmetal(metal1);
+                checkmetal(metal2);
+                checkmetal(metal3);
+                checkmetal(metal4);
+                checkmetal(metal5);
+                checkmetal(metal6);
+
+
+                bird.reset();
+            }
+        }
     }
+
     @Override
     public void pause() {}
 
@@ -410,3 +489,4 @@ public class leveltwo implements Screen
         backgroundMusic.dispose();
     }
 }
+

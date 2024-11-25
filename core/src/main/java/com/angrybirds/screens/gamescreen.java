@@ -317,11 +317,12 @@ public class gamescreen implements Screen
             rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
     }
-    @Override
-    public void render(float delta) {
+    public void render(float delta)
+    {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //above
         world.step(WORLD_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
         bird.update();
@@ -329,6 +330,7 @@ public class gamescreen implements Screen
         camera.update();
         box2DCamera.update();
 
+        //bgbc
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -346,7 +348,8 @@ public class gamescreen implements Screen
         plank6.render(game.batch);
 
         int remainingBirds = TOTAL_BIRDS - count;
-        for (int i = 0; i < remainingBirds; i++) {
+        for (int i = 0; i < remainingBirds; i++)
+        {
             game.batch.draw(remainingBirdsTextures.get(i),
                 rb[i],
                 BIRD_DISPLAY_Y,
@@ -354,7 +357,7 @@ public class gamescreen implements Screen
                 BIRD_DISPLAY_SIZE);
         }
 
-        Texture nice = new Texture("cata.png");
+        Texture nice=new Texture("cata.png");
         game.batch.draw(nice, cata.getX(), cata.getY(), 180, 180);
 
         bird.render(game.batch);
@@ -363,60 +366,52 @@ public class gamescreen implements Screen
         stage.act(delta);
         stage.draw();
 
+
         debugRenderer.render(world, box2DCamera.combined);
 
-        Vector2 birdPosition = bird.getPosition();
+
+        Vector2 birdPosition=bird.getPosition();
         if ((bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
             birdPosition.x * PIXELS_TO_METERS < 0 ||
             birdPosition.y * PIXELS_TO_METERS < 0 ||
-            bird.isStopped())) || over) {
-
-            if (!isWaitingForDelay) {
-                isWaitingForDelay = true;
-                delayTimer = 0;
-                shouldProcessNextBird = true;
-            }
-        }
-
-
-        if (isWaitingForDelay)
+            bird.isStopped())) || over)
         {
-            delayTimer += delta;
+            count++;
+            over=false;
 
-            if (delayTimer >= DELAY_SECONDS && shouldProcessNextBird) {
-                shouldProcessNextBird = false;
-                count++;
-                over = false;
+            if(count < TOTAL_BIRDS)
+            {
+                updateRemainingBirdsDisplay();
+                checkPigStatus(p1);
+                checkPigStatus(p2);
+                checkPigStatus(p3);
+                checkPigStatus(p4);
 
-                if (count < TOTAL_BIRDS) {
-                    updateRemainingBirdsDisplay();
-                    checkPigStatus(p1);
-                    checkPigStatus(p2);
-                    checkPigStatus(p3);
-                    checkPigStatus(p4);
-
-                    checkplankStatus(plank1);
-                    checkplankStatus(plank2);
-                    checkplankStatus(plank3);
-                    checkplankStatus(plank4);
-                    checkplankStatus(plank5);
-                    checkplankStatus(plank6);
-                    bird.reset();
-                }
-
-                isWaitingForDelay = false;
+                checkplankStatus(plank1);
+                checkplankStatus(plank2);
+                checkplankStatus(plank3);
+                checkplankStatus(plank4);
+                checkplankStatus(plank5);
+                checkplankStatus(plank6);
+                bird.reset();
             }
         }
 
-        if (count > TOTAL_BIRDS) {
+        if (count >TOTAL_BIRDS)
+        {
             Gdx.input.setInputProcessor(stage);
         }
-        if (count == TOTAL_BIRDS) {
-            if (score >= 500) {
-                game.setScreen(new winscreen(game, sb, score, 1, sb));
-            } else {
-                game.setScreen(new losescreen(game, sb, score, 1));
+        if(count==TOTAL_BIRDS)
+        {
+            if(score>=500)
+            {
+                game.setScreen(new winscreen(game,sb,score,1,sb));
             }
+            else
+            {
+                game.setScreen(new losescreen(game,sb,score,1));
+            }
+
         }
     }
     private void checkPigStatus(pigs pig)

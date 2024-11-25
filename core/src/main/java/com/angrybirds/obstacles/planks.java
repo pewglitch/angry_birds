@@ -37,17 +37,23 @@ public class planks
         body = world.createBody(bodyDef);
         float angleInRadians = (float) Math.toRadians(angle);
 
+
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(w / 2f / PIXELS_TO_METERS, h / 2f / PIXELS_TO_METERS);
 
         FixtureDef fixDef = new FixtureDef();
         fixDef.density = 5f;
-        fixDef.friction = 10f;
-        fixDef.restitution = 0.1f;
+        fixDef.friction = 100f;
+        fixDef.restitution = 0.01f;
         fixDef.shape = poly;
 
         body.createFixture(fixDef);
         body.setUserData(this);
+
+        //mine
+        body.setLinearDamping(0.4f);
+        body.setAngularDamping(0.4f);
+
 
         body.setTransform(body.getPosition(), angleInRadians);
     }

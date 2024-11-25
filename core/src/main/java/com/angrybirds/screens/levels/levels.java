@@ -1,10 +1,8 @@
 package com.angrybirds.screens.levels;
 
 import com.angrybirds.buttons.taptap;
-import com.angrybirds.screens.achievescreen;
-import com.angrybirds.screens.gamescreen;
-import com.angrybirds.screens.menu;
-import com.angrybirds.screens.settings;
+import com.angrybirds.screens.*;
+import com.angrybirds.screens.levelthree;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -121,7 +119,7 @@ public class levels implements Screen
             public void clicked(InputEvent event,float x,float y)
             {
                 backgroundMusic.stop();
-                game.setScreen(new leveltwo(game,sb));
+                game.setScreen(new com.angrybirds.screens.leveltwo(game,sb));
 
             }
         });
@@ -131,7 +129,7 @@ public class levels implements Screen
             public void clicked(InputEvent event,float x,float y)
             {
                 backgroundMusic.stop();
-                game.setScreen(new gamescreen(game,sb));
+                game.setScreen(new levelthree(game,sb));
             }
         });
         b4.addListener(new ClickListener()
