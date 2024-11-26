@@ -486,27 +486,41 @@ public class levelthree implements Screen
     }
     private void checkmetalpigStatus(helmetpig pig1)
     {
-        if(pig1!=null)
+        if(pig1!=null && !pig1.sus())
         {
             if (pig1.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig1.getdead()) {
-                score += pig1.gethealth();
+                score += 100;
                 pig1.destroy();
+                pig1.suss=true;
+                pig1.setHealth(0);
                 pig1.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
         }
+        else
+        {
+            score+=pig1.getHealth();
+            pig1.setHealth(0);
+        }
     }
     private void checkplank(planks plank)
     {
-        if(plank!=null)
+        if(plank!=null && !plank.sus())
         {
             if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
             {
-                score += plank.gethealth();
+                score += 100;
                 plank.destroy();
+                plank.suss=true;
+                plank.setHealth(0);
                 plank.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
+        }
+        else
+        {
+            score+=plank.getHealth();
+            plank.setHealth(0);
         }
     }
     @Override

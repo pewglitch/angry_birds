@@ -4,6 +4,7 @@ package com.angrybirds.screens;
 import com.angrybirds.obstacles.catapult;
 import com.angrybirds.obstacles.pigs;
 import com.angrybirds.obstacles.planks;
+import com.angrybirds.seiralize.gamestate;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -47,14 +48,14 @@ public class gamescreen implements Screen
     private Table table1;
     private Label scorelabel;
     private Label levellabel;
-    private TextButton b1;
+    private TextButton b1,b2;
     private TextureRegionDrawable buttonDrawable;
     private Music backgroundMusic;
-    private int score = 0;
-    private int level = 1;
+    public int score = 0;
+    public int level = 1;
     private Integer coins=0;
     private World world;
-    private red bird;
+    public red bird;
     private final float WORLD_STEP = 1/60f;
     private final int VELOCITY_ITERATIONS = 6;
     private final int POSITION_ITERATIONS = 2;
@@ -64,11 +65,21 @@ public class gamescreen implements Screen
     private final float PIXELS_TO_METERS = 100f;
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
-    private Integer count=0;
-    private pigs p1,p2,p3,p4,p5;
-    private planks plank1,plank2,plank3,plank4,plank5,plank6,plank7;
+    public Integer count=0;
+    public pigs p1;
+    public pigs p2;
+    public pigs p3;
+    public pigs p4;
+    public pigs p5;
+    public planks plank1;
+    public planks plank2;
+    public planks plank3;
+    public planks plank4;
+    public planks plank5;
+    public planks plank6;
+
     private Array<TextureRegion> remainingBirdsTextures;
-    private float[] rb;
+    public float[] rb;
     private static final int TOTAL_BIRDS = 5;
     private static final float BIRD_DISPLAY_Y = 50;
     private static final float BIRD_DISPLAY_SPACING = 40;
@@ -259,7 +270,10 @@ public class gamescreen implements Screen
         });
         show(multiplexer);
     }
-
+    public gamescreen getx()
+    {
+        return this;
+    }
     public void show(InputMultiplexer ix)
     {
         Gdx.input.setInputProcessor(ix);
@@ -295,7 +309,7 @@ public class gamescreen implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new menu(game));
+                game.setScreen(new inbtw(game,getx()));
                 backgroundMusic.stop();
             }
         });
@@ -319,7 +333,6 @@ public class gamescreen implements Screen
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //above
         world.step(WORLD_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
         bird.update();
@@ -327,22 +340,79 @@ public class gamescreen implements Screen
         camera.update();
         box2DCamera.update();
 
-        //bgbc
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        p1.render(game.batch);
-        p2.render(game.batch);
-        p3.render(game.batch);
-        p4.render(game.batch);
-        p5.render(game.batch);
+        if (p1.getHealth() > 20) {
+            p1.render(game.batch);
+        }
+        if (p2.getHealth() > 20) {
+            p2.render(game.batch);
+        }
+        if (p3.getHealth() > 20) {
+            p3.render(game.batch);
+        }
+        if (p4.getHealth() > 20) {
+            p4.render(game.batch);
+        }
+        if (p5.getHealth() > 20) {
+            p5.render(game.batch);
+        }
 
-        plank1.render(game.batch);
-        plank2.render(game.batch);
-        plank3.render(game.batch);
-        plank4.render(game.batch);
-        plank5.render(game.batch);
-        plank6.render(game.batch);
+        if (plank1.getHealth() > 20) {
+            plank1.render(game.batch);
+        }
+        if (plank2.getHealth() > 20) {
+            plank2.render(game.batch);
+        }
+        if (plank3.getHealth() > 20) {
+            plank3.render(game.batch);
+        }
+        if (plank4.getHealth() > 20) {
+            plank4.render(game.batch);
+        }
+        if (plank5.getHealth() > 20) {
+            plank5.render(game.batch);
+        }
+        if (plank6.getHealth() > 20) {
+            plank6.render(game.batch);
+        }
+
+        if (p1.getHealth() <= 20 && !p1.sus()) {
+            p1.destroy();
+        }
+        if (p2.getHealth() <= 20 && !p2.sus()) {
+            p2.destroy();
+        }
+        if (p3.getHealth() <= 20 && !p3.sus()) {
+            p3.destroy();
+        }
+        if (p4.getHealth() <= 20 && !p4.sus()) {
+            p4.destroy();
+        }
+        if (p5.getHealth() <= 20 && !p5.sus()) {
+            p5.destroy();
+        }
+
+        if (plank1.getHealth() <= 20 && !plank1.sus()) {
+            plank1.destroy();
+        }
+        if (plank2.getHealth() <= 20 && !plank2.sus()) {
+            plank2.destroy();
+        }
+        if (plank3.getHealth() <= 20 && !plank3.sus()) {
+            plank3.destroy();
+        }
+        if (plank4.getHealth() <= 20 && !plank4.sus()) {
+            plank4.destroy();
+        }
+        if (plank5.getHealth() <= 20 && !plank5.sus()) {
+            plank5.destroy();
+        }
+        if (plank6.getHealth() <= 20 && !plank6.sus()) {
+            plank6.destroy();
+        }
+
 
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++)
@@ -363,9 +433,7 @@ public class gamescreen implements Screen
         stage.act(delta);
         stage.draw();
 
-
         debugRenderer.render(world, box2DCamera.combined);
-
 
         Vector2 birdPosition=bird.getPosition();
         if ((bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
@@ -408,32 +476,66 @@ public class gamescreen implements Screen
             {
                 game.setScreen(new losescreen(game,sb,score,1));
             }
-
         }
+    }
+    public void restoreGameState(gamestate gameState)
+    {
+        this.score = gameState.getScore();
+        this.scorelabel.setText(String.format("Score: %05d", score));
+
+        this.count = gameState.getBirdsUsed();
+
+        this.p1.setHealth(gameState.pig1Health);
+        this.p2.setHealth(gameState.pig2Health);
+        this.p3.setHealth(gameState.pig3Health);
+        this.p4.setHealth(gameState.pig4Health);
+        this.p5.setHealth(gameState.pig5Health);
+
+        this.plank1.setHealth(gameState.plank1Health);
+        this.plank2.setHealth(gameState.plank2Health);
+        this.plank3.setHealth(gameState.plank3Health);
+        this.plank4.setHealth(gameState.plank4Health);
+        this.plank5.setHealth(gameState.plank5Health);
+        this.plank6.setHealth(gameState.plank6Health);
+
     }
     private void checkPigStatus(pigs pig)
     {
-        if(pig!=null)
+        if(pig!=null && !pig.sus())
         {
             if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig.getdead()) {
                 score += 100;
                 pig.destroy();
+                pig.suss=true;
+                pig.setHealth(0);
                 pig.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
         }
+        else
+        {
+            score+=pig.getHealth();
+            pig.setHealth(0);
+        }
     }
     private void checkplankStatus(planks plank)
     {
-        if(plank!=null)
+        if(plank!=null && !plank.sus())
         {
             if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
             {
                 score += 100;
                 plank.destroy();
+                plank.suss=true;
+                plank.setHealth(0);
                 plank.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
+        }
+        else
+        {
+            score+=plank.getHealth();
+            plank.setHealth(0);
         }
     }
     @Override
@@ -447,30 +549,14 @@ public class gamescreen implements Screen
     public void update(float deltaTime)
     {
         timer += deltaTime;
-        if (timer >= delay)
-        {
-            timer = 0.0f;
 
-            if (count < TOTAL_BIRDS) {
-                updateRemainingBirdsDisplay();
-                checkPigStatus(p1);
-                checkPigStatus(p2);
-                checkPigStatus(p3);
-                checkPigStatus(p4);
-
-                checkplankStatus(plank1);
-                checkplankStatus(plank2);
-                checkplankStatus(plank3);
-                checkplankStatus(plank4);
-                checkplankStatus(plank5);
-                checkplankStatus(plank6);
-                bird.reset();
-            }
-        }
     }
 
     @Override
-    public void pause() {}
+    public void pause()
+    {
+
+    }
 
     @Override
     public void resume() {}

@@ -1,5 +1,7 @@
 package com.angrybirds.screens;
 
+import com.angrybirds.screens.levels.levelthree;
+import com.angrybirds.screens.levels.leveltwo;
 import com.badlogic.gdx.Screen;
 import com.angrybirds.Main;
 import com.badlogic.gdx.Gdx;
@@ -39,12 +41,16 @@ public class losescreen implements Screen
     private Table table1;
     private Label label;
     private Integer score;
-
-    public losescreen(Main game,SpriteBatch sb,Integer scorex,Integer level)
+    private Integer l;
+    public SpriteBatch sb;
+    public losescreen(Main game,SpriteBatch sb1,Integer scorex,Integer level)
     {
+        this.sb=sb1;
         this.game = game;
         camera = new OrthographicCamera();
         this.score=scorex;
+        this.l=level;
+
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
 
@@ -73,6 +79,7 @@ public class losescreen implements Screen
 
         b4 = new TextButton("Back", skin);
         b5 = new TextButton("Exit", skin);
+        b6 = new TextButton("Retry level",skin);
 
         table1.setFillParent(true);
         table1.top();
@@ -84,6 +91,7 @@ public class losescreen implements Screen
         table1.add(label).colspan(3).center().padTop(80);
         table1.row();
         table1.add(scoreLabel).colspan(3).center().padTop(20);
+        table1.add(b6).center().padTop(20).padRight(30).width(100).height(40);
         //table1.row();
 
         b4.addListener(new ClickListener()
@@ -104,10 +112,29 @@ public class losescreen implements Screen
                 backgroundMusic.stop();
             }
         });
-
+        b6.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x ,float y)
+            {
+                if(l==1)
+                {
+                    game.setScreen( new gamescreen(game,sb));
+                }
+                else if(l==2)
+                {
+                    game.setScreen(new leveltwo(game,sb));
+                }
+                else
+                {
+                    game.setScreen(new levelthree(game,sb));
+                }
+            }
+        });
         buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("button1.png")));
         b4.getStyle().up= buttonDrawable;
         b5.getStyle().up= buttonDrawable;
+        b6.getStyle().up= buttonDrawable;
         stage.addActor(table1);
 
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("lose.mp3"));

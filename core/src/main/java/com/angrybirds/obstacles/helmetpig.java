@@ -16,6 +16,7 @@ public class helmetpig
     private World world;
     private int health;
     public boolean dead=false;
+    public boolean suss=false;
     public helmetpig(float x, float y, World world)
     {
         this.world = world;
@@ -87,6 +88,15 @@ public class helmetpig
     public void destroy()
     {
         world.destroyBody(body);
+        suss=true;
+    }
+    public Integer getHealth()
+    {
+        return health;
+    }
+    public void setHealth(Integer orz)
+    {
+        health=orz;
     }
     public void oncolide(Integer damage)
     {
@@ -95,6 +105,10 @@ public class helmetpig
         {
             dead=true;
         }
+    }
+    public boolean sus()
+    {
+        return suss;
     }
     public boolean getdead()
     {

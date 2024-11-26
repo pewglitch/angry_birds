@@ -16,6 +16,8 @@ public class pigs
     private World world;
     private int health;
     public boolean dead=false;
+    public boolean suss=false;
+
     public pigs(float x, float y, World world)
     {
         this.world = world;
@@ -87,6 +89,7 @@ public class pigs
     public void destroy()
     {
         world.destroyBody(body);
+        suss=true;
     }
     public void oncolide(Integer damage)
     {
@@ -95,6 +98,18 @@ public class pigs
         {
             dead=true;
         }
+    }
+    public Integer getHealth()
+    {
+        return health;
+    }
+    public void setHealth(Integer orz)
+    {
+        health=orz;
+    }
+    public boolean sus()
+    {
+        return suss;
     }
     public boolean getdead()
     {

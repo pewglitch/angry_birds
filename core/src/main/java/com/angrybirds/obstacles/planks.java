@@ -18,7 +18,7 @@ public class planks
     private float sy;
     private float h, w, angle;
     private boolean dead=false;
-
+    public boolean suss=false;
     public planks(float x, float y, float width, float length,float angle,float scx,float scy,World wor)
     {
         this.world = wor;
@@ -57,7 +57,18 @@ public class planks
 
         body.setTransform(body.getPosition(), angleInRadians);
     }
-
+    public Integer getHealth()
+    {
+        return health;
+    }
+    public void setHealth(Integer orz)
+    {
+        health=orz;
+    }
+    public boolean sus()
+    {
+        return suss;
+    }
     public void render(SpriteBatch batch)
     {
         Vector2 position = body.getPosition();
@@ -97,6 +108,7 @@ public class planks
     public void destroy()
     {
         world.destroyBody(body);
+        suss=true;
     }
 
     public boolean isAlive() {
