@@ -49,10 +49,10 @@ public class red extends InputMultiplexer
         circle.setRadius(BIRD_SIZE / (2f * PIXELS_TO_METERS));
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circle;
-        fixtureDef.density = BIRD_MASS;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.3f;
+        fixtureDef.shape =circle;
+        fixtureDef.density =BIRD_MASS;
+        fixtureDef.friction = 2f;
+        fixtureDef.restitution = 0.1f;
 
         body.createFixture(fixtureDef);
         body.setGravityScale(g);
