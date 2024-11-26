@@ -93,7 +93,7 @@ public class gamescreen implements Screen
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false, VIRTUAL_WIDTH / PIXELS_TO_METERS, VIRTUAL_HEIGHT / PIXELS_TO_METERS);
 
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -9.8f), true);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -139,18 +139,18 @@ public class gamescreen implements Screen
         p4= new pigs(890,200,world);
         p5= new pigs(870,240,world);
 
-        plank1=new planks(600,85,40,130,0,1.3f,2.1f,world);
+        plank1=new planks(600,85,50,130,0,1.3f,2.1f,world);
 
         //second pig plank
-        plank4=new planks(700,115,40,187,0,1.3f,2.2f,world);
+        plank4=new planks(700,110,50,187,0,1.3f,2.2f,world);
 
         //vertical plank last pigs
         plank2=new planks(830,85,30,85,0,1.3f,2.3f,world);
         plank3=new planks(910,85,30,85,0,1.3f,2.3f,world);
 
         //horizontal planks
-        plank5=new planks(870,160,37,110,90,1.3f,1.9f,world);
-        plank6=new planks(870,37,37,110,90,1.3f,1.9f,world);
+        plank5=new planks(870,160,37,130,90,1.4f,2.1f,world);
+        plank6=new planks(870,37,37,130,90,1.4f,2.1f,world);
 
         world.setContactListener(new ContactListener()
         {

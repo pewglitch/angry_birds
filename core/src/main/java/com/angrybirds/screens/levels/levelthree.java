@@ -86,7 +86,6 @@ public class levelthree implements Screen
     private boolean isWaitingForDelay = false;
     private static final float DELAY_SECONDS = 2f;
     private boolean shouldProcessNextBird = false;
-
     public levelthree(Main game, SpriteBatch sb1)
     {
         this.game = game;
@@ -99,7 +98,7 @@ public class levelthree implements Screen
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false, VIRTUAL_WIDTH / PIXELS_TO_METERS, VIRTUAL_HEIGHT / PIXELS_TO_METERS);
 
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -9.8f), true);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -242,6 +241,25 @@ public class levelthree implements Screen
                 else if ((a == bird && b == plan10) || (a == plan10 && b == bird)) {
                     plan10.oncolide(100);score+=100;
                     over=true;
+                }
+
+                planks[] plans = {plan1, plan2, plan3, plan4, plan5, plan6, plan7, plan8, plan9, plan10};
+
+                for (planks plan : plans)
+                {
+                    if ((a == groundshape && b == plan) || (a == plan && b == groundshape))
+                    {
+                        plan.oncolide(30);
+                    }
+                }
+
+                helmetpig[] rx={m1,m2,m3,m4,m5};
+                for(helmetpig hem:rx)
+                {
+                    if((a==groundshape && b==hem) || (a==hem && b==groundshape))
+                    {
+                        hem.oncolide(30);
+                    }
                 }
 
                 if ((a == bird && b == groundshape) || (a == groundshape && b == bird))
@@ -470,7 +488,7 @@ public class levelthree implements Screen
         if(pig1!=null)
         {
             if (pig1.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig1.getdead()) {
-                score += 100;
+                score += pig1.gethealth();
                 pig1.destroy();
                 pig1.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
@@ -483,7 +501,7 @@ public class levelthree implements Screen
         {
             if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
             {
-                score += 100;
+                score += plank.gethealth();
                 plank.destroy();
                 plank.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
@@ -501,33 +519,6 @@ public class levelthree implements Screen
     public void update(float deltaTime)
     {
         timer += deltaTime;
-        if (timer >= delay)
-        {
-            timer = 0.0f;
-
-            if (count < TOTAL_BIRDS) {
-                updateRemainingBirdsDisplay();
-                checkmetalpigStatus(m1);
-                checkmetalpigStatus(m2);
-                checkmetalpigStatus(m3);
-                checkmetalpigStatus(m4);
-                checkmetalpigStatus(m5);
-
-                checkplank(plan1);
-                checkplank(plan2);
-                checkplank(plan3);
-                checkplank(plan4);
-                checkplank(plan5);
-                checkplank(plan6);
-                checkplank(plan7);
-                checkplank(plan8);
-                checkplank(plan9);
-                checkplank(plan10);
-
-
-                bird.reset();
-            }
-        }
     }
 
     @Override
