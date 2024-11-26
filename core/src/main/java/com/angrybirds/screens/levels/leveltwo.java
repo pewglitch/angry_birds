@@ -104,7 +104,7 @@ public class leveltwo implements Screen
         box2DCamera = new OrthographicCamera();
         box2DCamera.setToOrtho(false, VIRTUAL_WIDTH / PIXELS_TO_METERS, VIRTUAL_HEIGHT / PIXELS_TO_METERS);
 
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -9.8f), true);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -487,30 +487,6 @@ public class leveltwo implements Screen
     public void update(float deltaTime)
     {
         timer += deltaTime;
-        if (timer >= delay)
-        {
-            timer = 0.0f;
-
-            if (count < TOTAL_BIRDS) {
-                updateRemainingBirdsDisplay();
-                checkPigStatus(p1);
-                checkPigStatus(p2);
-                checkPigStatus(p3);
-                checkPigStatus(p4);
-                checkPigStatus(p5);
-
-                checkplank(plank1);
-                checkplank(plan2);
-                checkplank(plank3);
-                checkplank(plank4);
-                checkplank(plank5);
-                checkplank(plank6);
-                checkplank(plank7);
-                checkplank(plank8);
-
-                bird.reset();
-            }
-        }
     }
 
     @Override

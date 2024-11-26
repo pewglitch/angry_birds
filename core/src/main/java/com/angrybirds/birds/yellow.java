@@ -37,7 +37,7 @@ public class yellow extends InputMultiplexer
         this.stage = stag;
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x, y);
         bodyDef.bullet = true;
         bodyDef.fixedRotation = false;

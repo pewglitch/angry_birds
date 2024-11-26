@@ -42,17 +42,17 @@ public class planks
         poly.setAsBox(w / 2f / PIXELS_TO_METERS, h / 2f / PIXELS_TO_METERS);
 
         FixtureDef fixDef = new FixtureDef();
-        fixDef.density = 5f;
-        fixDef.friction = 100f;
-        fixDef.restitution = 0.01f;
+        fixDef.density = 3f;
+        fixDef.friction = 6f;
+        fixDef.restitution = 0.1f;
         fixDef.shape = poly;
 
         body.createFixture(fixDef);
         body.setUserData(this);
 
         //mine
-        body.setLinearDamping(0.4f);
-        body.setAngularDamping(0.4f);
+//        body.setLinearDamping(0.4f);
+//        body.setAngularDamping(0.4f);
 
 
         body.setTransform(body.getPosition(), angleInRadians);

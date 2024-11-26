@@ -37,7 +37,7 @@ public class menu implements Screen
     private final float VIRTUAL_WIDTH = 1000;
     private final float VIRTUAL_HEIGHT = 600;
     private taptap buttonManager;
-    private TextButton b1,b2,b3,b4;
+    private TextButton b1,b2,b3,b4,b5;
     private Table table1;
     private SpriteBatch sb;
     private TextureRegionDrawable buttonDrawable;
@@ -94,17 +94,18 @@ public class menu implements Screen
         b2 = new TextButton("Settings", btn);
         b3 = new TextButton("Achievements", btn);
         b4 = new TextButton("Exit", btn);
-
+        b5 = new TextButton("Continue",btn);
         table1.setFillParent(true);
         table1.top();
         table1.padTop(50);
 
-        table1.add(b1).padLeft(30).padRight(10).padTop(20).width(220).height(90);
-        table1.add(b2).padLeft(10).padRight(10).padTop(20).width(220).height(90);
-        table1.add(b3).padLeft(10).padRight(10).padTop(20).width(220).height(90);
-        table1.add(b4).padLeft(10).padRight(30).padTop(20).width(220).height(90);
-
+        table1.add(b1).pad(20).width(220).height(90);
+        table1.add(b2).pad(20).width(220).height(90);
+        table1.add(b3).pad(20).width(220).height(90);
+        table1.add(b4).pad(20).width(220).height(90);
         table1.row();
+        table1.add(b5).colspan(4).padTop(280).width(220).height(90);
+
 
         constants rx = new constants();
         b1.addListener(new ClickListener() {
@@ -136,12 +137,20 @@ public class menu implements Screen
             }
         });
 
+        b5.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new continuescreen(game));
+            }
+        });
+
         buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("buttons.png")));
         b1.getStyle().up = buttonDrawable;
         b2.getStyle().up = buttonDrawable;
         b3.getStyle().up = buttonDrawable;
         b4.getStyle().up = buttonDrawable;
-
+        b5.getStyle().up = buttonDrawable;
         stage.addActor(table1);
         Gdx.input.setInputProcessor(stage);
     }
