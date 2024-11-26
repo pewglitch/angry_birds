@@ -2,10 +2,7 @@
 package com.angrybirds.screens.levels;
 
 import com.angrybirds.birds.yellow;
-import com.angrybirds.obstacles.catapult;
-import com.angrybirds.obstacles.metals;
-import com.angrybirds.obstacles.pigs;
-import com.angrybirds.obstacles.planks;
+import com.angrybirds.obstacles.*;
 import com.angrybirds.screens.losescreen;
 import com.angrybirds.screens.menu;
 import com.angrybirds.screens.winscreen;
@@ -72,6 +69,7 @@ public class leveltwo implements Screen
     private Integer count=0;
     private pigs p1,p2,p3,p4,p5;
     private metals metal1,plank2,metal3,metal4,metal5,metal6,metal7;
+    private helmetpig h1;
     private planks plank1,plan2,plank3,plank4,plank5,plank6,plank7,plank8;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
@@ -139,38 +137,40 @@ public class leveltwo implements Screen
         table1.top();
         table1.setFillParent(true);
 
-        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        levellabel = new Label(String.format("Level: %05d", 2), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        levellabel = new Label(String.format("Level: %05d", 2), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
         cata = new catapult(130,20);
         p1= new pigs(600,90,world);
 
-        p2= new pigs(710,253,world);
-        p5= new pigs(770,350,world);
+        p2= new pigs(700,100,world);
+        p5= new pigs(710,350,world);
 
-        p3= new pigs(870,185,world);
-        p4= new pigs(910,185,world);
+        p3= new pigs(890,185,world);
+        p4= new pigs(930,185,world);
+
+
 
         plank1=new planks(600,40,60,50,0,1.1f,2f,world);
 
         //second pig plank
-        plan2=new planks(700,80,40,140,150,1.1f,2.2f,world);
+        plan2=new planks(690,85,40,130,0,1.1f,2.3f,world);
 
-        plank3=new planks(740,77,40,140,25,1.1f,2f,world);
+        plank3=new planks(780,60,40,130,0,1.1f,2.2f,world);
 
         //vertical plank last two pigs
-        plank4=new planks(890,80,80,150,0,1.1f,2f,world);
+        plank4=new planks(910,80,80,150,0,1.1f,2f,world);
 
-        //horizontal planks
-        plank5=new planks(730,205,35,110,90,1.3f,2f,world);
-        plank6=new planks(730,192,35,110,90,1.3f,2f,world);
+        //T
+        plank5=new planks(790,250,35,130,0,1.3f,2.3f,world);
+        plank7=new planks(810,370,35,130,90,1.3f,2.3f,world);
 
+        plank6=new planks(750,192,35,130,88,1.3f,2.3f,world);
 
-        //flag
-        plank7=new planks(760,260,25,110,0,1.3f,2.2f,world);
-        plank8=new planks(780,350,25,110,90,1.3f,2.2f,world);
+        h1=new helmetpig(830,900,world);
+
 
 
         world.setContactListener(new ContactListener()
@@ -199,6 +199,10 @@ public class leveltwo implements Screen
                 }
                 else if ((a == bird && b == p5) || (a == p5 && b == bird)) {
                     p5.oncolide(100);score+=100;
+                    over=true;
+                }
+                else if ((a == bird && b == h1) || (a == h1 && b == bird)) {
+                    h1.oncolide(100);score+=100;
                     over=true;
                 }
                 if ((a == bird && b ==plank1) || (a == plank1 && b == bird)) {
@@ -370,6 +374,7 @@ public class leveltwo implements Screen
         p3.render(game.batch);
         p4.render(game.batch);
         p5.render(game.batch);
+        h1.render(game.batch);
 
         plank1.render(game.batch);
         plan2.render(game.batch);
@@ -377,8 +382,10 @@ public class leveltwo implements Screen
         plank4.render(game.batch);
         plank5.render(game.batch);
         plank6.render(game.batch);
+
         plank7.render(game.batch);
-        plank8.render(game.batch);
+
+
 
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++)
@@ -420,6 +427,7 @@ public class leveltwo implements Screen
                 checkPigStatus(p3);
                 checkPigStatus(p4);
                 checkPigStatus(p5);
+                checkhelmetpig(h1);
 
                 checkplank(plank1);
                 checkplank(plan2);
@@ -428,7 +436,7 @@ public class leveltwo implements Screen
                 checkplank(plank5);
                 checkplank(plank6);
                 checkplank(plank7);
-                checkplank(plank8);
+
 
                 bird.reset();
             }
@@ -459,6 +467,18 @@ public class leveltwo implements Screen
                 score += 100;
                 pig.destroy();
                 pig.getregion().setRegion(0, 0, 0, 0);
+                scorelabel.setText(String.format("Score: %05d", score));
+            }
+        }
+    }
+    private void checkhelmetpig(helmetpig h)
+    {
+        if(h!=null)
+        {
+            if (h.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || h.getdead()) {
+                score += 100;
+                h.destroy();
+                h.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
         }

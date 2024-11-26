@@ -124,7 +124,7 @@ public class levelthree implements Screen
 
         Texture birdTexture = new Texture(Gdx.files.internal("white1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new white(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
+        bird = new white(world, birdRegion, 100/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -145,7 +145,7 @@ public class levelthree implements Screen
         m3= new helmetpig(690,50,world);
 
         //last pig
-        m4= new helmetpig(920,325,world);
+        m4= new helmetpig(8000,500,world);
 
         m5= new helmetpig(880,155,world);
 
@@ -162,11 +162,14 @@ public class levelthree implements Screen
         plan6=new planks(700,205,35,200,90,1.3f,1.9f,world);
 
         //flag
-        plan7=new planks(900,210,40,150,0,1.1f,2.3f,world);
-        plan8=new planks(930,305,30,120,90,1.1f,2f,world);
+        plan7=new planks(880,210,40,150,0,1.1f,2.3f,world);
+        /*
+        plan8=new planks(900,330,30,120,90,1.1f,2f,world);
 
+
+         */
         //flag base
-        plan4 =new planks(900,120,60,120,90,1.2f,2f,world);
+        plan4 =new planks(930,120,60,120,90,1.2f,2f,world);
 
 
         //last two standing planks
@@ -406,7 +409,6 @@ public class levelthree implements Screen
         plan5.render(game.batch);
         plan6.render(game.batch);
         plan7.render(game.batch);
-        plan8.render(game.batch);
         plan9.render(game.batch);
         plan10.render(game.batch);
 
@@ -414,14 +416,14 @@ public class levelthree implements Screen
         for (int i = 0; i < remainingBirds; i++)
         {
             game.batch.draw(remainingBirdsTextures.get(i),
-                rb[i],
+                -100,
                 BIRD_DISPLAY_Y,
                 BIRD_DISPLAY_SIZE,
                 BIRD_DISPLAY_SIZE);
         }
 
         Texture nice=new Texture("cata.png");
-        game.batch.draw(nice, cata.getX(), cata.getY(), 180, 180);
+        game.batch.draw(nice, cata.getX()-150, cata.getY(), 180, 180);
 
         bird.render(game.batch);
         game.batch.end();
@@ -458,7 +460,6 @@ public class levelthree implements Screen
                 checkplank(plan5);
                 checkplank(plan6);
                 checkplank(plan7);
-                checkplank(plan8);
                 checkplank(plan9);
                 checkplank(plan10);
 

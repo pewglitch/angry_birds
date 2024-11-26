@@ -127,8 +127,8 @@ public class gamescreen implements Screen
         table1.top();
         table1.setFillParent(true);
 
-        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        levellabel = new Label(String.format("Level: %05d", level), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        levellabel = new Label(String.format("Level: %05d", level), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
