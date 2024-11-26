@@ -453,27 +453,41 @@ public class leveltwo implements Screen
     }
     private void checkPigStatus(pigs pig)
     {
-        if(pig!=null)
+        if(pig!=null && !pig.sus())
         {
             if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig.getdead()) {
                 score += 100;
                 pig.destroy();
+                pig.suss=true;
+                pig.setHealth(0);
                 pig.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
         }
+        else
+        {
+            score+=pig.getHealth();
+            pig.setHealth(0);
+        }
     }
     private void checkplank(planks plank)
     {
-        if(plank!=null)
+        if(plank!=null && !plank.sus())
         {
             if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
             {
                 score += 100;
                 plank.destroy();
+                plank.suss=true;
+                plank.setHealth(0);
                 plank.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
+        }
+        else
+        {
+            score+=plank.getHealth();
+            plank.setHealth(0);
         }
     }
     @Override

@@ -77,7 +77,7 @@ public class gamescreen implements Screen
     public planks plank4;
     public planks plank5;
     public planks plank6;
-    private planks plank7;
+
     private Array<TextureRegion> remainingBirdsTextures;
     public float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -343,18 +343,76 @@ public class gamescreen implements Screen
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        p1.render(game.batch);
-        p2.render(game.batch);
-        p3.render(game.batch);
-        p4.render(game.batch);
-        p5.render(game.batch);
+        if (p1.getHealth() > 20) {
+            p1.render(game.batch);
+        }
+        if (p2.getHealth() > 20) {
+            p2.render(game.batch);
+        }
+        if (p3.getHealth() > 20) {
+            p3.render(game.batch);
+        }
+        if (p4.getHealth() > 20) {
+            p4.render(game.batch);
+        }
+        if (p5.getHealth() > 20) {
+            p5.render(game.batch);
+        }
 
-        plank1.render(game.batch);
-        plank2.render(game.batch);
-        plank3.render(game.batch);
-        plank4.render(game.batch);
-        plank5.render(game.batch);
-        plank6.render(game.batch);
+        if (plank1.getHealth() > 20) {
+            plank1.render(game.batch);
+        }
+        if (plank2.getHealth() > 20) {
+            plank2.render(game.batch);
+        }
+        if (plank3.getHealth() > 20) {
+            plank3.render(game.batch);
+        }
+        if (plank4.getHealth() > 20) {
+            plank4.render(game.batch);
+        }
+        if (plank5.getHealth() > 20) {
+            plank5.render(game.batch);
+        }
+        if (plank6.getHealth() > 20) {
+            plank6.render(game.batch);
+        }
+
+        if (p1.getHealth() <= 20 && !p1.sus()) {
+            p1.destroy();
+        }
+        if (p2.getHealth() <= 20 && !p2.sus()) {
+            p2.destroy();
+        }
+        if (p3.getHealth() <= 20 && !p3.sus()) {
+            p3.destroy();
+        }
+        if (p4.getHealth() <= 20 && !p4.sus()) {
+            p4.destroy();
+        }
+        if (p5.getHealth() <= 20 && !p5.sus()) {
+            p5.destroy();
+        }
+
+        if (plank1.getHealth() <= 20 && !plank1.sus()) {
+            plank1.destroy();
+        }
+        if (plank2.getHealth() <= 20 && !plank2.sus()) {
+            plank2.destroy();
+        }
+        if (plank3.getHealth() <= 20 && !plank3.sus()) {
+            plank3.destroy();
+        }
+        if (plank4.getHealth() <= 20 && !plank4.sus()) {
+            plank4.destroy();
+        }
+        if (plank5.getHealth() <= 20 && !plank5.sus()) {
+            plank5.destroy();
+        }
+        if (plank6.getHealth() <= 20 && !plank6.sus()) {
+            plank6.destroy();
+        }
+
 
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++)
@@ -418,7 +476,6 @@ public class gamescreen implements Screen
             {
                 game.setScreen(new losescreen(game,sb,score,1));
             }
-
         }
     }
     public void restoreGameState(gamestate gameState)
@@ -428,42 +485,57 @@ public class gamescreen implements Screen
 
         this.count = gameState.getBirdsUsed();
 
-        this.p1.oncolide(gameState.isPig1Dead() ? 100 : 0);
-        this.p2.oncolide(gameState.isPig2Dead() ? 100 : 0);
-        this.p3.oncolide(gameState.isPig3Dead() ? 100 : 0);
-        this.p4.oncolide(gameState.isPig4Dead() ? 100 : 0);
-        this.p5.oncolide(gameState.isPig5Dead() ? 100 : 0);
+        this.p1.setHealth(gameState.pig1Health);
+        this.p2.setHealth(gameState.pig2Health);
+        this.p3.setHealth(gameState.pig3Health);
+        this.p4.setHealth(gameState.pig4Health);
+        this.p5.setHealth(gameState.pig5Health);
 
-        this.plank1.oncolide(gameState.isPlank1Destroyed() ? 100 : 0);
-        this.plank2.oncolide(gameState.isPlank2Destroyed() ? 100 : 0);
-        this.plank3.oncolide(gameState.isPlank3Destroyed() ? 100 : 0);
-        this.plank4.oncolide(gameState.isPlank4Destroyed() ? 100 : 0);
-        this.plank5.oncolide(gameState.isPlank5Destroyed() ? 100 : 0);
-        this.plank6.oncolide(gameState.isPlank6Destroyed() ? 100 : 0);
+        this.plank1.setHealth(gameState.plank1Health);
+        this.plank2.setHealth(gameState.plank2Health);
+        this.plank3.setHealth(gameState.plank3Health);
+        this.plank4.setHealth(gameState.plank4Health);
+        this.plank5.setHealth(gameState.plank5Health);
+        this.plank6.setHealth(gameState.plank6Health);
+
     }
     private void checkPigStatus(pigs pig)
     {
-        if(pig!=null)
+        if(pig!=null && !pig.sus())
         {
             if (pig.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig.getdead()) {
                 score += 100;
                 pig.destroy();
+                pig.suss=true;
+                pig.setHealth(0);
                 pig.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
         }
+        else
+        {
+            score+=pig.getHealth();
+            pig.setHealth(0);
+        }
     }
     private void checkplankStatus(planks plank)
     {
-        if(plank!=null)
+        if(plank!=null && !plank.sus())
         {
             if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
             {
                 score += 100;
                 plank.destroy();
+                plank.suss=true;
+                plank.setHealth(0);
                 plank.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
+        }
+        else
+        {
+            score+=plank.getHealth();
+            plank.setHealth(0);
         }
     }
     @Override
