@@ -4,6 +4,7 @@ package com.angrybirds.screens;
 import com.angrybirds.obstacles.catapult;
 import com.angrybirds.obstacles.pigs;
 import com.angrybirds.obstacles.planks;
+import com.angrybirds.seiralize.gamestate;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -47,14 +48,14 @@ public class gamescreen implements Screen
     private Table table1;
     private Label scorelabel;
     private Label levellabel;
-    private TextButton b1;
+    private TextButton b1,b2;
     private TextureRegionDrawable buttonDrawable;
     private Music backgroundMusic;
-    private int score = 0;
-    private int level = 1;
+    public int score = 0;
+    public int level = 1;
     private Integer coins=0;
     private World world;
-    private red bird;
+    public red bird;
     private final float WORLD_STEP = 1/60f;
     private final int VELOCITY_ITERATIONS = 6;
     private final int POSITION_ITERATIONS = 2;
@@ -64,11 +65,21 @@ public class gamescreen implements Screen
     private final float PIXELS_TO_METERS = 100f;
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
-    private Integer count=0;
-    private pigs p1,p2,p3,p4,p5;
-    private planks plank1,plank2,plank3,plank4,plank5,plank6,plank7;
+    public Integer count=0;
+    public pigs p1;
+    public pigs p2;
+    public pigs p3;
+    public pigs p4;
+    public pigs p5;
+    public planks plank1;
+    public planks plank2;
+    public planks plank3;
+    public planks plank4;
+    public planks plank5;
+    public planks plank6;
+    private planks plank7;
     private Array<TextureRegion> remainingBirdsTextures;
-    private float[] rb;
+    public float[] rb;
     private static final int TOTAL_BIRDS = 5;
     private static final float BIRD_DISPLAY_Y = 50;
     private static final float BIRD_DISPLAY_SPACING = 40;
@@ -259,7 +270,10 @@ public class gamescreen implements Screen
         });
         show(multiplexer);
     }
-
+    public gamescreen getx()
+    {
+        return this;
+    }
     public void show(InputMultiplexer ix)
     {
         Gdx.input.setInputProcessor(ix);
@@ -295,7 +309,7 @@ public class gamescreen implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new menu(game));
+                game.setScreen(new inbtw(game,getx()));
                 backgroundMusic.stop();
             }
         });
@@ -319,7 +333,6 @@ public class gamescreen implements Screen
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //above
         world.step(WORLD_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
         bird.update();
@@ -327,7 +340,6 @@ public class gamescreen implements Screen
         camera.update();
         box2DCamera.update();
 
-        //bgbc
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -363,9 +375,7 @@ public class gamescreen implements Screen
         stage.act(delta);
         stage.draw();
 
-
         debugRenderer.render(world, box2DCamera.combined);
-
 
         Vector2 birdPosition=bird.getPosition();
         if ((bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
@@ -411,6 +421,26 @@ public class gamescreen implements Screen
 
         }
     }
+    public void restoreGameState(gamestate gameState)
+    {
+        this.score = gameState.getScore();
+        this.scorelabel.setText(String.format("Score: %05d", score));
+
+        this.count = gameState.getBirdsUsed();
+
+        this.p1.oncolide(gameState.isPig1Dead() ? 100 : 0);
+        this.p2.oncolide(gameState.isPig2Dead() ? 100 : 0);
+        this.p3.oncolide(gameState.isPig3Dead() ? 100 : 0);
+        this.p4.oncolide(gameState.isPig4Dead() ? 100 : 0);
+        this.p5.oncolide(gameState.isPig5Dead() ? 100 : 0);
+
+        this.plank1.oncolide(gameState.isPlank1Destroyed() ? 100 : 0);
+        this.plank2.oncolide(gameState.isPlank2Destroyed() ? 100 : 0);
+        this.plank3.oncolide(gameState.isPlank3Destroyed() ? 100 : 0);
+        this.plank4.oncolide(gameState.isPlank4Destroyed() ? 100 : 0);
+        this.plank5.oncolide(gameState.isPlank5Destroyed() ? 100 : 0);
+        this.plank6.oncolide(gameState.isPlank6Destroyed() ? 100 : 0);
+    }
     private void checkPigStatus(pigs pig)
     {
         if(pig!=null)
@@ -447,30 +477,14 @@ public class gamescreen implements Screen
     public void update(float deltaTime)
     {
         timer += deltaTime;
-        if (timer >= delay)
-        {
-            timer = 0.0f;
 
-            if (count < TOTAL_BIRDS) {
-                updateRemainingBirdsDisplay();
-                checkPigStatus(p1);
-                checkPigStatus(p2);
-                checkPigStatus(p3);
-                checkPigStatus(p4);
-
-                checkplankStatus(plank1);
-                checkplankStatus(plank2);
-                checkplankStatus(plank3);
-                checkplankStatus(plank4);
-                checkplankStatus(plank5);
-                checkplankStatus(plank6);
-                bird.reset();
-            }
-        }
     }
 
     @Override
-    public void pause() {}
+    public void pause()
+    {
+
+    }
 
     @Override
     public void resume() {}

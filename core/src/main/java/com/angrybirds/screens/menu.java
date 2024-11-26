@@ -3,6 +3,7 @@ package com.angrybirds.screens;
 import com.angrybirds.Main;
 import com.angrybirds.buttons.taptap;
 import com.angrybirds.screens.levels.levels;
+import com.angrybirds.seiralize.gamestate;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -25,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
+import com.angrybirds.seiralize.loadgame;
 
 public class menu implements Screen
 {
@@ -140,8 +141,20 @@ public class menu implements Screen
         b5.addListener(new ClickListener()
         {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new continuescreen(game));
+            public void clicked(InputEvent event, float x, float y)
+            {
+                gamestate loadedState = loadgame.load();
+                if (loadedState != null)
+                {
+                    gamescreen newScreen = new gamescreen(game, sb);
+                    newScreen.restoreGameState(loadedState);
+                    game.setScreen(newScreen);
+                }
+                else
+                {
+                    game.setScreen(new continuescreen(game));
+                }
+
             }
         });
 
