@@ -4,7 +4,6 @@ package com.angrybirds.screens.levels;
 import com.angrybirds.birds.white;
 import com.angrybirds.obstacles.*;
 import com.angrybirds.screens.*;
-import com.angrybirds.seiralize.gamestate2;
 import com.angrybirds.seiralize.gamestate3;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
@@ -66,16 +65,16 @@ public class levelthree implements Screen {
     private Integer VIRTUAL_HEIGHT = 600;
     public Integer count = 0;
     private pigs p1, p2, p3, p4, p5;
-    public helmetpig m1, m2, m3, m4, m5;
+    public helmetpig m1, m2, m3, m4, m5,m6;
     private metals metal1, metal2, metal3, metal4, metal5, plank5, plank6;
-    public ice ice1, ice2, ice3, ice4, ice5,ice6, ice7, ice8, ice9, ice10;
-    private Array<TextureRegion> remainingBirdsTextures;
+    public ice ice1, ice2, ice3, ice4, ice5,ice6, ice7, ice8, ice9, ice10,ice11;
+    private Array<TextureRegion> rbt;
     private float[] rb;
-    private static final int TOTAL_BIRDS = 5;
-    private static final float BIRD_DISPLAY_Y = 50;
-    private static final float BIRD_DISPLAY_SPACING = 40;
-    private static final float BIRD_DISPLAY_SIZE = 40;
-    private static final float INITIAL_X_POSITION = 50;
+    private static final int TB = 5;
+    private static final float BY = 50;
+    private static final float BSP= 40;
+    private static final float BSZ = 40;
+    private static final float IX = 50;
     private Body body;
     private float runtime;
     private boolean over = false;
@@ -124,7 +123,7 @@ public class levelthree implements Screen {
 
         Texture birdTexture = new Texture(Gdx.files.internal("white1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new white(world, birdRegion, 100 / PIXELS_TO_METERS, 180 / PIXELS_TO_METERS, stage);
+        bird = new white(world, birdRegion, 70 / PIXELS_TO_METERS, 120 / PIXELS_TO_METERS, stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -158,6 +157,10 @@ public class levelthree implements Screen {
         m4 = new helmetpig(800, 100, world);
 
         m5 = new helmetpig(685, 385, world);
+
+        //first ground plank with pig
+        ice11 = new ice(540, 40, 60, 52, 0, 1.1f, 1.3f, world);
+        m6= new helmetpig(540,80,world);
 
         //between
         ice1 = new ice(690, 40, 60, 52, 0, 1.3f, 1.9f, world);
@@ -216,6 +219,11 @@ public class levelthree implements Screen {
                     score += 100;
                     over = true;
                 }
+                else if ((a == bird && b == m6) || (a == m6 && b == bird)) {
+                    m6.oncolide(100);
+                    score += 100;
+                    over = true;
+                }
                 if ((a == bird && b == ice1) || (a == ice1 && b == bird)) {
                     ice1.oncolide(100);
                     score += 100;
@@ -259,8 +267,12 @@ public class levelthree implements Screen {
                     score += 100;
                     over = true;
                 }
-
-                ice[] ices = {ice1, ice2, ice3, ice4, ice5, ice6, ice7, ice8, ice9, ice10};
+                else if ((a == bird && b == ice11) || (a == ice11 && b == bird)) {
+                    ice11.oncolide(100);
+                    score += 100;
+                    over = true;
+                }
+                ice[] ices = {ice1, ice2, ice3, ice4, ice5, ice6, ice7, ice8, ice9, ice10,ice11};
 
                 for (ice plan : ices) {
                     if ((a == groundshape && b == plan) || (a == plan && b == groundshape)) {
@@ -268,7 +280,7 @@ public class levelthree implements Screen {
                     }
                 }
 
-                helmetpig[] rx = {m1, m2, m3, m4, m5};
+                helmetpig[] rx = {m1, m2, m3, m4, m5,m6};
                 for (helmetpig hem : rx) {
                     if ((a == groundshape && b == hem) || (a == hem && b == groundshape)) {
                         hem.oncolide(30);
@@ -292,12 +304,12 @@ public class levelthree implements Screen {
             public void postSolve(Contact contact, ContactImpulse impulse) {
             }
         });
-        remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
-        rb = new float[TOTAL_BIRDS];
+        rbt = new Array<>(TB);
+        rb = new float[TB];
 
-        for (int i = 0; i < TOTAL_BIRDS; i++) {
-            remainingBirdsTextures.add(birdRegion);
-            rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
+        for (int i = 0; i < TB; i++) {
+            rbt.add(birdRegion);
+            rb[i] = IX + (i * BSP);
         }
 
 
@@ -379,9 +391,9 @@ public class levelthree implements Screen {
     }
 
     private void updateRemainingBirdsDisplay() {
-        int remainingBirds = TOTAL_BIRDS - count;
-        for (int i = 0; i < remainingBirds; i++) {
-            rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
+        int rB = TB - count;
+        for (int i = 0; i < rB; i++) {
+            rb[i] = IX + (i * BSP);
         }
     }
 
@@ -416,6 +428,9 @@ public class levelthree implements Screen {
         if (m5.getHealth() > 20) {
             m5.render(game.batch);
         }
+        if (m6.getHealth() > 20) {
+            m6.render(game.batch);
+        }
 
         if (ice1.getHealth() > 20) {
             ice1.render(game.batch);
@@ -444,6 +459,9 @@ public class levelthree implements Screen {
         if (ice10.getHealth() > 20) {
             ice10.render(game.batch);
         }
+        if (ice11.getHealth() > 20) {
+            ice11.render(game.batch);
+        }
 
         if (m1.getHealth() <= 20 && !m1.sus()) {
             m1.destroy();
@@ -459,6 +477,9 @@ public class levelthree implements Screen {
         }
         if (m5.getHealth() <= 20 && !m5.sus()) {
             m5.destroy();
+        }
+        if (m6.getHealth() <= 20 && !m6.sus()) {
+            m6.destroy();
         }
 
         if (ice1.getHealth() <= 20 && !ice1.sus()) {
@@ -488,18 +509,21 @@ public class levelthree implements Screen {
         if (ice10.getHealth() <= 20 && !ice10.sus()) {
             ice10.destroy();
         }
+        if (ice11.getHealth() <= 20 && !ice11.sus()) {
+            ice11.destroy();
+        }
 
-        int remainingBirds = TOTAL_BIRDS - count;
+        int remainingBirds = TB - count;
         for (int i = 0; i < remainingBirds; i++) {
-            game.batch.draw(remainingBirdsTextures.get(i),
+            game.batch.draw(rbt.get(i),
                 -100,
-                BIRD_DISPLAY_Y,
-                BIRD_DISPLAY_SIZE,
-                BIRD_DISPLAY_SIZE);
+                BY,
+                BSZ,
+                BSZ);
         }
 
         Texture nice = new Texture("cata.png");
-        game.batch.draw(nice, cata.getX() - 150, cata.getY(), 180, 180);
+        game.batch.draw(nice, cata.getX() - 175, cata.getY(), 190, 100);
 
         bird.render(game.batch);
         game.batch.end();
@@ -519,13 +543,14 @@ public class levelthree implements Screen {
             count++;
             over = false;
 
-            if (count < TOTAL_BIRDS) {
+            if (count < TB) {
                 updateRemainingBirdsDisplay();
                 checkmetalpigStatus(m1);
                 checkmetalpigStatus(m2);
                 checkmetalpigStatus(m3);
                 checkmetalpigStatus(m4);
                 checkmetalpigStatus(m5);
+                checkmetalpigStatus(m6);
 
                 checkplank(ice1);
                 checkplank(ice2);
@@ -536,15 +561,16 @@ public class levelthree implements Screen {
                 checkplank(ice7);
                 checkplank(ice9);
                 checkplank(ice10);
+                checkplank(ice11);
 
                 bird.reset();
             }
         }
 
-        if (count > TOTAL_BIRDS) {
+        if (count > TB) {
             Gdx.input.setInputProcessor(stage);
         }
-        if (count == TOTAL_BIRDS) {
+        if (count == TB) {
             if (score >= 500) {
                 game.setScreen(new winscreen(game, sb, score, 1, sb));
             } else {
@@ -565,6 +591,9 @@ public class levelthree implements Screen {
         this.m3.setHealth(gameState3.pig3Health);
         this.m4.setHealth(gameState3.pig4Health);
         this.m5.setHealth(gameState3.pig5Health);
+        this.m6.setHealth(gameState3.pig6Health);
+
+
 
         this.ice1.setHealth(gameState3.plank1Health);
         this.ice2.setHealth(gameState3.plan2Health);
@@ -575,6 +604,7 @@ public class levelthree implements Screen {
         this.ice7.setHealth(gameState3.plank7Health);
         this.ice9.setHealth(gameState3.plank9Health);
         this.ice10.setHealth(gameState3.plank10Health);
+        this.ice11.setHealth(gameState3.plank11Health);
     }
 
     private void checkmetalpigStatus(helmetpig pig1) {

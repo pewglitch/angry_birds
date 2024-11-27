@@ -15,6 +15,7 @@ public class gamestate3 implements Serializable
     public Integer pig3Health;
     public Integer pig4Health;
     public Integer pig5Health;
+    public Integer pig6Health;
     public Integer h1Health;
 
     public Integer plank1Health;
@@ -26,6 +27,8 @@ public class gamestate3 implements Serializable
     public Integer plank7Health;
     public Integer plank9Health;
     public Integer plank10Health;
+    public Integer plank11Health;
+
 
     public gamestate3(levelthree screen)
     {
@@ -37,6 +40,7 @@ public class gamestate3 implements Serializable
         this.pig3Health = screen.m3.getHealth();
         this.pig4Health = screen.m4.getHealth();
         this.pig5Health = screen.m5.getHealth();
+        this.pig6Health= screen.m6.getHealth();
 
         this.plank1Health = screen.ice1.getHealth();
         this.plan2Health = screen.ice2.getHealth();
@@ -47,6 +51,7 @@ public class gamestate3 implements Serializable
         this.plank7Health= screen.ice7.getHealth();
         this.plank9Health= screen.ice9.getHealth();
         this.plank10Health= screen.ice10.getHealth();
+        this.plank11Health=screen.ice11.getHealth();
 
     }
     public int getScore3()

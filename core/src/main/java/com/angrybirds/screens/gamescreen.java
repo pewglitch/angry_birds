@@ -68,13 +68,13 @@ public class gamescreen implements Screen
     public Integer count=0;
     public pigs p1,p2,p3,p4,p5;
     public planks plank1,plank2,plank3,plank4,plank5,plank6;
-    private Array<TextureRegion> remainingBirdsTextures;
+    private Array<TextureRegion> rbt;
     public float[] rb;
-    private static final int TOTAL_BIRDS = 5;
-    private static final float BIRD_DISPLAY_Y = 50;
-    private static final float BIRD_DISPLAY_SPACING = 40;
-    private static final float BIRD_DISPLAY_SIZE = 40;
-    private static final float INITIAL_X_POSITION = 50;
+    private static final int Tb =5;
+    private static final float BY =50;
+    private static final float BS =40;
+    private static final float BSZ =40;
+    private static final float IX =50;
     private Body body;
     private float runtime;
     private boolean over=false;
@@ -120,7 +120,7 @@ public class gamescreen implements Screen
 
         Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new red(world, birdRegion, 208/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
+        bird = new red(world, birdRegion, 75/PIXELS_TO_METERS, 110/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -145,7 +145,7 @@ public class gamescreen implements Screen
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
         cata = new catapult(130,20);
         p1= new pigs(600,180,world);
-        p2= new pigs(700,250,world);
+        p2= new pigs(700,300,world);
         p3= new pigs(850,200,world);
         p4= new pigs(890,200,world);
         p5= new pigs(870,240,world);
@@ -153,7 +153,7 @@ public class gamescreen implements Screen
         plank1=new planks(600,85,50,130,0,1.3f,2.1f,world);
 
         //second pig plank
-        plank4=new planks(700,110,50,187,0,1.3f,2.2f,world);
+        plank4=new planks(700,110,50,187,0,1.3f,1.8f,world);
 
         //vertical plank last pigs
         plank2=new planks(830,85,30,85,0,1.3f,2.3f,world);
@@ -226,13 +226,13 @@ public class gamescreen implements Screen
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) {}
         });
-        remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
-        rb = new float[TOTAL_BIRDS];
+        rbt = new Array<>(Tb);
+        rb = new float[Tb];
 
-        for (int i = 0; i < TOTAL_BIRDS; i++)
+        for (int i = 0; i < Tb; i++)
         {
-            remainingBirdsTextures.add(birdRegion);
-            rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
+            rbt.add(birdRegion);
+            rb[i] = IX + (i * BS);
         }
 
 
@@ -323,9 +323,9 @@ public class gamescreen implements Screen
 
     private void updateRemainingBirdsDisplay()
     {
-        int remainingBirds=TOTAL_BIRDS-count;
+        int remainingBirds= Tb -count;
         for (int i = 0; i < remainingBirds; i++) {
-            rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
+            rb[i] = IX + (i * BS);
         }
     }
     public void render(float delta)
@@ -414,18 +414,18 @@ public class gamescreen implements Screen
         }
 
 
-        int remainingBirds = TOTAL_BIRDS - count;
-        for (int i = 0; i < remainingBirds; i++)
+        int rbs = Tb - count;
+        for (int i = 0; i < rbs; i++)
         {
-            game.batch.draw(remainingBirdsTextures.get(i),
-                rb[i],
-                BIRD_DISPLAY_Y,
-                BIRD_DISPLAY_SIZE,
-                BIRD_DISPLAY_SIZE);
+            game.batch.draw(rbt.get(i),
+                rb[i]-300,
+                BY,
+                BSZ,
+                BSZ);
         }
 
         Texture nice=new Texture("cata.png");
-        game.batch.draw(nice, cata.getX(), cata.getY(), 180, 180);
+        game.batch.draw(nice, cata.getX()-175, cata.getY(), 190, 100);
 
         bird.render(game.batch);
         game.batch.end();
@@ -444,7 +444,7 @@ public class gamescreen implements Screen
             count++;
             over=false;
 
-            if(count < TOTAL_BIRDS)
+            if(count < Tb)
             {
                 updateRemainingBirdsDisplay();
                 checkPigStatus(p1);
@@ -462,11 +462,11 @@ public class gamescreen implements Screen
             }
         }
 
-        if (count >TOTAL_BIRDS)
+        if (count > Tb)
         {
             Gdx.input.setInputProcessor(stage);
         }
-        if(count==TOTAL_BIRDS)
+        if(count== Tb)
         {
             if(score>=500)
             {
