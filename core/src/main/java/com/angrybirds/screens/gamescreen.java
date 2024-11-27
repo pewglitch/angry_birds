@@ -66,18 +66,8 @@ public class gamescreen implements Screen
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
     public Integer count=0;
-    public pigs p1;
-    public pigs p2;
-    public pigs p3;
-    public pigs p4;
-    public pigs p5;
-    public planks plank1;
-    public planks plank2;
-    public planks plank3;
-    public planks plank4;
-    public planks plank5;
-    public planks plank6;
-
+    public pigs p1,p2,p3,p4,p5;
+    public planks plank1,plank2,plank3,plank4,plank5,plank6;
     private Array<TextureRegion> remainingBirdsTextures;
     public float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -138,8 +128,18 @@ public class gamescreen implements Screen
         table1.top();
         table1.setFillParent(true);
 
-        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levellabel = new Label(String.format("Level: %05d", level), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        par.size=20;
+        BitmapFont font14 = gen.generateFont(par);
+        gen.dispose();
+
+        TextButton.TextButtonStyle btn1 = new TextButton.TextButtonStyle();
+        btn1.font =font14;
+        btn1.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
+
+        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(font14, Color.WHITE));
+        levellabel = new Label(String.format("Level: %05d", level), new Label.LabelStyle(font14, Color.WHITE));
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);

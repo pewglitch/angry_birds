@@ -3,9 +3,9 @@ package com.angrybirds.screens.levels;
 
 import com.angrybirds.birds.white;
 import com.angrybirds.obstacles.*;
-import com.angrybirds.screens.losescreen;
-import com.angrybirds.screens.menu;
-import com.angrybirds.screens.winscreen;
+import com.angrybirds.screens.*;
+import com.angrybirds.seiralize.gamestate2;
+import com.angrybirds.seiralize.gamestate3;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,8 +33,7 @@ import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
 
 
-public class levelthree implements Screen
-{
+public class levelthree implements Screen {
     private final Main game;
     private final SpriteBatch sb;
     private Sprite sprite_plank;
@@ -51,12 +50,12 @@ public class levelthree implements Screen
     private TextButton b1;
     private TextureRegionDrawable buttonDrawable;
     private Music backgroundMusic;
-    private int score = 0;
+    public int score = 0;
     private int level = 1;
-    private Integer coins=0;
+    private Integer coins = 0;
     private World world;
     private white bird;
-    private final float WORLD_STEP = 1/60f;
+    private final float WORLD_STEP = 1 / 60f;
     private final int VELOCITY_ITERATIONS = 6;
     private final int POSITION_ITERATIONS = 2;
     private Vector3 touchPoint;
@@ -65,11 +64,11 @@ public class levelthree implements Screen
     private final float PIXELS_TO_METERS = 100f;
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
-    private Integer count=0;
-    private pigs p1,p2,p3,p4,p5;
-    private helmetpig m1,m2,m3,m4,m5;
-    private metals metal1,metal2,metal3,metal4,metal5,plank5,plank6;
-    private planks plan1, plan2, plan3, plan4,plan5,plan6,plan7,plan8,plan9,plan10;
+    public Integer count = 0;
+    private pigs p1, p2, p3, p4, p5;
+    public helmetpig m1, m2, m3, m4, m5;
+    private metals metal1, metal2, metal3, metal4, metal5, plank5, plank6;
+    public ice ice1, ice2, ice3, ice4, ice5,ice6, ice7, ice8, ice9, ice10;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -79,15 +78,16 @@ public class levelthree implements Screen
     private static final float INITIAL_X_POSITION = 50;
     private Body body;
     private float runtime;
-    private boolean over=false;
+    private boolean over = false;
     private catapult cata;
     private float delay = 2.0f;
-    private float timer = 0.0f;private float delayTimer = 0;
+    private float timer = 0.0f;
+    private float delayTimer = 0;
     private boolean isWaitingForDelay = false;
     private static final float DELAY_SECONDS = 2f;
     private boolean shouldProcessNextBird = false;
-    public levelthree(Main game, SpriteBatch sb1)
-    {
+
+    public levelthree(Main game, SpriteBatch sb1) {
         this.game = game;
         this.sb = sb1;
 
@@ -102,17 +102,17 @@ public class levelthree implements Screen
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0,0);
+        bodyDef.position.set(0, 0);
 
         body = world.createBody(bodyDef);
 
-        ChainShape groundshape=new ChainShape();
-        groundshape.createChain(new Vector2[]{new Vector2(-5000,0),new Vector2(5000,0)});
+        ChainShape groundshape = new ChainShape();
+        groundshape.createChain(new Vector2[]{new Vector2(-5000, 0), new Vector2(5000, 0)});
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape=groundshape;
-        fixtureDef.friction=1000f;
-        fixtureDef.restitution=0.1f;
+        fixtureDef.shape = groundshape;
+        fixtureDef.friction = 1000f;
+        fixtureDef.restitution = 0.1f;
         world.createBody(bodyDef);
         body.createFixture(fixtureDef);
         body.setUserData(groundshape);
@@ -120,11 +120,11 @@ public class levelthree implements Screen
 
         touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
-        texture = new Texture("level3.jpg");
+        texture = new Texture("level2bg3.png");
 
         Texture birdTexture = new Texture(Gdx.files.internal("white1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new white(world, birdRegion, 100/PIXELS_TO_METERS, 180/PIXELS_TO_METERS,stage);
+        bird = new white(world, birdRegion, 100 / PIXELS_TO_METERS, 180 / PIXELS_TO_METERS, stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -132,59 +132,64 @@ public class levelthree implements Screen
         table1.top();
         table1.setFillParent(true);
 
-        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levellabel = new Label(String.format("Level: %05d", 3), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        par.size=20;
+        BitmapFont font15 = gen.generateFont(par);
+        gen.dispose();
+
+        TextButton.TextButtonStyle btn1 = new TextButton.TextButtonStyle();
+        btn1.font =font15;
+        btn1.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
+
+        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(font15, Color.WHITE));
+        levellabel = new Label(String.format("Level: %05d", 3), new Label.LabelStyle(font15, Color.WHITE));
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
-        cata = new catapult(130,20);
-        m1= new helmetpig(650,240,world);
-        m2= new helmetpig(700,240,world);
+        cata = new catapult(130, 20);
+        m1 = new helmetpig(650, 240, world);
+        m2 = new helmetpig(700, 240, world);
 
         //between pig
-        m3= new helmetpig(690,50,world);
+        m3 = new helmetpig(690, 50, world);
 
         //last pig
-        m4= new helmetpig(8000,500,world);
+        m4 = new helmetpig(800, 100, world);
 
-        m5= new helmetpig(880,155,world);
+        m5 = new helmetpig(685, 385, world);
 
         //between
-        plan1 =new planks(690,40,60,52,0,1.3f,1.9f,world);
+        ice1 = new ice(690, 40, 60, 52, 0, 1.3f, 1.9f, world);
 
         //vertical
-        plan2 =new planks(630,80,40,180,0,1.1f,2f,world);
-        plan3 =new planks(750,77,40,180,0,1.1f,2f,world);
+        ice2 = new ice(630, 80, 40, 180, 0, 1.1f, 2f, world);
+        ice3 = new ice(745, 77, 40, 180, 0, 1.1f, 2f, world);
 
-        plan5=new planks(700,250,35,110,0,1.3f,2.5f,world);
+        ice5 = new ice(700, 250, 35, 110, 0, 1.3f, 2.5f, world);
 
 
-        plan6=new planks(700,205,35,200,90,1.3f,1.9f,world);
+        ice6 = new ice(700, 205, 37, 200, 90, 1.3f, 1.3f, world);
 
         //flag
-        plan7=new planks(880,210,40,150,0,1.1f,2.3f,world);
+        ice7 = new ice(700, 370, 43, 155, 95, 1.1f, 1.4f, world);
         /*
         plan8=new planks(900,330,30,120,90,1.1f,2f,world);
 
 
          */
         //flag base
-        plan4 =new planks(930,120,60,120,90,1.2f,2f,world);
+        ice4 = new ice(900, 280, 43, 420, 5.5f, 1.2f, 1.5f, world);
 
 
         //last two standing planks
-        plan9=new planks(900,40,25,80,0,1.1f,2f,world);
-        plan10=new planks(940,40,25,80,0,1.1f,2f,world);
+        ice9 = new ice(820, 120, 25, 200, 0, 1.1f, 2f, world);
+        ice10 = new ice(870, 40, 25, 80, 90, 1.1f, 2f, world);
 
 
-
-
-
-        world.setContactListener(new ContactListener()
-        {
+        world.setContactListener(new ContactListener() {
             @Override
-            public void beginContact(Contact contact)
-            {
+            public void beginContact(Contact contact) {
                 Object a = contact.getFixtureA().getBody().getUserData();
                 Object b = contact.getFixtureB().getBody().getUserData();
 
@@ -192,99 +197,105 @@ public class levelthree implements Screen
 
                 if ((a == bird && b == m1) || (a == m1 && b == bird)) {
                     m1.oncolide(100);
-                    score+=100;
-                    over=true;
-                } else if ((a == bird && b ==m2) || (a == m2 && b == bird)) {
-                    m2.oncolide(100);score+=100;
-                    over=true;
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == m2) || (a == m2 && b == bird)) {
+                    m2.oncolide(100);
+                    score += 100;
+                    over = true;
                 } else if ((a == bird && b == m3) || (a == m3 && b == bird)) {
-                    m3.oncolide(100);score+=100;
-                    over=true;
+                    m3.oncolide(100);
+                    score += 100;
+                    over = true;
                 } else if ((a == bird && b == m4) || (a == m4 && b == bird)) {
-                    m4.oncolide(100);score+=100;
-                    over=true;
+                    m4.oncolide(100);
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == m5) || (a == m5 && b == bird)) {
+                    m5.oncolide(100);
+                    score += 100;
+                    over = true;
                 }
-                else if ((a == bird && b == m5) || (a == m5 && b == bird)) {
-                    m5.oncolide(100);score+=100;
-                    over=true;
+                if ((a == bird && b == ice1) || (a == ice1 && b == bird)) {
+                    ice1.oncolide(100);
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == ice2) || (a == ice2 && b == bird)) {
+                    ice2.oncolide(100);
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == ice3) || (a == ice3 && b == bird)) {
+                    ice3.oncolide(100);
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == ice4) || (a == ice4 && b == bird)) {
+                    ice4.oncolide(100);
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == ice5) || (a == ice5 && b == bird)) {
+                    ice5.oncolide(100);
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == ice6) || (a == ice6 && b == bird)) {
+                    ice6.oncolide(100);
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == ice7) || (a == ice7 && b == bird)) {
+                    ice7.oncolide(100);
+                    score += 100;
+                    over = true;
                 }
-                if ((a == bird && b == plan1) || (a == plan1 && b == bird)) {
-                    plan1.oncolide(100);score+=100;
-                    over=true;
-                } else if ((a == bird && b == plan2) || (a == plan2 && b == bird)) {
-                    plan2.oncolide(100);score+=100;
-                    over=true;
-                } else if ((a == bird && b == plan3) || (a == plan3 && b == bird)) {
-                    plan3.oncolide(100);score+=100;
-                    over=true;
-                } else if ((a == bird && b == plan4) || (a == plan4 && b == bird)) {
-                    plan4.oncolide(100);score+=100;
-                    over=true;
+                else if ((a == bird && b == ice8) || (a == ice8 && b == bird)) {
+                    ice8.oncolide(100);
+                    score += 100;
+                    over = true;
                 }
-                else if ((a == bird && b == plan5) || (a == plan5 && b == bird)) {
-                    plan5.oncolide(100);score+=100;
-                    over=true;
-                }
-                else if ((a == bird && b == plan6) || (a == plan6 && b == bird)) {
-                    plan6.oncolide(100);score+=100;
-                    over=true;
-                }
-                else if ((a == bird && b == plan7) || (a == plan7 && b == bird)) {
-                    plan7.oncolide(100);score+=100;
-                    over=true;
-                }
-                else if ((a == bird && b == plan8) || (a == plan8 && b == bird)) {
-                    plan8.oncolide(100);score+=100;
-                    over=true;
-                }
-                else if ((a == bird && b == plan9) || (a == plan9 && b == bird)) {
-                    plan9.oncolide(100);score+=100;
-                    over=true;
-                }
-                else if ((a == bird && b == plan10) || (a == plan10 && b == bird)) {
-                    plan10.oncolide(100);score+=100;
-                    over=true;
+                else if ((a == bird && b == ice9) || (a == ice9 && b == bird)) {
+                    ice9.oncolide(100);
+                    score += 100;
+                    over = true;
+                } else if ((a == bird && b == ice10) || (a == ice10 && b == bird)) {
+                    ice10.oncolide(100);
+                    score += 100;
+                    over = true;
                 }
 
-                planks[] plans = {plan1, plan2, plan3, plan4, plan5, plan6, plan7, plan8, plan9, plan10};
+                ice[] ices = {ice1, ice2, ice3, ice4, ice5, ice6, ice7, ice8, ice9, ice10};
 
-                for (planks plan : plans)
-                {
-                    if ((a == groundshape && b == plan) || (a == plan && b == groundshape))
-                    {
+                for (ice plan : ices) {
+                    if ((a == groundshape && b == plan) || (a == plan && b == groundshape)) {
                         plan.oncolide(30);
                     }
                 }
 
-                helmetpig[] rx={m1,m2,m3,m4,m5};
-                for(helmetpig hem:rx)
-                {
-                    if((a==groundshape && b==hem) || (a==hem && b==groundshape))
-                    {
+                helmetpig[] rx = {m1, m2, m3, m4, m5};
+                for (helmetpig hem : rx) {
+                    if ((a == groundshape && b == hem) || (a == hem && b == groundshape)) {
                         hem.oncolide(30);
                     }
                 }
 
-                if ((a == bird && b == groundshape) || (a == groundshape && b == bird))
-                {
-                    over=true;
+                if ((a == bird && b == groundshape) || (a == groundshape && b == bird)) {
+                    over = true;
                 }
             }
 
             @Override
-            public void endContact(Contact contact) {}
+            public void endContact(Contact contact) {
+            }
 
             @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
+            public void preSolve(Contact contact, Manifold oldManifold) {
+            }
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {}
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+            }
         });
         remainingBirdsTextures = new Array<>(TOTAL_BIRDS);
         rb = new float[TOTAL_BIRDS];
 
-        for (int i = 0; i < TOTAL_BIRDS; i++)
-        {
+        for (int i = 0; i < TOTAL_BIRDS; i++) {
             remainingBirdsTextures.add(birdRegion);
             rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
@@ -294,11 +305,9 @@ public class levelthree implements Screen
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(new InputAdapter()
-        {
+        multiplexer.addProcessor(new InputAdapter() {
             @Override
-            public boolean touchDown(int screenX, int screenY, int pointer, int button)
-            {
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 Vector3 worldCoords = new Vector3(screenX, screenY, 0);
                 camera.unproject(worldCoords);
                 bird.touchDown(worldCoords.x / PIXELS_TO_METERS, worldCoords.y / PIXELS_TO_METERS);
@@ -306,8 +315,7 @@ public class levelthree implements Screen
             }
 
             @Override
-            public boolean touchDragged(int screenX, int screenY, int pointer)
-            {
+            public boolean touchDragged(int screenX, int screenY, int pointer) {
                 Vector3 worldCoords = new Vector3(screenX, screenY, 0);
                 camera.unproject(worldCoords);
                 bird.touchDragged(worldCoords.x / PIXELS_TO_METERS, worldCoords.y / PIXELS_TO_METERS);
@@ -325,45 +333,43 @@ public class levelthree implements Screen
         show(multiplexer);
     }
 
-    public void show(InputMultiplexer ix)
-    {
+    public void show(InputMultiplexer ix) {
         Gdx.input.setInputProcessor(ix);
     }
+
     @Override
-    public void show()
-    {
+    public void show() {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size=20;
-        BitmapFont font12=generator.generateFont(parameter);
+        parameter.size = 20;
+        BitmapFont font12 = generator.generateFont(parameter);
         generator.dispose();
 
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        par.size=20;
+        par.size = 20;
         BitmapFont font13 = gen.generateFont(par);
         gen.dispose();
 
         TextButton.TextButtonStyle btn = new TextButton.TextButtonStyle();
-        btn.font =font13;
+        btn.font = font13;
         btn.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
 
-        b1= new TextButton("Home", btn);
+        b1 =new TextButton("Home", btn);
+        b1.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new inbtw3(game,getz()));
+                backgroundMusic.stop();
+            }
+        });
 
         table1.setFillParent(true);
         table1.top();
         table1.add(b1).padTop(10).padLeft(90).padRight(5).width(120).height(50);
         buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("buttons.png")));
         b1.getStyle().up = buttonDrawable;
-        b1.addListener(new ClickListener()
-        {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                game.setScreen(new menu(game));
-                backgroundMusic.stop();
-            }
-        });
+
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("gametheme.mp3"));
         backgroundMusic.setLooping(false);
         backgroundMusic.setVolume(0.5f);
@@ -372,15 +378,14 @@ public class levelthree implements Screen
 
     }
 
-    private void updateRemainingBirdsDisplay()
-    {
-        int remainingBirds=TOTAL_BIRDS-count;
+    private void updateRemainingBirdsDisplay() {
+        int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++) {
             rb[i] = INITIAL_X_POSITION + (i * BIRD_DISPLAY_SPACING);
         }
     }
-    public void render(float delta)
-    {
+
+    public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -396,25 +401,96 @@ public class levelthree implements Screen
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        m1.render(game.batch);
-        m2.render(game.batch);
-        m3.render(game.batch);
-        m4.render(game.batch);
-        m5.render(game.batch);
+        if (m1.getHealth() > 20) {
+            m1.render(game.batch);
+        }
+        if (m2.getHealth() > 20) {
+            m2.render(game.batch);
+        }
+        if (m3.getHealth() > 20) {
+            m3.render(game.batch);
+        }
+        if (m4.getHealth() > 20) {
+            m4.render(game.batch);
+        }
+        if (m5.getHealth() > 20) {
+            m5.render(game.batch);
+        }
 
-        plan1.render(game.batch);
-        plan2.render(game.batch);
-        plan3.render(game.batch);
-        plan4.render(game.batch);
-        plan5.render(game.batch);
-        plan6.render(game.batch);
-        plan7.render(game.batch);
-        plan9.render(game.batch);
-        plan10.render(game.batch);
+        if (ice1.getHealth() > 20) {
+            ice1.render(game.batch);
+        }
+        if (ice2.getHealth() > 20) {
+            ice2.render(game.batch);
+        }
+        if (ice3.getHealth() > 20) {
+            ice3.render(game.batch);
+        }
+        if (ice4.getHealth() > 20) {
+            ice4.render(game.batch);
+        }
+        if (ice5.getHealth() > 20) {
+            ice5.render(game.batch);
+        }
+        if (ice6.getHealth() > 20) {
+            ice6.render(game.batch);
+        }
+        if (ice7.getHealth() > 20) {
+            ice7.render(game.batch);
+        }
+        if (ice9.getHealth() > 20) {
+            ice9.render(game.batch);
+        }
+        if (ice10.getHealth() > 20) {
+            ice10.render(game.batch);
+        }
+
+        if (m1.getHealth() <= 20 && !m1.sus()) {
+            m1.destroy();
+        }
+        if (m2.getHealth() <= 20 && !m2.sus()) {
+            m2.destroy();
+        }
+        if (m3.getHealth() <= 20 && !m3.sus()) {
+            m3.destroy();
+        }
+        if (m4.getHealth() <= 20 && !m4.sus()) {
+            m4.destroy();
+        }
+        if (m5.getHealth() <= 20 && !m5.sus()) {
+            m5.destroy();
+        }
+
+        if (ice1.getHealth() <= 20 && !ice1.sus()) {
+            ice1.destroy();
+        }
+        if (ice2.getHealth() <= 20 && !ice2.sus()) {
+            ice2.destroy();
+        }
+        if (ice3.getHealth() <= 20 && !ice3.sus()) {
+            ice3.destroy();
+        }
+        if (ice4.getHealth() <= 20 && !ice4.sus()) {
+            ice4.destroy();
+        }
+        if (ice5.getHealth() <= 20 && !ice5.sus()) {
+            ice5.destroy();
+        }
+        if (ice6.getHealth() <= 20 && !ice6.sus()) {
+            ice6.destroy();
+        }
+        if (ice7.getHealth() <= 20 && !ice7.sus()) {
+            ice7.destroy();
+        }
+        if (ice9.getHealth() <= 20 && !ice9.sus()) {
+            ice9.destroy();
+        }
+        if (ice10.getHealth() <= 20 && !ice10.sus()) {
+            ice10.destroy();
+        }
 
         int remainingBirds = TOTAL_BIRDS - count;
-        for (int i = 0; i < remainingBirds; i++)
-        {
+        for (int i = 0; i < remainingBirds; i++) {
             game.batch.draw(remainingBirdsTextures.get(i),
                 -100,
                 BIRD_DISPLAY_Y,
@@ -422,8 +498,8 @@ public class levelthree implements Screen
                 BIRD_DISPLAY_SIZE);
         }
 
-        Texture nice=new Texture("cata.png");
-        game.batch.draw(nice, cata.getX()-150, cata.getY(), 180, 180);
+        Texture nice = new Texture("cata.png");
+        game.batch.draw(nice, cata.getX() - 150, cata.getY(), 180, 180);
 
         bird.render(game.batch);
         game.batch.end();
@@ -435,17 +511,15 @@ public class levelthree implements Screen
         debugRenderer.render(world, box2DCamera.combined);
 
 
-        Vector2 birdPosition=bird.getPosition();
+        Vector2 birdPosition = bird.getPosition();
         if ((bird.isLaunched() && (birdPosition.x * PIXELS_TO_METERS > VIRTUAL_WIDTH ||
             birdPosition.x * PIXELS_TO_METERS < 0 ||
             birdPosition.y * PIXELS_TO_METERS < 0 ||
-            bird.isStopped())) || over)
-        {
+            bird.isStopped())) || over) {
             count++;
-            over=false;
+            over = false;
 
-            if(count < TOTAL_BIRDS)
-            {
+            if (count < TOTAL_BIRDS) {
                 updateRemainingBirdsDisplay();
                 checkmetalpigStatus(m1);
                 checkmetalpigStatus(m2);
@@ -453,103 +527,120 @@ public class levelthree implements Screen
                 checkmetalpigStatus(m4);
                 checkmetalpigStatus(m5);
 
-                checkplank(plan1);
-                checkplank(plan2);
-                checkplank(plan3);
-                checkplank(plan4);
-                checkplank(plan5);
-                checkplank(plan6);
-                checkplank(plan7);
-                checkplank(plan9);
-                checkplank(plan10);
+                checkplank(ice1);
+                checkplank(ice2);
+                checkplank(ice3);
+                checkplank(ice4);
+                checkplank(ice5);
+                checkplank(ice6);
+                checkplank(ice7);
+                checkplank(ice9);
+                checkplank(ice10);
 
                 bird.reset();
             }
         }
 
-        if (count >TOTAL_BIRDS)
-        {
+        if (count > TOTAL_BIRDS) {
             Gdx.input.setInputProcessor(stage);
         }
-        if(count==TOTAL_BIRDS)
-        {
-            if(score>=500)
-            {
-                game.setScreen(new winscreen(game,sb,score,1,sb));
-            }
-            else
-            {
-                game.setScreen(new losescreen(game,sb,score,1));
+        if (count == TOTAL_BIRDS) {
+            if (score >= 500) {
+                game.setScreen(new winscreen(game, sb, score, 1, sb));
+            } else {
+                game.setScreen(new losescreen(game, sb, score, 1));
             }
 
         }
     }
-    private void checkmetalpigStatus(helmetpig pig1)
-    {
-        if(pig1!=null && !pig1.sus())
-        {
+
+    public void restoreGameState3(gamestate3 gameState3) {
+        this.score = gameState3.getScore3();
+        this.scorelabel.setText(String.format("Score: %05d", score));
+
+        this.count = gameState3.getBirdsUsed();
+
+        this.m1.setHealth(gameState3.pig1Health);
+        this.m2.setHealth(gameState3.pig2Health);
+        this.m3.setHealth(gameState3.pig3Health);
+        this.m4.setHealth(gameState3.pig4Health);
+        this.m5.setHealth(gameState3.pig5Health);
+
+        this.ice1.setHealth(gameState3.plank1Health);
+        this.ice2.setHealth(gameState3.plan2Health);
+        this.ice3.setHealth(gameState3.plank3Health);
+        this.ice4.setHealth(gameState3.plank4Health);
+        this.ice5.setHealth(gameState3.plank5Health);
+        this.ice6.setHealth(gameState3.plank6Health);
+        this.ice7.setHealth(gameState3.plank7Health);
+        this.ice9.setHealth(gameState3.plank9Health);
+        this.ice10.setHealth(gameState3.plank10Health);
+    }
+
+    private void checkmetalpigStatus(helmetpig pig1) {
+        if (pig1 != null && !pig1.sus()) {
             if (pig1.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig1.getdead()) {
                 score += 100;
                 pig1.destroy();
-                pig1.suss=true;
+                pig1.suss = true;
                 pig1.setHealth(0);
                 pig1.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
-        }
-        else
-        {
-            score+=pig1.getHealth();
+        } else {
+            score += pig1.getHealth();
             pig1.setHealth(0);
         }
     }
-    private void checkplank(planks plank)
-    {
-        if(plank!=null && !plank.sus())
-        {
-            if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead())
-            {
+
+    private void checkplank(ice plank) {
+        if (plank != null && !plank.sus()) {
+            if (plank.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || plank.getdead()) {
                 score += 100;
                 plank.destroy();
-                plank.suss=true;
+                plank.suss = true;
                 plank.setHealth(0);
                 plank.getregion().setRegion(0, 0, 0, 0);
                 scorelabel.setText(String.format("Score: %05d", score));
             }
-        }
-        else
-        {
-            score+=plank.getHealth();
+        } else {
+            score += plank.getHealth();
             plank.setHealth(0);
         }
     }
+
     @Override
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
         viewport.update(width, height);
         stage.getViewport().update(width, height, true);
     }
 
 
-    public void update(float deltaTime)
-    {
+    public void update(float deltaTime) {
         timer += deltaTime;
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void dispose() {
         stage.dispose();
         texture.dispose();
         backgroundMusic.dispose();
+    }
+
+    public levelthree getz() {
+        return this;
     }
 }
 

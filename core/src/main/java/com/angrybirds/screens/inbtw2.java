@@ -1,9 +1,9 @@
 package com.angrybirds.screens;
 
 import com.angrybirds.Main;
-import com.angrybirds.buttons.taptap;
-import com.angrybirds.screens.levels.levels;
+import com.angrybirds.screens.levels.leveltwo;
 import com.angrybirds.seiralize.savegame;
+import com.angrybirds.seiralize.savegame2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -26,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class inbtw implements Screen
+public class inbtw2 implements Screen
 {
     private Main game;
     private OrthographicCamera camera;
@@ -43,11 +42,11 @@ public class inbtw implements Screen
     private Table table;
     private BitmapFont font;
     private TextButton yes,no;
-    private gamescreen gs;
-    public inbtw(Main game,gamescreen g1)
+    private leveltwo l2;
+    public inbtw2(Main game,leveltwo l)
     {
         this.game = game;
-        this.gs=g1;
+        this.l2 = l;
         camera = new OrthographicCamera();
         table=new Table();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
@@ -103,8 +102,8 @@ public class inbtw implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                savegame.save(gs);
-                constants.levelstate=1;
+                savegame2.save(l2);
+                constants.levelstate=2;
                 game.setScreen(new menu(game));
             }
         });

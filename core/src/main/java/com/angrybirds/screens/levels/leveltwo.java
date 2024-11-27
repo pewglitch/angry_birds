@@ -3,9 +3,10 @@ package com.angrybirds.screens.levels;
 
 import com.angrybirds.birds.yellow;
 import com.angrybirds.obstacles.*;
+import com.angrybirds.screens.inbtw2;
 import com.angrybirds.screens.losescreen;
-import com.angrybirds.screens.menu;
 import com.angrybirds.screens.winscreen;
+import com.angrybirds.seiralize.gamestate2;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -31,7 +32,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
-import com.angrybirds.birds.red;
 
 
 public class leveltwo implements Screen
@@ -52,7 +52,7 @@ public class leveltwo implements Screen
     private TextButton b1;
     private TextureRegionDrawable buttonDrawable;
     private Music backgroundMusic;
-    private int score = 0;
+    public int score = 0;
     private int level = 1;
     private Integer coins=0;
     private World world;
@@ -66,11 +66,10 @@ public class leveltwo implements Screen
     private final float PIXELS_TO_METERS = 100f;
     private Integer VIRTUAL_WIDTH = 1000;
     private Integer VIRTUAL_HEIGHT = 600;
-    private Integer count=0;
-    private pigs p1,p2,p3,p4,p5;
-    private metals metal1,plank2,metal3,metal4,metal5,metal6,metal7;
-    private helmetpig h1;
-    private planks plank1,plan2,plank3,plank4,plank5,plank6,plank7,plank8;
+    public Integer count=0;
+    public pigs p1,p2,p3,p4,p5;
+    public helmetpig h1;
+    public planks plan1,plan2,plan3,plan4,plan5,plan6,plan7,plan8;
     private Array<TextureRegion> remainingBirdsTextures;
     private float[] rb;
     private static final int TOTAL_BIRDS = 5;
@@ -137,8 +136,19 @@ public class leveltwo implements Screen
         table1.top();
         table1.setFillParent(true);
 
-        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levellabel = new Label(String.format("Level: %05d", 2), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        par.size=20;
+        BitmapFont font14 = gen.generateFont(par);
+        gen.dispose();
+
+        TextButton.TextButtonStyle btn1 = new TextButton.TextButtonStyle();
+        btn1.font =font14;
+        btn1.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
+
+
+        scorelabel = new Label(String.format("Score: %05d", score), new Label.LabelStyle(font14, Color.WHITE));
+        levellabel = new Label(String.format("Level: %05d", 2), new Label.LabelStyle(font14, Color.WHITE));
 
         table1.add(scorelabel).expandX().padTop(10).left().padLeft(20);
         table1.add(levellabel).expandX().padTop(10).right().padRight(20);
@@ -153,21 +163,21 @@ public class leveltwo implements Screen
 
 
 
-        plank1=new planks(600,40,60,50,0,1.1f,2f,world);
+        plan1=new planks(600,40,60,50,0,1.1f,2f,world);
 
         //second pig plank
         plan2=new planks(690,85,40,130,0,1.1f,2.3f,world);
 
-        plank3=new planks(780,60,40,130,0,1.1f,2.2f,world);
+        plan3=new planks(780,60,40,130,0,1.1f,2.2f,world);
 
         //vertical plank last two pigs
-        plank4=new planks(910,80,80,150,0,1.1f,2f,world);
+        plan4=new planks(910,80,80,150,0,1.1f,2f,world);
 
         //T
-        plank5=new planks(790,250,35,130,0,1.3f,2.3f,world);
-        plank7=new planks(810,370,35,130,90,1.3f,2.3f,world);
+        plan5=new planks(790,250,35,130,0,1.3f,2.3f,world);
+        plan7=new planks(810,370,35,130,90,1.3f,2.3f,world);
 
-        plank6=new planks(750,192,35,130,88,1.3f,2.3f,world);
+        plan6=new planks(750,192,35,130,88,1.3f,2.3f,world);
 
         h1=new helmetpig(830,900,world);
 
@@ -205,33 +215,29 @@ public class leveltwo implements Screen
                     h1.oncolide(100);score+=100;
                     over=true;
                 }
-                if ((a == bird && b ==plank1) || (a == plank1 && b == bird)) {
-                    plank1.oncolide(100);score+=100;
+                if ((a == bird && b ==plan1) || (a == plan1 && b == bird)) {
+                    plan1.oncolide(100);score+=100;
                     over=true;
-                } else if ((a == bird && b == plan2) || (a == plan2 && b == bird)) {
+                } else if ((a == bird && b == plan2) || (a ==plan2 && b == bird)) {
                     plan2.oncolide(100);score+=100;
                     over=true;
-                } else if ((a == bird && b == plank3) || (a ==plank3 && b == bird)) {
-                    plank3.oncolide(100);score+=100;
+                } else if ((a == bird && b == plan3) || (a ==plan3 && b == bird)) {
+                    plan3.oncolide(100);score+=100;
                     over=true;
-                } else if ((a == bird && b ==plank4) || (a ==plank4 && b == bird)) {
-                    plank4.oncolide(100);score+=100;
-                    over=true;
-                }
-                else if ((a == bird && b == plank5) || (a == plank5 && b == bird)) {
-                    plank5.oncolide(100);score+=100;
+                } else if ((a == bird && b ==plan4) || (a ==plan4 && b == bird)) {
+                    plan4.oncolide(100);score+=100;
                     over=true;
                 }
-                else if ((a == bird && b ==plank6) || (a == plank6&& b == bird)) {
-                    plank6.oncolide(100);score+=100;
+                else if ((a == bird && b == plan5) || (a == plan5 && b == bird)) {
+                    plan5.oncolide(100);score+=100;
                     over=true;
                 }
-                else if ((a == bird && b ==plank7) || (a == plank7 && b == bird)) {
-                    plank7.oncolide(100);score+=100;
+                else if ((a == bird && b ==plan6) || (a == plan6&& b == bird)) {
+                    plan6.oncolide(100);score+=100;
                     over=true;
                 }
-                else if ((a == bird && b ==plank8) || (a == plank8 && b == bird)) {
-                    plank8.oncolide(100);score+=100;
+                else if ((a == bird && b ==plan7) || (a == plan7 && b == bird)) {
+                    plan7.oncolide(100);score+=100;
                     over=true;
                 }
 
@@ -333,7 +339,7 @@ public class leveltwo implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new menu(game));
+                game.setScreen(new inbtw2(game,gety()));
                 backgroundMusic.stop();
             }
         });
@@ -369,23 +375,87 @@ public class leveltwo implements Screen
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(texture, 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-        p1.render(game.batch);
-        p2.render(game.batch);
-        p3.render(game.batch);
-        p4.render(game.batch);
-        p5.render(game.batch);
-        h1.render(game.batch);
+        if (p1.getHealth() > 20) {
+            p1.render(game.batch);
+        }
+        if (p2.getHealth() > 20) {
+            p2.render(game.batch);
+        }
+        if (p3.getHealth() > 20) {
+            p3.render(game.batch);
+        }
+        if (p4.getHealth() > 20) {
+            p4.render(game.batch);
+        }
+        if (p5.getHealth() > 20) {
+            p5.render(game.batch);
+        }
+        if (h1.getHealth() > 20) {
+            h1.render(game.batch);
+        }
 
-        plank1.render(game.batch);
-        plan2.render(game.batch);
-        plank3.render(game.batch);
-        plank4.render(game.batch);
-        plank5.render(game.batch);
-        plank6.render(game.batch);
+        if (plan1.getHealth() > 20) {
+            plan1.render(game.batch);
+        }
+        if (plan2.getHealth() > 20) {
+            plan2.render(game.batch);
+        }
+        if (plan3.getHealth() > 20) {
+            plan3.render(game.batch);
+        }
+        if (plan4.getHealth() > 20) {
+            plan4.render(game.batch);
+        }
+        if (plan5.getHealth() > 20) {
+            plan5.render(game.batch);
+        }
+        if (plan6.getHealth() > 20) {
+            plan6.render(game.batch);
+        }
+        if (plan7.getHealth() > 20) {
+            plan7.render(game.batch);
+        }
 
-        plank7.render(game.batch);
+        if (p1.getHealth() <= 20 && !p1.sus()) {
+            p1.destroy();
+        }
+        if (p2.getHealth() <= 20 && !p2.sus()) {
+            p2.destroy();
+        }
+        if (p3.getHealth() <= 20 && !p3.sus()) {
+            p3.destroy();
+        }
+        if (p4.getHealth() <= 20 && !p4.sus()) {
+            p4.destroy();
+        }
+        if (p5.getHealth() <= 20 && !p5.sus()) {
+            p5.destroy();
+        }
+        if (h1.getHealth() <= 20 && !h1.sus()) {
+            h1.destroy();
+        }
 
-
+        if (plan1.getHealth() <= 20 && !plan1.sus()) {
+            plan1.destroy();
+        }
+        if (plan2.getHealth() <= 20 && !plan2.sus()) {
+            plan2.destroy();
+        }
+        if (plan3.getHealth() <= 20 && !plan3.sus()) {
+            plan3.destroy();
+        }
+        if (plan4.getHealth() <= 20 && !plan4.sus()) {
+            plan4.destroy();
+        }
+        if (plan5.getHealth() <= 20 && !plan5.sus()) {
+            plan5.destroy();
+        }
+        if (plan6.getHealth() <= 20 && !plan6.sus()) {
+            plan6.destroy();
+        }
+        if (plan7.getHealth() <= 20 && !plan7.sus()) {
+            plan7.destroy();
+        }
 
         int remainingBirds = TOTAL_BIRDS - count;
         for (int i = 0; i < remainingBirds; i++)
@@ -429,13 +499,13 @@ public class leveltwo implements Screen
                 checkPigStatus(p5);
                 checkhelmetpig(h1);
 
-                checkplank(plank1);
+                checkplank(plan1);
                 checkplank(plan2);
-                checkplank(plank3);
-                checkplank(plank4);
-                checkplank(plank5);
-                checkplank(plank6);
-                checkplank(plank7);
+                checkplank(plan3);
+                checkplank(plan4);
+                checkplank(plan5);
+                checkplank(plan6);
+                checkplank(plan7);
 
 
                 bird.reset();
@@ -458,6 +528,29 @@ public class leveltwo implements Screen
             }
 
         }
+    }
+
+    public void restoreGameState2(gamestate2 gameState2)
+    {
+        this.score = gameState2.getScore2();
+        this.scorelabel.setText(String.format("Score: %05d", score));
+
+        this.count = gameState2.getBirdsUsed();
+
+        this.p1.setHealth(gameState2.pig1Health);
+        this.p2.setHealth(gameState2.pig2Health);
+        this.p3.setHealth(gameState2.pig3Health);
+        this.p4.setHealth(gameState2.pig4Health);
+        this.p5.setHealth(gameState2.pig5Health);
+        this.h1.setHealth(gameState2.h1Health);
+
+        this.plan1.setHealth(gameState2.plank1Health);
+        this.plan2.setHealth(gameState2.plan2Health);
+        this.plan3.setHealth(gameState2.plank3Health);
+        this.plan4.setHealth(gameState2.plank4Health);
+        this.plan5.setHealth(gameState2.plank5Health);
+        this.plan6.setHealth(gameState2.plank6Health);
+        this.plan7.setHealth(gameState2.plank7Health);
     }
     private void checkPigStatus(pigs pig)
     {
@@ -537,6 +630,10 @@ public class leveltwo implements Screen
         stage.dispose();
         texture.dispose();
         backgroundMusic.dispose();
+    }
+
+    public leveltwo gety(){
+        return this;
     }
 }
 
