@@ -120,7 +120,7 @@ public class gamescreen implements Screen
 
         Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new red(world, birdRegion, 75/PIXELS_TO_METERS, 110/PIXELS_TO_METERS,stage);
+        bird = new red(world, birdRegion, 200/PIXELS_TO_METERS, 150/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -418,14 +418,14 @@ public class gamescreen implements Screen
         for (int i = 0; i < rbs; i++)
         {
             game.batch.draw(rbt.get(i),
-                rb[i]-300,
-                BY,
+                rb[i]-40,
+                BY-10,
                 BSZ,
                 BSZ);
         }
 
         Texture nice=new Texture("cata.png");
-        game.batch.draw(nice, cata.getX()-175, cata.getY(), 190, 100);
+        game.batch.draw(nice, cata.getX()-20, cata.getY(), 190, 150);
 
         bird.render(game.batch);
         game.batch.end();

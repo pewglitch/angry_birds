@@ -128,7 +128,7 @@ public class leveltwo implements Screen
         Texture bird22= new Texture("yellow_new.png");
         TextureRegion bird22r=new TextureRegion(bird22);
 
-        bird = new yellow(world, bird22r, 70/PIXELS_TO_METERS, 120/PIXELS_TO_METERS,stage);
+        bird = new yellow(world, bird22r, 200/PIXELS_TO_METERS, 150/PIXELS_TO_METERS,stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -461,14 +461,14 @@ public class leveltwo implements Screen
         for (int i = 0; i < rbs; i++)
         {
             game.batch.draw(rbt.get(i),
-                rb[i]-400,
-                BY,
+                rb[i]-40,
+                BY-10,
                 BSZ,
                 BSZ);
         }
 
         Texture nice=new Texture("cata.png");
-        game.batch.draw(nice, cata.getX()-175, cata.getY(), 190, 100);
+        game.batch.draw(nice, cata.getX()-20, cata.getY(), 190, 150);
 
         bird.render(game.batch);
         game.batch.end();

@@ -123,7 +123,7 @@ public class levelthree implements Screen {
 
         Texture birdTexture = new Texture(Gdx.files.internal("white1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);
-        bird = new white(world, birdRegion, 70 / PIXELS_TO_METERS, 120 / PIXELS_TO_METERS, stage);
+        bird = new white(world, birdRegion, 200 / PIXELS_TO_METERS, 150 / PIXELS_TO_METERS, stage);
 
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
 
@@ -513,17 +513,17 @@ public class levelthree implements Screen {
             ice11.destroy();
         }
 
-        int remainingBirds = TB - count;
-        for (int i = 0; i < remainingBirds; i++) {
+        int rbs = TB - count;
+        for (int i = 0; i < rbs; i++) {
             game.batch.draw(rbt.get(i),
-                -100,
-                BY,
+                rb[i]-50,
+                BY-10,
                 BSZ,
                 BSZ);
         }
 
         Texture nice = new Texture("cata.png");
-        game.batch.draw(nice, cata.getX() - 175, cata.getY(), 190, 100);
+        game.batch.draw(nice, cata.getX()-20, cata.getY(), 190, 150);
 
         bird.render(game.batch);
         game.batch.end();
