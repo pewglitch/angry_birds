@@ -309,8 +309,9 @@ public class gamescreen implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new inbtw(game,getx()));
                 backgroundMusic.stop();
+                game.setScreen(new inbtw(game,getx()));
+
             }
         });
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("gametheme.mp3"));
@@ -470,10 +471,12 @@ public class gamescreen implements Screen
         {
             if(score>=500)
             {
+                backgroundMusic.stop();
                 game.setScreen(new winscreen(game,sb,score,1,sb));
             }
             else
             {
+                backgroundMusic.stop();
                 game.setScreen(new losescreen(game,sb,score,1));
             }
         }

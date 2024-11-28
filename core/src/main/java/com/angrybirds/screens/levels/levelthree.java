@@ -204,7 +204,14 @@ public class levelthree implements Screen {
                     m1.oncolide(100);
                     score += 100;
                     over = true;
-                } else if ((a == bird && b == m2) || (a == m2 && b == bird)) {
+                }
+                else if((a==bird && b==k1) || (a==k1 && b==bird))
+                {
+                    k1.oncolide(100);
+                    score+=100;
+                    over= true;
+                }
+                else if ((a == bird && b == m2) || (a == m2 && b == bird)) {
                     m2.oncolide(100);
                     score += 100;
                     over = true;
@@ -372,9 +379,11 @@ public class levelthree implements Screen {
         b1 =new TextButton("Home", btn);
         b1.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new inbtw3(game,getz()));
+            public void clicked(InputEvent event, float x, float y)
+            {
                 backgroundMusic.stop();
+                game.setScreen(new inbtw3(game,getz()));
+                //backgroundMusic.stop();
             }
         });
 
@@ -384,7 +393,7 @@ public class levelthree implements Screen {
         buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("buttons.png")));
         b1.getStyle().up = buttonDrawable;
 
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("gametheme.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("level3bgm.mp3"));
         backgroundMusic.setLooping(false);
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
@@ -576,10 +585,15 @@ public class levelthree implements Screen {
             Gdx.input.setInputProcessor(stage);
         }
         if (count == TB) {
-            if (score >= 500) {
-                game.setScreen(new winscreen(game, sb, score, 1, sb));
-            } else {
-                game.setScreen(new losescreen(game, sb, score, 1));
+            if (score >= 500)
+            {
+                backgroundMusic.stop();
+                game.setScreen(new winscreen(game, sb, score, 3, sb));
+            }
+            else
+            {
+                backgroundMusic.stop();
+                game.setScreen(new losescreen(game, sb, score, 3));
             }
 
         }

@@ -66,6 +66,7 @@ public class winscreen implements Screen
         } else if (level == 4) {
             rx.setR4(Math.max(rx.getR4(), socrex));
         }
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
@@ -121,6 +122,7 @@ public class winscreen implements Screen
         b1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 game.setScreen(new menu(game));
                 //backgroundMusic.stop();
             }
@@ -129,6 +131,7 @@ public class winscreen implements Screen
         b2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 Gdx.app.exit();
                 //backgroundMusic.stop();
             }
@@ -136,16 +139,16 @@ public class winscreen implements Screen
         b3.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 if (l == 1) {
                     game.setScreen(new leveltwo(game,sb));
                 } else if (l == 2) {
                     game.setScreen(new levelthree(game,sb));
                 } else if (l == 3) {
-                    game.setScreen(new levelfour(game,sb));
+                    game.setScreen(new finalover(game,sb,score));
                 } else if (l == 4) {
 
                 }
-                //backgroundMusic.stop();
             }
         });
 
@@ -154,6 +157,7 @@ public class winscreen implements Screen
         {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 if (l == 1) {
                     game.setScreen(new gamescreen(game,sb));
                 } else if (l == 2) {
@@ -173,6 +177,10 @@ public class winscreen implements Screen
         b3.getStyle().up = buttonDrawable;
         b4.getStyle().up = buttonDrawable;
 
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("win.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.5f);
+        backgroundMusic.play();
         stage.addActor(table1);
         Gdx.input.setInputProcessor(stage);
     }

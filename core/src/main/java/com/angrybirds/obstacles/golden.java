@@ -20,7 +20,7 @@ public class golden
     public golden(float x, float y, World world)
     {
         this.world = world;
-        this.health = 150;
+        this.health = 190;
         Texture pigTexture = new Texture("golden.png");
         this.texture = new TextureRegion(pigTexture);
 

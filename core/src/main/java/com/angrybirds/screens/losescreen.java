@@ -99,8 +99,9 @@ public class losescreen implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new menu(game));
                 backgroundMusic.stop();
+                game.setScreen(new menu(game));
+                //backgroundMusic.stop();
             }
         });
 
@@ -108,8 +109,9 @@ public class losescreen implements Screen
         {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
                 backgroundMusic.stop();
+                Gdx.app.exit();
+                //backgroundMusic.stop();
             }
         });
         b6.addListener(new ClickListener()
@@ -117,6 +119,7 @@ public class losescreen implements Screen
             @Override
             public void clicked(InputEvent event,float x ,float y)
             {
+                backgroundMusic.stop();
                 if(l==1)
                 {
                     game.setScreen( new gamescreen(game,sb));

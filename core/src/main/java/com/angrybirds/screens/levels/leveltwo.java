@@ -338,11 +338,12 @@ public class leveltwo implements Screen
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new inbtw2(game,gety()));
                 backgroundMusic.stop();
+                game.setScreen(new inbtw2(game,gety()));
+                //backgroundMusic.stop();
             }
         });
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("gametheme.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("level2bgm.mp3"));
         backgroundMusic.setLooping(false);
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
@@ -519,11 +520,13 @@ public class leveltwo implements Screen
         {
             if(score>=500)
             {
-                game.setScreen(new winscreen(game,sb,score,1,sb));
+                backgroundMusic.stop();
+                game.setScreen(new winscreen(game,sb,score,2,sb));
             }
             else
             {
-                game.setScreen(new losescreen(game,sb,score,1));
+                backgroundMusic.stop();
+                game.setScreen(new losescreen(game,sb,score,2));
             }
 
         }

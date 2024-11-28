@@ -104,6 +104,7 @@ public class inbtw2 implements Screen
             {
                 savegame2.save(l2);
                 constants.levelstate=2;
+                backgroundMusic.stop();
                 game.setScreen(new menu(game));
             }
         });
@@ -112,6 +113,7 @@ public class inbtw2 implements Screen
         no.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 game.setScreen(new menu(game));
             }
         });

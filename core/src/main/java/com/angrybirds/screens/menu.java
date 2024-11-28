@@ -115,6 +115,7 @@ public class menu implements Screen
         b1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 game.setScreen(new levels(game, sb));
             }
         });
@@ -123,6 +124,7 @@ public class menu implements Screen
         b2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 game.setScreen(new settings(game));
             }
         });
@@ -130,6 +132,7 @@ public class menu implements Screen
         {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 game.setScreen(new achievescreen(game));
             }
         });
@@ -137,15 +140,18 @@ public class menu implements Screen
         b4.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                backgroundMusic.stop();
                 Gdx.app.exit();
             }
         });
 
         b5.addListener(new ClickListener()
         {
+
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                backgroundMusic.stop();
                 if(levelstate==1){
                     gamestate loadedState = loadgame.load();
                     if (loadedState != null)
