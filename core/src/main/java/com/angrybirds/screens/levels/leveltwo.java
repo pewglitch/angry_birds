@@ -69,7 +69,7 @@ public class leveltwo implements Screen
     public Integer count=0;
     public pigs p1,p2,p3,p4,p5;
     public helmetpig h1;
-    public planks plan1,plan2,plan3,plan4,plan5,plan6,plan7,plan8;
+    public metals plan1,plan2,plan3,plan4,plan5,plan6,plan7,plan8;
     private Array<TextureRegion> rbt;
     private float[] rb;
     private static final int TB = 5;
@@ -156,30 +156,29 @@ public class leveltwo implements Screen
         p1= new pigs(600,90,world);
 
         p2= new pigs(700,100,world);
-        p5= new pigs(710,350,world);
+        p5= new pigs(780,395,world);
 
-        p3= new pigs(890,185,world);
-        p4= new pigs(930,185,world);
+        p3= new pigs(910,185,world);
+        p4= new pigs(950,185,world);
 
 
 
-        plan1=new planks(600,40,60,50,0,1.1f,2f,world);
+        plan1=new metals(600,40,60,55,0,1.3f,1.3f,world);
 
         //second pig plank
-        plan2=new planks(690,85,40,130,0,1.1f,2.3f,world);
-
-        plan3=new planks(780,60,40,130,0,1.1f,2.2f,world);
+        plan2=new metals(690,80,40,185,0,1.1f,1.1f,world);
+        plan3=new metals(780,65,40,185,0,1.1f,1.1f,world);
 
         //vertical plank last two pigs
-        plan4=new planks(910,80,80,150,0,1.1f,2f,world);
+        plan4=new metals(930,80,92,150,0,1f,1f,world);
 
         //T
-        plan5=new planks(790,250,35,130,0,1.3f,2.3f,world);
-        plan7=new planks(810,370,35,130,90,1.3f,2.3f,world);
+        plan5=new metals(790,400,35,130,40,1.3f,1f,world);
+        plan7=new metals(730,400,35,140,135,1.3f,1f,world);
 
-        plan6=new planks(750,192,35,130,88,1.3f,2.3f,world);
+        plan6=new metals(750,380,52,230,88,1f,1f,world);
 
-        h1=new helmetpig(830,900,world);
+        h1=new helmetpig(840,100,world);
 
 
 
@@ -583,7 +582,7 @@ public class leveltwo implements Screen
             }
         }
     }
-    private void checkplank(planks plank)
+    private void checkplank(metals plank)
     {
         if(plank!=null && !plank.sus())
         {

@@ -66,6 +66,7 @@ public class levelthree implements Screen {
     public Integer count = 0;
     private pigs p1, p2, p3, p4, p5;
     public helmetpig m1, m2, m3, m4, m5,m6;
+    public golden k1;
     private metals metal1, metal2, metal3, metal4, metal5, plank5, plank6;
     public ice ice1, ice2, ice3, ice4, ice5,ice6, ice7, ice8, ice9, ice10,ice11;
     private Array<TextureRegion> rbt;
@@ -85,6 +86,7 @@ public class levelthree implements Screen {
     private boolean isWaitingForDelay = false;
     private static final float DELAY_SECONDS = 2f;
     private boolean shouldProcessNextBird = false;
+
 
     public levelthree(Main game, SpriteBatch sb1) {
         this.game = game;
@@ -160,7 +162,7 @@ public class levelthree implements Screen {
 
         //first ground plank with pig
         ice11 = new ice(540, 40, 60, 52, 0, 1.1f, 1.3f, world);
-        m6= new helmetpig(540,80,world);
+        k1= new golden(540,80,world);
 
         //between
         ice1 = new ice(690, 40, 60, 52, 0, 1.3f, 1.9f, world);
@@ -280,7 +282,7 @@ public class levelthree implements Screen {
                     }
                 }
 
-                helmetpig[] rx = {m1, m2, m3, m4, m5,m6};
+                helmetpig[] rx = {m1, m2, m3, m4, m5};
                 for (helmetpig hem : rx) {
                     if ((a == groundshape && b == hem) || (a == hem && b == groundshape)) {
                         hem.oncolide(30);
@@ -428,9 +430,10 @@ public class levelthree implements Screen {
         if (m5.getHealth() > 20) {
             m5.render(game.batch);
         }
-        if (m6.getHealth() > 20) {
-            m6.render(game.batch);
+        if (k1.getHealth() > 20) {
+            k1.render(game.batch);
         }
+
 
         if (ice1.getHealth() > 20) {
             ice1.render(game.batch);
@@ -478,9 +481,11 @@ public class levelthree implements Screen {
         if (m5.getHealth() <= 20 && !m5.sus()) {
             m5.destroy();
         }
-        if (m6.getHealth() <= 20 && !m6.sus()) {
-            m6.destroy();
+        if (k1.getHealth() <= 20 && !k1.sus()) {
+            k1.destroy();
         }
+
+
 
         if (ice1.getHealth() <= 20 && !ice1.sus()) {
             ice1.destroy();
@@ -550,7 +555,7 @@ public class levelthree implements Screen {
                 checkmetalpigStatus(m3);
                 checkmetalpigStatus(m4);
                 checkmetalpigStatus(m5);
-                checkmetalpigStatus(m6);
+                kingpigstatus(k1);
 
                 checkplank(ice1);
                 checkplank(ice2);
@@ -591,8 +596,7 @@ public class levelthree implements Screen {
         this.m3.setHealth(gameState3.pig3Health);
         this.m4.setHealth(gameState3.pig4Health);
         this.m5.setHealth(gameState3.pig5Health);
-        this.m6.setHealth(gameState3.pig6Health);
-
+        this.k1.setHealth(gameState3.pig6Health);
 
 
         this.ice1.setHealth(gameState3.plank1Health);
@@ -608,6 +612,21 @@ public class levelthree implements Screen {
     }
 
     private void checkmetalpigStatus(helmetpig pig1) {
+        if (pig1 != null && !pig1.sus()) {
+            if (pig1.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig1.getdead()) {
+                score += 100;
+                pig1.destroy();
+                pig1.suss = true;
+                pig1.setHealth(0);
+                pig1.getregion().setRegion(0, 0, 0, 0);
+                scorelabel.setText(String.format("Score: %05d", score));
+            }
+        } else {
+            score += pig1.getHealth();
+            pig1.setHealth(0);
+        }
+    }
+    private void kingpigstatus(golden pig1) {
         if (pig1 != null && !pig1.sus()) {
             if (pig1.isOutOfWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT) || pig1.getdead()) {
                 score += 100;

@@ -18,7 +18,7 @@ public class metals
     private float sy;
     private float h, w, angle;
     private boolean dead=false;
-
+    public boolean suss=false;
     public metals(float x, float y, float width, float length,float angle,float scx,float scy,World wor)
     {
         this.world = wor;
@@ -26,7 +26,7 @@ public class metals
         this.w = width;
         this.health = 130;
 
-        Texture plankTexture = new Texture("metal6.png");
+        Texture plankTexture = new Texture("metal2.png");
         this.texture = new TextureRegion(plankTexture);
 
         this.sx=scx;
@@ -42,22 +42,33 @@ public class metals
         poly.setAsBox(w / 2f / PIXELS_TO_METERS, h / 2f / PIXELS_TO_METERS);
 
         FixtureDef fixDef = new FixtureDef();
-        fixDef.density = 5f;
-        fixDef.friction = 100f;
-        fixDef.restitution = 0.01f;
+        fixDef.density = 3f;
+        fixDef.friction = 6f;
+        fixDef.restitution = 0.1f;
         fixDef.shape = poly;
 
         body.createFixture(fixDef);
         body.setUserData(this);
 
         //mine
-        body.setLinearDamping(0.4f);
-        body.setAngularDamping(0.4f);
+//        body.setLinearDamping(0.4f);
+//        body.setAngularDamping(0.4f);
 
 
         body.setTransform(body.getPosition(), angleInRadians);
     }
-
+    public Integer getHealth()
+    {
+        return health;
+    }
+    public void setHealth(Integer orz)
+    {
+        health=orz;
+    }
+    public boolean sus()
+    {
+        return suss;
+    }
     public void render(SpriteBatch batch)
     {
         Vector2 position = body.getPosition();
@@ -97,6 +108,7 @@ public class metals
     public void destroy()
     {
         world.destroyBody(body);
+        suss=true;
     }
 
     public boolean isAlive() {

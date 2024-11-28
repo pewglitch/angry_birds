@@ -414,7 +414,7 @@ public class gamescreen implements Screen
         }
 
 
-        int rbs = Tb - count;
+        int rbs=Tb-count;
         for (int i = 0; i < rbs; i++)
         {
             game.batch.draw(rbt.get(i),

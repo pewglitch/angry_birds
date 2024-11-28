@@ -40,7 +40,7 @@ public class gamestate3 implements Serializable
         this.pig3Health = screen.m3.getHealth();
         this.pig4Health = screen.m4.getHealth();
         this.pig5Health = screen.m5.getHealth();
-        this.pig6Health= screen.m6.getHealth();
+        this.pig6Health= screen.k1.getHealth();
 
         this.plank1Health = screen.ice1.getHealth();
         this.plan2Health = screen.ice2.getHealth();
