@@ -43,7 +43,7 @@ public class menu implements Screen
     private taptap buttonManager;
     private TextButton b1,b2,b3,b4,b5;
     private Table table1;
-    private SpriteBatch sb;
+    public SpriteBatch sb;
     private TextureRegionDrawable buttonDrawable;
     private Stage stage;
     public menu(Main game)

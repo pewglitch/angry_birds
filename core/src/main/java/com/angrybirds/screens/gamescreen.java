@@ -322,6 +322,14 @@ public class gamescreen implements Screen
 
     }
 
+    public static boolean cantacess(Integer level,Integer score)
+    {
+        if(level!=2)
+        {
+            return false;
+        }
+        return score>=500;
+    }
     private void updateRemainingBirdsDisplay()
     {
         int remainingBirds= Tb -count;

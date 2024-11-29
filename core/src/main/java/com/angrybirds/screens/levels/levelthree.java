@@ -88,7 +88,8 @@ public class levelthree implements Screen {
     private boolean shouldProcessNextBird = false;
 
 
-    public levelthree(Main game, SpriteBatch sb1) {
+    public levelthree(Main game, SpriteBatch sb1)
+    {
         this.game = game;
         this.sb = sb1;
 

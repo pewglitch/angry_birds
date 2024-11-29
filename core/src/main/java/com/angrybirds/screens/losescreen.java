@@ -91,7 +91,8 @@ public class losescreen implements Screen
         table1.add(label).colspan(3).center().padTop(80);
         table1.row();
         table1.add(scoreLabel).colspan(3).center().padTop(20);
-        table1.add(b6).center().padTop(20).padRight(30).width(100).height(40);
+        table1.row();
+        table1.add(b6).colspan(3).center().padTop(20).padRight(30).width(180).height(70);
         //table1.row();
 
         b4.addListener(new ClickListener()
@@ -134,7 +135,7 @@ public class losescreen implements Screen
                 }
             }
         });
-        buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("button1.png")));
+        buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("buttons.png")));
         b4.getStyle().up= buttonDrawable;
         b5.getStyle().up= buttonDrawable;
         b6.getStyle().up= buttonDrawable;

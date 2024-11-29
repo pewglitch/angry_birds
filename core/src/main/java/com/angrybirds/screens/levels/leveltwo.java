@@ -123,7 +123,7 @@ public class leveltwo implements Screen
 
         touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
-        texture = new Texture("level2bg3.png");
+        texture = new Texture("level2bg2.png");
 
         Texture bird22= new Texture("yellow_new.png");
         TextureRegion bird22r=new TextureRegion(bird22);
