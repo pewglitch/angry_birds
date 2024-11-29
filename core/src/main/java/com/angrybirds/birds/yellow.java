@@ -21,8 +21,8 @@ public class yellow extends InputMultiplexer
     private Vector2 dragStart = new Vector2();
     private Vector2 launchPosition = new Vector2();
 
-    private static final float MAX_DRAG_DISTANCE = 1.5f;
-    private static final float LAUNCH_FORCE_MULTIPLIER = 20.0f;
+    private static final float Mdd = 1.5f;//max drag distance
+    private static final float Lf = 20.0f;//launch force
     private static final float g = 0.5f;
     private static final float ad = 1.0f;
     private static final float dc = 0.3f;
@@ -98,8 +98,8 @@ public class yellow extends InputMultiplexer
 
             float angle = MathUtils.atan2(dragVector.y, dragVector.x);
 
-            if (dragVector.len() > MAX_DRAG_DISTANCE) {
-                dragVector.nor().scl(MAX_DRAG_DISTANCE);
+            if (dragVector.len() > Mdd) {
+                dragVector.nor().scl(Mdd);
             }
 
             body.setTransform(
@@ -120,14 +120,14 @@ public class yellow extends InputMultiplexer
 
             float angle = MathUtils.atan2(launchVector.y, launchVector.x);
 
-            if (launchVector.len() > MAX_DRAG_DISTANCE) {
-                launchVector.nor().scl(MAX_DRAG_DISTANCE);
+            if (launchVector.len() > Mdd) {
+                launchVector.nor().scl(Mdd);
             }
 
             body.setType(BodyDef.BodyType.DynamicBody);
             body.setLinearVelocity(0, 0);
 
-            float velocity = launchVector.len() * LAUNCH_FORCE_MULTIPLIER;
+            float velocity = launchVector.len() * Lf;
 
             float x_v = velocity * MathUtils.cos(angle) * 1.2f;
             float y_v= velocity * MathUtils.sin(angle) * 1.2f;
