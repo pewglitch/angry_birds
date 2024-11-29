@@ -10,3 +10,5 @@ Class relations being used have being demonstrated in a UML Diagram:
 A sample Use Case Diagram:
    `angry_birds/ucd.pdf`
 
+Video demonstration about features and gameplay:
+   `https://drive.google.com/drive/folders/1q5Cc7-jk-iIuQkSPxyB_mtm4Oxp4ZnUC`
