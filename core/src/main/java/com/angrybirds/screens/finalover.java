@@ -70,16 +70,15 @@ public class finalover implements Screen
     @Override
     public void show()
     {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("metalui/angry.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 70;
         BitmapFont font12 = generator.generateFont(parameter);
         generator.dispose();
         Label.LabelStyle lst=new Label.LabelStyle();
         lst.font=font12;
-        Label lrx=new Label("Yayy all levels cleared!",lst);
+        Label lrx = new Label(String.format("YAY ALL LEVELS CLEARED!"), new Label.LabelStyle(font12, Color.WHITE));
 
-        lrx.setColor(0, 0f, 0, 1);
 
         FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();

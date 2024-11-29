@@ -1,11 +1,7 @@
 package com.angrybirds.screens.levels;
 
-import com.angrybirds.buttons.taptap;
 import com.angrybirds.screens.*;
-import com.angrybirds.screens.levels.levelthree;
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,9 +21,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.angrybirds.Main;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.angrybirds.screens.levels.leveltwo;
 
 public class levels implements Screen
 {
@@ -83,12 +77,19 @@ public class levels implements Screen
 //        label = new Label("Choose Level", skin);
 //        label.setFontScale(5);
 //        label.setColor(0, 0, 0, 1);
+        FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("metalui/funny.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter par = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        par.size = 30;
+        BitmapFont font13 = gen.generateFont(par);
+        gen.dispose();
+        TextButton.TextButtonStyle tbt = new TextButton.TextButtonStyle();
+        tbt.font = font13;
 
-        b1 = new TextButton("Level 1", skin);
-        b2 = new TextButton("Level 2", skin);
-        b3 = new TextButton("Level 3", skin);
-        b4 = new TextButton("Back", skin);
-        b5 = new TextButton("Exit", skin);
+        b1 = new TextButton("Level 1",tbt);
+        b2 = new TextButton("Level 2",tbt);
+        b3 = new TextButton("Level 3",tbt);
+        b4 = new TextButton("Back", tbt);
+        b5 = new TextButton("Exit", tbt);
 
         table1.setFillParent(true);
         table1.top();
@@ -151,7 +152,7 @@ public class levels implements Screen
         });
         Gdx.input.setInputProcessor(stage);
 
-        buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("button1.png")));
+        buttonDrawable= new TextureRegionDrawable(new TextureRegion(new Texture("button1.png")));
         b1.getStyle().up = buttonDrawable;
         b2.getStyle().up = buttonDrawable;
         b3.getStyle().up = buttonDrawable;

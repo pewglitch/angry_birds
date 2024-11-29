@@ -161,8 +161,8 @@ public class levelthree implements Screen {
         m5 = new helmetpig(685, 385, world);
 
         //first ground plank with pig
-        ice11 = new ice(540, 40, 60, 52, 0, 1.1f, 1.3f, world);
-        k1= new golden(540,80,world);
+        ice11 = new ice(540, 40, 60, 200, 0, 1.1f, 1.3f, world);
+        k1= new golden(540,230,world);
 
         //between
         ice1 = new ice(690, 40, 60, 52, 0, 1.3f, 1.9f, world);
