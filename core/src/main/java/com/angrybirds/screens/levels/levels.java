@@ -2,6 +2,7 @@ package com.angrybirds.screens.levels;
 
 import com.angrybirds.screens.*;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -48,7 +49,7 @@ public class levels implements Screen
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
         viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
-        texture= new Texture("levelsbg.png");
+        texture= new Texture("levelbg2.png");
         skin=new Skin(Gdx.files.internal("ui/uiskin.json"));
         table1=new Table();
         table2=new Table();
@@ -83,13 +84,14 @@ public class levels implements Screen
         BitmapFont font13 = gen.generateFont(par);
         gen.dispose();
         TextButton.TextButtonStyle tbt = new TextButton.TextButtonStyle();
-        tbt.font = font13;
+        tbt.font =font13;
+        tbt.fontColor= new Color(0, 0, 1, 1);
 
-        b1 = new TextButton("Level 1",tbt);
-        b2 = new TextButton("Level 2",tbt);
-        b3 = new TextButton("Level 3",tbt);
-        b4 = new TextButton("Back", tbt);
-        b5 = new TextButton("Exit", tbt);
+        b1 =new TextButton("Level 1",tbt);
+        b2 =new TextButton("Level 2",tbt);
+        b3 =new TextButton("Level 3",tbt);
+        b4 =new TextButton("Back", tbt);
+        b5 =new TextButton("Exit", tbt);
 
         table1.setFillParent(true);
         table1.top();

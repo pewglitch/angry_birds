@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -75,9 +76,9 @@ public class settings implements Screen
         btn.font =font13;
         btn.fontColor = new Color(0.0f, 0.0f, 0.55f, 1);
 
-        b1= new TextButton("Mountains", btn);
-        b2= new TextButton("Beach",btn);
-        b3= new TextButton("Halloween",btn);
+        b1= new TextButton("Level1", btn);
+        b2= new TextButton("Level2",btn);
+        b3= new TextButton("Level3",btn);
         b4= new TextButton("Back",btn);
         b5= new TextButton("Exit",btn);
 
@@ -88,7 +89,7 @@ public class settings implements Screen
         table1.add().expandX();
         table1.add(b5).right().padTop(20).padRight(30).width(100).height(40);
         table1.row();
-        table1.add(label).colspan(3).center().padTop(80);
+        table1.add(label).colspan(3).center().padTop(5);
         table1.row();
 
         table1.add(b1).padTop(50).padLeft(70).padRight(5).width(180).height(50);
@@ -96,16 +97,45 @@ public class settings implements Screen
         table1.add(b3).padTop(50).padLeft(5).padRight(70).width(180).height(50);
         table1.row();
 
-        Texture imgTexture1=new Texture(Gdx.files.internal("setting.png"));
-        Texture imgTexture2=new Texture(Gdx.files.internal("img.png"));
-        Texture imgTexture3=new Texture(Gdx.files.internal("gamebg.jpg"));
 
-        Image i1=new Image(imgTexture1);
-        Image i2=new Image(imgTexture2);
-        Image i3=new Image(imgTexture3);
-        table1.add(i1).padTop(35).padLeft(70).padRight(5).width(150).height(120);
-        table1.add(i2).padTop(35).padLeft(5).padRight(5).width(150).height(120);
-        table1.add(i3).padTop(35).padLeft(5).padRight(70).width(150).height(120);
+        Texture it1 =new Texture(Gdx.files.internal("shivsans.png"));
+        Drawable dp1 = new TextureRegionDrawable(new TextureRegion(it1));
+
+        Texture it2 =new Texture(Gdx.files.internal("forest.png"));
+        Drawable dp2 = new TextureRegionDrawable(new TextureRegion(it2));
+
+        Texture it3=new Texture(Gdx.files.internal("hollow.png"));
+        Drawable dp3 = new TextureRegionDrawable(new TextureRegion(it3));
+
+        ImageButton i1= new ImageButton(dp1);
+        ImageButton i2= new ImageButton(dp2);
+        ImageButton i3= new ImageButton(dp3);
+
+        ImageButton j1= new ImageButton(dp1);
+        ImageButton j2= new ImageButton(dp2);
+        ImageButton j3= new ImageButton(dp3);
+
+        ImageButton k1= new ImageButton(dp1);
+        ImageButton k2= new ImageButton(dp2);
+        ImageButton k3= new ImageButton(dp3);
+
+
+        table1.add(i1).padTop(25).padLeft(70).padRight(5).width(80).height(80);
+        table1.add(j1).padTop(25).padLeft(5).padRight(5).width(80).height(80);
+        table1.add(k1).padTop(25).padLeft(5).padRight(70).width(80).height(80);
+
+        table1.row().padTop(10);
+
+        table1.add(i2).padLeft(70).padRight(5).width(80).height(80);
+        table1.add(j2).padLeft(5).padRight(5).width(80).height(80);
+        table1.add(k2).padLeft(5).padRight(70).width(80).height(80);
+
+        table1.row().padTop(10);
+
+        table1.add(i3).padLeft(70).padRight(5).width(80).height(80);
+        table1.add(j3).padLeft(5).padRight(5).width(80).height(80);
+        table1.add(k3).padLeft(5).padRight(70).width(80).height(80);
+
 
         b4.addListener(new ClickListener()
         {
