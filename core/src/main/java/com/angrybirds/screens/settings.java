@@ -141,7 +141,7 @@ public class settings implements Screen
             @Override
             public void clicked(InputEvent event,float x,float y)
             {
-                constants.pathl1="shivsans.png";
+                constants.pathl1="treebg.jpeg";
             }
         });
         j1.addListener(new ClickListener()
@@ -166,7 +166,7 @@ public class settings implements Screen
             @Override
             public void clicked(InputEvent event,float x,float y)
             {
-                constants.pathl2="shivsans.png";
+                constants.pathl2="treebg.jpeg";
             }
         });
         j2.addListener(new ClickListener()
@@ -191,7 +191,7 @@ public class settings implements Screen
             @Override
             public void clicked(InputEvent event,float x,float y)
             {
-                constants.pathl3="shivsans.png";
+                constants.pathl3="treebg.jpeg";
             }
         });
         j3.addListener(new ClickListener()
