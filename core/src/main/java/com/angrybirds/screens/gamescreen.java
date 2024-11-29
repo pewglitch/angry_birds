@@ -116,7 +116,7 @@ public class gamescreen implements Screen
 
         touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
-        texture = new Texture("gamebg.jpg");
+        texture = new Texture(constants.pathl1);
 
         Texture birdTexture = new Texture(Gdx.files.internal("red1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);

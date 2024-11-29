@@ -5,7 +5,7 @@ public class constants
 
     public static Integer r1 = 0, r2 = 0, r3 = 0, r4 = 0;
     public static Integer levelstate=-1;
-
+    public static String pathl1="gamebg.jpg",pathl2="level2bg2.png",pathl3="level3bg3.png";
     public constants()
     {
     }

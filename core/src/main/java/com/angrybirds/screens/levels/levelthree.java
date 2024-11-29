@@ -122,7 +122,7 @@ public class levelthree implements Screen {
 
         touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
-        texture = new Texture("level2bg3.png");
+        texture = new Texture(constants.pathl3);
 
         Texture birdTexture = new Texture(Gdx.files.internal("white1.png"));
         TextureRegion birdRegion = new TextureRegion(birdTexture);

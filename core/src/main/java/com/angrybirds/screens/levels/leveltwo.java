@@ -3,6 +3,7 @@ package com.angrybirds.screens.levels;
 
 import com.angrybirds.birds.yellow;
 import com.angrybirds.obstacles.*;
+import com.angrybirds.screens.constants;
 import com.angrybirds.screens.inbtw2;
 import com.angrybirds.screens.losescreen;
 import com.angrybirds.screens.winscreen;
@@ -123,7 +124,7 @@ public class leveltwo implements Screen
 
         touchPoint = new Vector3();
         stage = new Stage(viewport, sb);
-        texture = new Texture("level2bg2.png");
+        texture = new Texture(constants.pathl2);
 
         Texture bird22= new Texture("yellow_new.png");
         TextureRegion bird22r=new TextureRegion(bird22);

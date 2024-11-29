@@ -136,7 +136,80 @@ public class settings implements Screen
         table1.add(j3).padLeft(5).padRight(5).width(80).height(80);
         table1.add(k3).padLeft(5).padRight(70).width(80).height(80);
 
+        i1.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl1="shivsans.png";
+            }
+        });
+        j1.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl1="forest.png";
+            }
+        });
+        k1.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl1="hollow.png";
+            }
+        });
 
+        i2.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl2="shivsans.png";
+            }
+        });
+        j2.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl2="forest.png";
+            }
+        });
+        k2.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl2="hollow.png";
+            }
+        });
+
+        i3.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl3="shivsans.png";
+            }
+        });
+        j3.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl3="forest.png";
+            }
+        });
+        k3.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event,float x,float y)
+            {
+                constants.pathl3="hollow.png";
+            }
+        });
         b4.addListener(new ClickListener()
         {
             @Override
